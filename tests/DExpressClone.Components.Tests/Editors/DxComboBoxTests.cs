@@ -1,5 +1,8 @@
 using Bunit;
+using DExpressClone.Components.Interop;
 using FluentAssertions;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.JSInterop;
 using Xunit;
 
 namespace DExpressClone.Components.Tests.Editors;
@@ -7,6 +10,14 @@ namespace DExpressClone.Components.Tests.Editors;
 public class DxComboBoxTests : TestContext
 {
     private readonly string[] _items = { "Apple", "Banana", "Cherry", "Date", "Elderberry" };
+
+    public DxComboBoxTests()
+    {
+        Services.AddSingleton<JsInteropService>(sp =>
+            new JsInteropService(JSInterop.JSRuntime));
+        JSInterop.SetupVoid("import", _ => true);
+        JSInterop.Mode = JSRuntimeMode.Loose;
+    }
 
     [Fact]
     public void RendersWithPlaceholder()

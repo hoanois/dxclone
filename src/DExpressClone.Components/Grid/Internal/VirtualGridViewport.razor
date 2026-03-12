@@ -17,13 +17,13 @@
             var index = i;
             var item = Items[localIndex];
 
-            if (RowTemplate is not null)
+            @if (RowTemplate is not null)
             {
-                @RowTemplate(item)
+                <div @key="index">@RowTemplate(item)</div>
             }
             else
             {
-                <GridRow TItem="TItem"
+                <GridRow @key="index" TItem="TItem"
                          Item="@item"
                          Columns="@Columns"
                          IsSelected="@GetIsSelected(item)"

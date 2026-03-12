@@ -40,7 +40,7 @@ public partial class DxTabs : DxComponentBase
         if (!_tabs.Contains(tab))
         {
             _tabs.Add(tab);
-            StateHasChanged();
+            RequestRender();
         }
     }
 
@@ -48,7 +48,7 @@ public partial class DxTabs : DxComponentBase
     {
         if (_tabs.Remove(tab))
         {
-            StateHasChanged();
+            RequestRender();
         }
     }
 

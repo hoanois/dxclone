@@ -21,13 +21,14 @@
         {
             <div class="dx-calendar-day-header">@dayName</div>
         }
-        @foreach (var day in GetCalendarDays())
+        @{ var days = GetCalendarDays(); }
+        @for (int i = 0; i < days.Length; i++)
         {
-            var d = day;
+            var d = days[i];
             <button class="@GetDayCssClass(d)"
                     type="button"
                     disabled="@IsDateDisabled(d)"
-                    @onclick="() => SelectDateAsync(d)">
+                    @onclick="GetDayClickHandler(i)">
                 @d.Day
             </button>
         }

@@ -5,6 +5,8 @@ namespace DExpressClone.Components.Grid.Internal;
 
 public partial class GridHeader<TItem> : ComponentBase
 {
+    private readonly Dictionary<DxGridDataColumn, Func<Task>> _headerClickHandlers = new();
+
     [Parameter]
     public IReadOnlyList<DxGridColumnBase> Columns { get; set; } = Array.Empty<DxGridColumnBase>();
 
@@ -23,6 +25,16 @@ public partial class GridHeader<TItem> : ComponentBase
     private GridSortDescriptor? GetSortDescriptor(string fieldName)
     {
         return SortDescriptors.FirstOrDefault(s => s.FieldName == fieldName);
+    }
+
+    private Func<Task> GetHeaderClickHandler(DxGridDataColumn column)
+    {
+        if (!_headerClickHandlers.TryGetValue(column, out var handler))
+        {
+            handler = () => OnHeaderClick(column);
+            _headerClickHandlers[column] = handler;
+        }
+        return handler;
     }
 
     private async Task OnHeaderClick(DxGridDataColumn column)

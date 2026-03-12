@@ -4,11 +4,15 @@
 @inherits DExpressClone.Components.Core.DxComponentBase
 
 <div class="@DropdownCssClass">
-    @{ int index = 0; }
-    @foreach (var item in Items)
+    @{
+        var itemsList = Items as IList<TData> ?? Items.ToList();
+        var hasItems = false;
+    }
+    @for (int i = 0; i < itemsList.Count; i++)
     {
-        var currentItem = item;
-        var currentIndex = index;
+        hasItems = true;
+        var currentItem = itemsList[i];
+        var currentIndex = i;
         <div class="@GetCssClass(currentItem, currentIndex)"
              @onclick="() => HandleItemClickAsync(currentItem)">
             @if (ItemTemplate is not null)
@@ -20,10 +24,9 @@
                 @GetText(currentItem)
             }
         </div>
-        index++;
     }
 
-    @if (!Items.Any())
+    @if (!hasItems)
     {
         <div class="dx-combobox-no-data">No data to display</div>
     }

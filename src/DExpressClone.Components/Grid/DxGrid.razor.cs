@@ -21,6 +21,9 @@ public partial class DxGrid<TItem> : DxDataBoundComponentBase<TItem>, IDxGridCol
 
     private GridDataProcessor<TItem> _dataProcessor = new();
     private IReadOnlyList<TItem> _processedData = Array.Empty<TItem>();
+    private IReadOnlyList<TItem>? _cachedPagedData;
+    private int _cachedPageIndex = -1;
+    private int _cachedProcessedDataCount = -1;
     private int _pageIndex;
     private TItem? _focusedItem;
 
@@ -138,11 +141,19 @@ public partial class DxGrid<TItem> : DxDataBoundComponentBase<TItem>, IDxGridCol
             if (IsServerMode || IsVirtualizationMode || PageSize <= 0)
                 return _processedData;
 
-            return _processedData
+            if (_cachedPagedData is not null
+                && _cachedPageIndex == _pageIndex
+                && _cachedProcessedDataCount == _processedData.Count)
+                return _cachedPagedData;
+
+            _cachedPagedData = _processedData
                 .Skip(_pageIndex * PageSize)
                 .Take(PageSize)
                 .ToList()
                 .AsReadOnly();
+            _cachedPageIndex = _pageIndex;
+            _cachedProcessedDataCount = _processedData.Count;
+            return _cachedPagedData;
         }
     }
 
@@ -194,16 +205,14 @@ public partial class DxGrid<TItem> : DxDataBoundComponentBase<TItem>, IDxGridCol
         {
             column.ColumnIndex = _columns.Count;
             _columns.Add(column);
-            MarkDirty();
-            StateHasChanged();
+            RequestRender();
         }
     }
 
     public void RemoveColumn(DxGridColumnBase column)
     {
         _columns.Remove(column);
-        MarkDirty();
-        StateHasChanged();
+        RequestRender();
     }
 
     // --- Data Processing ---
@@ -313,7 +322,7 @@ public partial class DxGrid<TItem> : DxDataBoundComponentBase<TItem>, IDxGridCol
         else
         {
             RecalculateVirtualWindow();
-            await InvokeAsync(StateHasChanged);
+            await InvokeAsync(RequestRender);
         }
     }
 

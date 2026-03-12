@@ -73,6 +73,9 @@ public partial class DxComboBox<TData, TValue> : DxFormEditorBase<TValue>
     private int HighlightedIndex { get; set; } = -1;
     private bool _dropUp;
     private ElementReference _containerRef;
+    private IList<TData>? _cachedFilteredItems;
+    private string? _cachedFilterText;
+    private IEnumerable<TData>? _cachedData;
 
     private bool IsInputReadOnly => ReadOnly || (!AllowUserInput && !IsDropdownOpen);
 
@@ -110,18 +113,31 @@ public partial class DxComboBox<TData, TValue> : DxFormEditorBase<TValue>
         return item?.ToString() ?? string.Empty;
     }
 
-    private IEnumerable<TData> GetFilteredItems()
+    private IList<TData> GetFilteredItems()
     {
-        if (Data is null) return Enumerable.Empty<TData>();
-        if (string.IsNullOrEmpty(FilterText)) return Data;
+        if (_cachedFilteredItems is not null
+            && _cachedFilterText == FilterText
+            && ReferenceEquals(_cachedData, Data))
+            return _cachedFilteredItems;
 
-        return FilteringMode switch
+        _cachedFilterText = FilterText;
+        _cachedData = Data;
+
+        if (Data is null) { _cachedFilteredItems = Array.Empty<TData>(); return _cachedFilteredItems; }
+        if (string.IsNullOrEmpty(FilterText))
+        {
+            _cachedFilteredItems = Data as IList<TData> ?? Data.ToList();
+            return _cachedFilteredItems;
+        }
+
+        _cachedFilteredItems = FilteringMode switch
         {
             ComboBoxFilteringMode.StartsWith => Data.Where(d =>
-                GetItemText(d).StartsWith(FilterText, StringComparison.OrdinalIgnoreCase)),
+                GetItemText(d).StartsWith(FilterText, StringComparison.OrdinalIgnoreCase)).ToList(),
             _ => Data.Where(d =>
-                GetItemText(d).Contains(FilterText, StringComparison.OrdinalIgnoreCase))
+                GetItemText(d).Contains(FilterText, StringComparison.OrdinalIgnoreCase)).ToList()
         };
+        return _cachedFilteredItems;
     }
 
     private bool IsItemSelected(TData item)
@@ -188,7 +204,7 @@ public partial class DxComboBox<TData, TValue> : DxFormEditorBase<TValue>
     {
         if (!Enabled || ReadOnly) return;
 
-        var items = GetFilteredItems().ToList();
+        var items = GetFilteredItems();
 
         switch (e.Key)
         {

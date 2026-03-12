@@ -36,6 +36,12 @@ public abstract class DxInteractiveComponentBase : DxComponentBase
     /// </summary>
     protected bool IsHovered { get; private set; }
 
+    private string? _cachedInteractiveStateCss;
+    private bool _cachedFocused;
+    private bool _cachedHovered;
+    private bool _cachedEnabled = true;
+    private bool _cachedReadOnly;
+
     /// <summary>
     /// Handles the focus event on the component.
     /// </summary>
@@ -81,12 +87,24 @@ public abstract class DxInteractiveComponentBase : DxComponentBase
     {
         get
         {
-            return CssClassBuilder.New()
+            if (_cachedInteractiveStateCss is not null
+                && _cachedFocused == IsFocused
+                && _cachedHovered == IsHovered
+                && _cachedEnabled == Enabled
+                && _cachedReadOnly == ReadOnly)
+                return _cachedInteractiveStateCss;
+
+            _cachedFocused = IsFocused;
+            _cachedHovered = IsHovered;
+            _cachedEnabled = Enabled;
+            _cachedReadOnly = ReadOnly;
+            _cachedInteractiveStateCss = CssClassBuilder.New()
                 .AddIf("dx-state-focused", IsFocused)
                 .AddIf("dx-state-hovered", IsHovered && Enabled)
                 .AddIf("dx-state-disabled", !Enabled)
                 .AddIf("dx-state-readonly", ReadOnly)
                 .Build();
+            return _cachedInteractiveStateCss;
         }
     }
 }

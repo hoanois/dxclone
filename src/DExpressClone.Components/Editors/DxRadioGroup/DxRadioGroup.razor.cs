@@ -52,14 +52,23 @@ public partial class DxRadioGroup<TValue> : DxFormEditorBase<TValue>
         .Add(CssClass)
         .Build();
 
-    private IEnumerable<RadioItem> GetRadioItems()
+    private RadioItem[]? _cachedRadioItems;
+    private IEnumerable<TValue>? _cachedItems;
+    private IEnumerable<object>? _cachedDataSource;
+
+    private RadioItem[] GetRadioItems()
     {
+        if (ReferenceEquals(_cachedItems, Items) && ReferenceEquals(_cachedDataSource, Data) && _cachedRadioItems is not null)
+            return _cachedRadioItems;
+
+        _cachedItems = Items;
+        _cachedDataSource = Data;
+
+        var list = new List<RadioItem>();
         if (Items is not null)
         {
             foreach (var item in Items)
-            {
-                yield return new RadioItem(item, item?.ToString() ?? string.Empty);
-            }
+                list.Add(new RadioItem(item, item?.ToString() ?? string.Empty));
         }
         else if (Data is not null)
         {
@@ -67,9 +76,12 @@ public partial class DxRadioGroup<TValue> : DxFormEditorBase<TValue>
             {
                 var value = ValueField is not null ? ValueField(dataItem) : default;
                 var text = TextField is not null ? TextField(dataItem) : dataItem.ToString() ?? string.Empty;
-                yield return new RadioItem(value, text);
+                list.Add(new RadioItem(value, text));
             }
         }
+
+        _cachedRadioItems = list.ToArray();
+        return _cachedRadioItems;
     }
 
     private bool IsSelected(TValue? itemValue)

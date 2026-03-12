@@ -14,7 +14,7 @@
                 @if (column is DxGridDataColumn dataCol)
                 {
                     <div class="dx-grid-header-cell-content"
-                         @onclick="() => OnHeaderClick(dataCol)"
+                         @onclick="GetHeaderClickHandler(dataCol)"
                          style="cursor: @(dataCol.AllowSort && AllowSort ? "pointer" : "default")">
                         <span class="dx-grid-header-caption">@dataCol.DisplayCaption</span>
                         @if (dataCol.AllowSort && AllowSort)

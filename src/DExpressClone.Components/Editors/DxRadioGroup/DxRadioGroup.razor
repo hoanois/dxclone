@@ -14,9 +14,11 @@
         <label class="dx-radio-group-label">@LabelText</label>
     }
 
-    @foreach (var item in GetRadioItems())
+    @{ var radioItems = GetRadioItems(); }
+    @for (int i = 0; i < radioItems.Length; i++)
     {
-        var itemValue = item.Value;
+        var itemValue = radioItems[i].Value;
+        var item = radioItems[i];
         <div class="@GetRadioItemCssClass(itemValue)"
              role="radio"
              aria-checked="@IsSelected(itemValue)"

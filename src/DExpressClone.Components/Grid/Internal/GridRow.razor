@@ -4,7 +4,7 @@
 
 @if (IsEditing && RowEditContext is not null)
 {
-    <CascadingValue Value="@RowEditContext" IsFixed="false">
+    <CascadingValue Value="@RowEditContext" IsFixed="true">
         <div class="@RowCssClass"
              style="height:@(RowHeight)px;"
              @onclick="HandleClick"

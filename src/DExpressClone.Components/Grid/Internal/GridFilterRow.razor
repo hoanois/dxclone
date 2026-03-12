@@ -17,7 +17,7 @@
                        class="dx-grid-filter-input"
                        placeholder="Filter..."
                        value="@GetFilterValue(fieldName)"
-                       @onchange="e => OnFilterInput(fieldName, e.Value)" />
+                       @onchange="GetFilterHandler(fieldName)" />
             }
         </div>
     }

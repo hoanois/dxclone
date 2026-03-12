@@ -21,6 +21,9 @@ public partial class DatePickerCalendar : DxComponentBase
     public EventCallback<DateTime> OnDateSelected { get; set; }
 
     private DateTime DisplayMonth { get; set; }
+    private DateTime _cachedDisplayMonth;
+    private DateTime[]? _cachedCalendarDays;
+    private Func<Task>[]? _cachedDayClickHandlers;
 
     private static readonly string[] DayNames = { "Su", "Mo", "Tu", "We", "Th", "Fr", "Sa" };
 
@@ -88,18 +91,36 @@ public partial class DatePickerCalendar : DxComponentBase
             .Build();
     }
 
-    private List<DateTime> GetCalendarDays()
+    private DateTime[] GetCalendarDays()
     {
-        var days = new List<DateTime>();
+        if (_cachedCalendarDays is not null && _cachedDisplayMonth == DisplayMonth)
+            return _cachedCalendarDays;
+
+        var days = new DateTime[42];
         var firstOfMonth = new DateTime(DisplayMonth.Year, DisplayMonth.Month, 1);
         var startDay = firstOfMonth.AddDays(-(int)firstOfMonth.DayOfWeek);
 
-        for (int i = 0; i < 42; i++) // 6 weeks
+        for (int i = 0; i < 42; i++)
         {
-            days.Add(startDay.AddDays(i));
+            days[i] = startDay.AddDays(i);
         }
 
+        // Cache click handlers for each day
+        _cachedDayClickHandlers = new Func<Task>[42];
+        for (int i = 0; i < 42; i++)
+        {
+            var d = days[i];
+            _cachedDayClickHandlers[i] = () => SelectDateAsync(d);
+        }
+
+        _cachedCalendarDays = days;
+        _cachedDisplayMonth = DisplayMonth;
         return days;
+    }
+
+    private Func<Task> GetDayClickHandler(int index)
+    {
+        return _cachedDayClickHandlers![index];
     }
 
     private string MonthYearDisplay => DisplayMonth.ToString("MMMM yyyy");

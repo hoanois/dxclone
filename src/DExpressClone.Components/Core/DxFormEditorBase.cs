@@ -12,6 +12,10 @@ namespace DExpressClone.Components.Core;
 public abstract class DxFormEditorBase<TValue> : DxInteractiveComponentBase, IDisposable
 {
     private EditContext? _previousEditContext;
+    private string? _cachedValidationCss;
+    private bool _cachedIsValid = true;
+    private bool _cachedHasEditContext;
+    private bool _cachedHasFieldId;
 
     /// <summary>
     /// The cascaded EditContext from an ancestor EditForm.
@@ -91,10 +95,28 @@ public abstract class DxFormEditorBase<TValue> : DxInteractiveComponentBase, IDi
     /// <summary>
     /// CSS classes representing the validation state.
     /// </summary>
-    protected string ValidationCssClass => CssClassBuilder.New()
-        .AddIf("dx-valid", IsValid && EditContext is not null && HasFieldIdentifier)
-        .AddIf("dx-invalid", !IsValid)
-        .Build();
+    protected string ValidationCssClass
+    {
+        get
+        {
+            var hasEc = EditContext is not null;
+            var hasFi = HasFieldIdentifier;
+            if (_cachedValidationCss is not null
+                && _cachedIsValid == IsValid
+                && _cachedHasEditContext == hasEc
+                && _cachedHasFieldId == hasFi)
+                return _cachedValidationCss;
+
+            _cachedIsValid = IsValid;
+            _cachedHasEditContext = hasEc;
+            _cachedHasFieldId = hasFi;
+            _cachedValidationCss = CssClassBuilder.New()
+                .AddIf("dx-valid", IsValid && hasEc && hasFi)
+                .AddIf("dx-invalid", !IsValid)
+                .Build();
+            return _cachedValidationCss;
+        }
+    }
 
     private bool HasFieldIdentifier => ValueExpression is not null;
 

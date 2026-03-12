@@ -21,27 +21,47 @@ public partial class DxChart<TItem> : DxDataBoundComponentBase<TItem>
     [Parameter] public ChartAxisDescriptor? ValueAxis { get; set; }
     [Parameter] public RenderFragment? ChildContent { get; set; }
 
+    // Cached chart data
+    private IReadOnlyList<ChartSeriesDescriptor>? _cachedDescriptors;
+    private IReadOnlyList<ChartSeriesDescriptor>? _cachedLineDescriptors;
+    private IReadOnlyList<ChartSeriesDescriptor>? _cachedBarDescriptors;
+    private bool _chartDataDirty = true;
+
     internal void AddSeries(DxChartSeriesBase<TItem> series)
     {
         series.SeriesIndex = _series.Count;
         _series.Add(series);
-        MarkDirty();
-        StateHasChanged();
+        _chartDataDirty = true;
+        RequestRender();
     }
 
     internal void RemoveSeries(DxChartSeriesBase<TItem> series)
     {
         _series.Remove(series);
-        // Re-index
         for (int i = 0; i < _series.Count; i++)
             _series[i].SeriesIndex = i;
-        MarkDirty();
-        StateHasChanged();
+        _chartDataDirty = true;
+        RequestRender();
+    }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        _chartDataDirty = true;
     }
 
     private IReadOnlyList<ChartSeriesDescriptor> BuildAllDescriptors()
     {
-        return _series.Select(s => s.BuildDescriptor(InternalData)).ToList();
+        if (!_chartDataDirty && _cachedDescriptors is not null)
+            return _cachedDescriptors;
+
+        _cachedDescriptors = _series.Select(s => s.BuildDescriptor(InternalData)).ToList();
+        _cachedLineDescriptors = _cachedDescriptors
+            .Where((_, i) => i < _series.Count && _series[i].SeriesType == ChartSeriesType.Line).ToList();
+        _cachedBarDescriptors = _cachedDescriptors
+            .Where((_, i) => i < _series.Count && _series[i].SeriesType == ChartSeriesType.Bar).ToList();
+        _chartDataDirty = false;
+        return _cachedDescriptors;
     }
 
     private bool HasPieSeries => _series.Any(s => s.SeriesType == ChartSeriesType.Pie);
@@ -77,10 +97,10 @@ public partial class DxChart<TItem> : DxDataBoundComponentBase<TItem>
         _series.OfType<DxChartPieSeries<TItem>>().FirstOrDefault();
 
     private IReadOnlyList<ChartSeriesDescriptor> GetLineDescriptors(IReadOnlyList<ChartSeriesDescriptor> all) =>
-        all.Where((_, i) => i < _series.Count && _series[i].SeriesType == ChartSeriesType.Line).ToList();
+        _cachedLineDescriptors ?? all.Where((_, i) => i < _series.Count && _series[i].SeriesType == ChartSeriesType.Line).ToList();
 
     private IReadOnlyList<ChartSeriesDescriptor> GetBarDescriptors(IReadOnlyList<ChartSeriesDescriptor> all) =>
-        all.Where((_, i) => i < _series.Count && _series[i].SeriesType == ChartSeriesType.Bar).ToList();
+        _cachedBarDescriptors ?? all.Where((_, i) => i < _series.Count && _series[i].SeriesType == ChartSeriesType.Bar).ToList();
 
     private string RootCssClass => BuildCssClass("dx-chart");
 
