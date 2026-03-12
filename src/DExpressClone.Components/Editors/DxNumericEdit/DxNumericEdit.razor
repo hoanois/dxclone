@@ -1,0 +1,61 @@
+@namespace DExpressClone.Components.Editors.DxNumericEdit
+@typeparam TValue where TValue : struct, IComparable
+@inherits DExpressClone.Components.Core.DxFormEditorBase<TValue>
+
+<div class="@RootCssClass"
+     id="@Id"
+     @onmouseenter="HandleMouseEnter"
+     @onmouseleave="HandleMouseLeave"
+     @attributes="AdditionalAttributes">
+
+    @if (!string.IsNullOrEmpty(LabelText))
+    {
+        <label class="dx-numeric-label">@LabelText</label>
+    }
+
+    <div class="dx-numeric-container">
+        <input class="dx-numeric-input"
+               type="text"
+               inputmode="decimal"
+               value="@DisplayValue"
+               placeholder="@NullText"
+               disabled="@(!Enabled)"
+               readonly="@ReadOnly"
+               tabindex="@(TabIndex ?? 0)"
+               @onchange="HandleInputChangeAsync"
+               @onkeydown="HandleKeyDownAsync"
+               @onfocus="HandleFocusAsync"
+               @onblur="HandleBlurAsync" />
+
+        @if (ShowSpinButtons)
+        {
+            <div class="dx-numeric-spin-buttons">
+                <button class="dx-numeric-spin-up"
+                        type="button"
+                        tabindex="-1"
+                        disabled="@(!Enabled || ReadOnly)"
+                        @onclick="SpinUpAsync"
+                        aria-label="Increment">
+                    <svg viewBox="0 0 16 16" fill="none" width="12" height="12">
+                        <path d="M4 10L8 6L12 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <button class="dx-numeric-spin-down"
+                        type="button"
+                        tabindex="-1"
+                        disabled="@(!Enabled || ReadOnly)"
+                        @onclick="SpinDownAsync"
+                        aria-label="Decrement">
+                    <svg viewBox="0 0 16 16" fill="none" width="12" height="12">
+                        <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
+        }
+    </div>
+
+    @if (!IsValid && ShowBuiltInValidation)
+    {
+        <div class="dx-editor-validation-message">@ValidationMessage</div>
+    }
+</div>

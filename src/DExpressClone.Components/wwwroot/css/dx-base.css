@@ -1,0 +1,194 @@
+/* ==========================================================================
+   DExpressClone Base Styles — Reset, Typography, Utilities, Scrollbars
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   CSS Reset
+   -------------------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    tab-size: 4;
+}
+
+body {
+    line-height: var(--dx-line-height-normal, 1.5);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+img, picture, video, canvas, svg {
+    display: block;
+    max-width: 100%;
+}
+
+input, button, textarea, select {
+    font: inherit;
+    color: inherit;
+}
+
+p, h1, h2, h3, h4, h5, h6 {
+    overflow-wrap: break-word;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Typography Base
+   -------------------------------------------------------------------------- */
+body {
+    font-family: var(--dx-font-family, 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif);
+    font-size: var(--dx-font-size-md, 0.875rem);
+    font-weight: var(--dx-font-weight-regular, 400);
+    color: var(--dx-color-text-primary, #1a1a1a);
+    background-color: var(--dx-color-background, #ffffff);
+}
+
+h1 { font-size: var(--dx-font-size-3xl); font-weight: var(--dx-font-weight-bold); line-height: var(--dx-line-height-tight); }
+h2 { font-size: var(--dx-font-size-2xl); font-weight: var(--dx-font-weight-semibold); line-height: var(--dx-line-height-tight); }
+h3 { font-size: var(--dx-font-size-xl); font-weight: var(--dx-font-weight-semibold); line-height: var(--dx-line-height-tight); }
+h4 { font-size: var(--dx-font-size-lg); font-weight: var(--dx-font-weight-semibold); line-height: var(--dx-line-height-normal); }
+h5 { font-size: var(--dx-font-size-md); font-weight: var(--dx-font-weight-semibold); line-height: var(--dx-line-height-normal); }
+h6 { font-size: var(--dx-font-size-sm); font-weight: var(--dx-font-weight-semibold); line-height: var(--dx-line-height-normal); }
+
+code, pre, kbd, samp {
+    font-family: var(--dx-font-family-mono, 'Consolas', monospace);
+}
+
+/* --------------------------------------------------------------------------
+   Utility Classes
+   -------------------------------------------------------------------------- */
+
+/* Display */
+.dx-hidden { display: none !important; }
+.dx-block { display: block; }
+.dx-inline { display: inline; }
+.dx-inline-block { display: inline-block; }
+
+/* Flexbox */
+.dx-flex { display: flex; }
+.dx-inline-flex { display: inline-flex; }
+.dx-flex-column { flex-direction: column; }
+.dx-flex-row { flex-direction: row; }
+.dx-flex-wrap { flex-wrap: wrap; }
+.dx-flex-nowrap { flex-wrap: nowrap; }
+.dx-flex-1 { flex: 1 1 0%; }
+.dx-flex-auto { flex: 1 1 auto; }
+.dx-flex-none { flex: none; }
+.dx-items-center { align-items: center; }
+.dx-items-start { align-items: flex-start; }
+.dx-items-end { align-items: flex-end; }
+.dx-items-stretch { align-items: stretch; }
+.dx-justify-center { justify-content: center; }
+.dx-justify-start { justify-content: flex-start; }
+.dx-justify-end { justify-content: flex-end; }
+.dx-justify-between { justify-content: space-between; }
+.dx-justify-around { justify-content: space-around; }
+
+/* Gap utilities */
+.dx-gap-0 { gap: var(--dx-spacing-0); }
+.dx-gap-1 { gap: var(--dx-spacing-1); }
+.dx-gap-2 { gap: var(--dx-spacing-2); }
+.dx-gap-3 { gap: var(--dx-spacing-3); }
+.dx-gap-4 { gap: var(--dx-spacing-4); }
+.dx-gap-5 { gap: var(--dx-spacing-5); }
+.dx-gap-6 { gap: var(--dx-spacing-6); }
+.dx-gap-8 { gap: var(--dx-spacing-8); }
+
+/* Text alignment */
+.dx-text-left { text-align: left; }
+.dx-text-center { text-align: center; }
+.dx-text-right { text-align: right; }
+
+/* Text styling */
+.dx-text-sm { font-size: var(--dx-font-size-sm); }
+.dx-text-md { font-size: var(--dx-font-size-md); }
+.dx-text-lg { font-size: var(--dx-font-size-lg); }
+.dx-text-bold { font-weight: var(--dx-font-weight-bold); }
+.dx-text-semibold { font-weight: var(--dx-font-weight-semibold); }
+.dx-text-nowrap { white-space: nowrap; }
+.dx-text-truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Overflow */
+.dx-overflow-hidden { overflow: hidden; }
+.dx-overflow-auto { overflow: auto; }
+.dx-overflow-x-auto { overflow-x: auto; }
+.dx-overflow-y-auto { overflow-y: auto; }
+
+/* Sizing */
+.dx-w-full { width: 100%; }
+.dx-h-full { height: 100%; }
+.dx-min-w-0 { min-width: 0; }
+.dx-min-h-0 { min-height: 0; }
+
+/* Positioning */
+.dx-relative { position: relative; }
+.dx-absolute { position: absolute; }
+.dx-fixed { position: fixed; }
+.dx-sticky { position: sticky; }
+
+/* Cursor */
+.dx-cursor-pointer { cursor: pointer; }
+.dx-cursor-default { cursor: default; }
+.dx-cursor-not-allowed { cursor: not-allowed; }
+
+/* User select */
+.dx-select-none { user-select: none; }
+.dx-select-all { user-select: all; }
+
+/* --------------------------------------------------------------------------
+   Scrollbar Styling
+   -------------------------------------------------------------------------- */
+
+/* Webkit / Blink scrollbars */
+.dx-scrollbar::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.dx-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.dx-scrollbar::-webkit-scrollbar-thumb {
+    background-color: var(--dx-neutral-70);
+    border-radius: var(--dx-radius-full);
+    border: 2px solid transparent;
+    background-clip: content-box;
+}
+
+.dx-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: var(--dx-neutral-50);
+}
+
+/* Firefox scrollbars */
+.dx-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: var(--dx-neutral-70) transparent;
+}
+
+/* Thin scrollbar variant */
+.dx-scrollbar-thin::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+}
+
+.dx-scrollbar-thin {
+    scrollbar-width: thin;
+}

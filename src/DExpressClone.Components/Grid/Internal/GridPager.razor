@@ -1,0 +1,29 @@
+@namespace DExpressClone.Components.Grid.Internal
+
+<div class="dx-grid-pager">
+    <button class="dx-grid-pager-btn dx-grid-pager-first"
+            disabled="@(PageIndex <= 0)"
+            @onclick="GoFirst">
+        &#x00AB;
+    </button>
+    <button class="dx-grid-pager-btn dx-grid-pager-prev"
+            disabled="@(PageIndex <= 0)"
+            @onclick="GoPrevious">
+        &#x2039;
+    </button>
+
+    <span class="dx-grid-pager-info">
+        Page @(PageIndex + 1) of @Math.Max(1, PageCount)
+    </span>
+
+    <button class="dx-grid-pager-btn dx-grid-pager-next"
+            disabled="@(PageIndex >= PageCount - 1)"
+            @onclick="GoNext">
+        &#x203A;
+    </button>
+    <button class="dx-grid-pager-btn dx-grid-pager-last"
+            disabled="@(PageIndex >= PageCount - 1)"
+            @onclick="GoLast">
+        &#x00BB;
+    </button>
+</div>

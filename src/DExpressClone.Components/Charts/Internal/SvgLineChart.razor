@@ -1,0 +1,31 @@
+@namespace DExpressClone.Components.Charts.Internal
+@using DExpressClone.Components.Charts.Models
+
+@if (Scale is not null)
+{
+    <g class="dx-chart-line-series">
+        @foreach (var series in Series)
+        {
+            var color = GetColor(series);
+            <path d="@BuildPath(series)"
+                  stroke="@color"
+                  class="dx-chart-line-path"
+                  fill="none" />
+
+            @if (ShowPoints)
+            {
+                @foreach (var pt in series.DataPoints)
+                {
+                    <circle cx="@F(Scale.MapX(pt.X))"
+                            cy="@F(Scale.MapY(pt.Y))"
+                            r="4"
+                            fill="@color"
+                            class="dx-chart-data-point"
+                            data-series="@series.Name"
+                            data-label="@pt.Label"
+                            data-value="@F(pt.Y)" />
+                }
+            }
+        }
+    </g>
+}

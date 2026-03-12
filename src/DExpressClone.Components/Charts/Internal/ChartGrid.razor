@@ -1,0 +1,29 @@
+@namespace DExpressClone.Components.Charts.Internal
+@using DExpressClone.Components.Charts.Models
+
+@if (Scale is not null)
+{
+    <g class="dx-chart-grid">
+        @* Horizontal grid lines (Y ticks) *@
+        @foreach (var tick in YTicks)
+        {
+            var y = Scale.MapY(tick);
+            <line x1="@F(Scale.PlotLeft)"
+                  y1="@F(y)"
+                  x2="@F(Scale.PlotLeft + Scale.PlotWidth)"
+                  y2="@F(y)"
+                  class="dx-chart-grid-line" />
+        }
+
+        @* Vertical grid lines (X ticks) *@
+        @foreach (var tick in XTicks)
+        {
+            var x = Scale.MapX(tick);
+            <line x1="@F(x)"
+                  y1="@F(Scale.PlotTop)"
+                  x2="@F(x)"
+                  y2="@F(Scale.PlotTop + Scale.PlotHeight)"
+                  class="dx-chart-grid-line" />
+        }
+    </g>
+}

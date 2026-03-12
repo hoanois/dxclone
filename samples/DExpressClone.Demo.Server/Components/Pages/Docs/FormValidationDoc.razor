@@ -1,0 +1,207 @@
+@page "/docs/formvalidation"
+@rendermode InteractiveServer
+
+<ComponentDoc Title="DxFormValidation" Description="A form validation component that integrates with Blazor's EditContext to provide declarative, rule-based validation for form fields. Pair with DxFormItem to define per-field rules.">
+    <ParametersContent>
+        <h4 style="margin-top: 0;">DxFormValidation</h4>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>Model</code></td><td><code>object</code></td><td><em>required</em></td><td>The model object to validate.</td></tr>
+                <tr><td><code>ChildContent</code></td><td><code>RenderFragment</code></td><td><code>null</code></td><td>Form content, typically DxFormItem components.</td></tr>
+                <tr><td><code>OnValidSubmit</code></td><td><code>EventCallback&lt;EditContext&gt;</code></td><td>&mdash;</td><td>Fires when the form is submitted and validation passes.</td></tr>
+                <tr><td><code>OnInvalidSubmit</code></td><td><code>EventCallback&lt;EditContext&gt;</code></td><td>&mdash;</td><td>Fires when the form is submitted and validation fails.</td></tr>
+                <tr><td><code>ShowValidationSummary</code></td><td><code>bool</code></td><td><code>false</code></td><td>Whether to display a summary of all validation errors.</td></tr>
+                <tr><td><code>SubmitButtonText</code></td><td><code>string</code></td><td><code>"Submit"</code></td><td>Text displayed on the built-in submit button.</td></tr>
+                <tr><td><code>ShowSubmitButton</code></td><td><code>bool</code></td><td><code>true</code></td><td>Whether to render the built-in submit button.</td></tr>
+                <tr><td><code>CssClass</code></td><td><code>string?</code></td><td><code>null</code></td><td>Additional CSS classes for the form element.</td></tr>
+            </tbody>
+        </table>
+
+        <h4>DxFormItem</h4>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>FieldName</code></td><td><code>string</code></td><td><em>required</em></td><td>The model property name this item validates.</td></tr>
+                <tr><td><code>LabelText</code></td><td><code>string?</code></td><td><code>null</code></td><td>Label displayed above the editor.</td></tr>
+                <tr><td><code>ChildContent</code></td><td><code>RenderFragment</code></td><td><code>null</code></td><td>Editor content (e.g., DxTextBox).</td></tr>
+                <tr><td><code>Rules</code></td><td><code>List&lt;ValidationRule&gt;</code></td><td><code>null</code></td><td>Explicit list of validation rules.</td></tr>
+                <tr><td><code>Required</code></td><td><code>bool</code></td><td><code>false</code></td><td>Shorthand: adds a RequiredRule.</td></tr>
+                <tr><td><code>RequiredMessage</code></td><td><code>string?</code></td><td><code>null</code></td><td>Custom message for the required rule.</td></tr>
+                <tr><td><code>Email</code></td><td><code>bool</code></td><td><code>false</code></td><td>Shorthand: adds an EmailRule.</td></tr>
+                <tr><td><code>EmailMessage</code></td><td><code>string?</code></td><td><code>null</code></td><td>Custom message for the email rule.</td></tr>
+                <tr><td><code>RegexPattern</code></td><td><code>string?</code></td><td><code>null</code></td><td>Shorthand: adds a RegexRule with this pattern.</td></tr>
+                <tr><td><code>RegexMessage</code></td><td><code>string?</code></td><td><code>null</code></td><td>Custom message for the regex rule.</td></tr>
+                <tr><td><code>MinLength</code></td><td><code>int?</code></td><td><code>null</code></td><td>Shorthand: adds a MinLengthRule.</td></tr>
+                <tr><td><code>MinLengthMessage</code></td><td><code>string?</code></td><td><code>null</code></td><td>Custom message for the min-length rule.</td></tr>
+                <tr><td><code>MaxLength</code></td><td><code>int?</code></td><td><code>null</code></td><td>Shorthand: adds a MaxLengthRule.</td></tr>
+                <tr><td><code>MaxLengthMessage</code></td><td><code>string?</code></td><td><code>null</code></td><td>Custom message for the max-length rule.</td></tr>
+                <tr><td><code>CssClass</code></td><td><code>string?</code></td><td><code>null</code></td><td>Additional CSS classes for the form item wrapper.</td></tr>
+            </tbody>
+        </table>
+    </ParametersContent>
+    <EventsContent>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>OnValidSubmit</code></td><td><code>EventCallback&lt;EditContext&gt;</code></td><td>Fires when validation succeeds on form submit.</td></tr>
+                <tr><td><code>OnInvalidSubmit</code></td><td><code>EventCallback&lt;EditContext&gt;</code></td><td>Fires when validation fails on form submit.</td></tr>
+            </tbody>
+        </table>
+    </EventsContent>
+    <Examples>
+        <ExampleBlock Title="Basic Required Validation" Description="A simple registration form with required fields. Submitting with empty values triggers validation messages.">
+            <Demo>
+                <DxFormValidation Model="@_basicModel" OnValidSubmit="@HandleBasicValid" SubmitButtonText="Register">
+                    <DxFormItem FieldName="Name" LabelText="Full Name" Required="true" RequiredMessage="Name is required.">
+                        <DxTextBox @bind-Value="@_basicModel.Name" />
+                    </DxFormItem>
+                    <DxFormItem FieldName="Email" LabelText="Email Address" Required="true" RequiredMessage="Email is required.">
+                        <DxTextBox @bind-Value="@_basicModel.Email" />
+                    </DxFormItem>
+                </DxFormValidation>
+                @if (_basicSubmitted)
+                {
+                    <div style="margin-top: 0.75rem; color: green; font-weight: 600;">Form submitted successfully!</div>
+                }
+            </Demo>
+            <Code>
+@(@"<DxFormValidation Model=""@_model"" OnValidSubmit=""@HandleValid"" SubmitButtonText=""Register"">
+    <DxFormItem FieldName=""Name"" LabelText=""Full Name""
+                Required=""true"" RequiredMessage=""Name is required."">
+        <DxTextBox @bind-Value=""@_model.Name"" />
+    </DxFormItem>
+    <DxFormItem FieldName=""Email"" LabelText=""Email Address""
+                Required=""true"" RequiredMessage=""Email is required."">
+        <DxTextBox @bind-Value=""@_model.Email"" />
+    </DxFormItem>
+</DxFormValidation>
+
+@code {
+    private RegistrationModel _model = new();
+    private bool _submitted;
+
+    private void HandleValid(EditContext ctx) { _submitted = true; }
+
+    public class RegistrationModel
+    {
+        public string Name { get; set; } = """";
+        public string Email { get; set; } = """";
+        public string Password { get; set; } = """";
+    }
+}")
+            </Code>
+        </ExampleBlock>
+
+        <ExampleBlock Title="Email + MinLength Validation" Description="Combine the Email and MinLength convenience parameters for concise inline validation.">
+            <Demo>
+                <DxFormValidation Model="@_emailModel" OnValidSubmit="@HandleEmailValid" SubmitButtonText="Sign Up">
+                    <DxFormItem FieldName="Email" LabelText="Email" Required="true" Email="true" EmailMessage="Please enter a valid email address.">
+                        <DxTextBox @bind-Value="@_emailModel.Email" />
+                    </DxFormItem>
+                    <DxFormItem FieldName="Password" LabelText="Password" Required="true" MinLength="6" MinLengthMessage="Password must be at least 6 characters.">
+                        <DxTextBox @bind-Value="@_emailModel.Password" />
+                    </DxFormItem>
+                </DxFormValidation>
+                @if (_emailSubmitted)
+                {
+                    <div style="margin-top: 0.75rem; color: green; font-weight: 600;">Sign-up complete!</div>
+                }
+            </Demo>
+            <Code>
+@(@"<DxFormValidation Model=""@_model"" OnValidSubmit=""@HandleValid"" SubmitButtonText=""Sign Up"">
+    <DxFormItem FieldName=""Email"" LabelText=""Email""
+                Required=""true"" Email=""true""
+                EmailMessage=""Please enter a valid email address."">
+        <DxTextBox @bind-Value=""@_model.Email"" />
+    </DxFormItem>
+    <DxFormItem FieldName=""Password"" LabelText=""Password""
+                Required=""true"" MinLength=""6""
+                MinLengthMessage=""Password must be at least 6 characters."">
+        <DxTextBox @bind-Value=""@_model.Password"" />
+    </DxFormItem>
+</DxFormValidation>
+
+@code {
+    private RegistrationModel _model = new();
+
+    private void HandleValid(EditContext ctx) { /* process sign-up */ }
+
+    public class RegistrationModel
+    {
+        public string Name { get; set; } = """";
+        public string Email { get; set; } = """";
+        public string Password { get; set; } = """";
+    }
+}")
+            </Code>
+        </ExampleBlock>
+
+        <ExampleBlock Title="Validation Summary" Description="Enable ShowValidationSummary to display all validation errors in a grouped summary at the top of the form.">
+            <Demo>
+                <DxFormValidation Model="@_summaryModel" OnValidSubmit="@HandleSummaryValid" ShowValidationSummary="true" SubmitButtonText="Submit">
+                    <DxFormItem FieldName="Name" LabelText="Name" Required="true" RequiredMessage="Name is required.">
+                        <DxTextBox @bind-Value="@_summaryModel.Name" />
+                    </DxFormItem>
+                    <DxFormItem FieldName="Email" LabelText="Email" Required="true" Email="true" RequiredMessage="Email is required." EmailMessage="Invalid email format.">
+                        <DxTextBox @bind-Value="@_summaryModel.Email" />
+                    </DxFormItem>
+                    <DxFormItem FieldName="Password" LabelText="Password" Required="true" MinLength="8" RequiredMessage="Password is required." MinLengthMessage="Password must be at least 8 characters.">
+                        <DxTextBox @bind-Value="@_summaryModel.Password" />
+                    </DxFormItem>
+                </DxFormValidation>
+                @if (_summarySubmitted)
+                {
+                    <div style="margin-top: 0.75rem; color: green; font-weight: 600;">All fields valid. Form submitted!</div>
+                }
+            </Demo>
+            <Code>
+@(@"<DxFormValidation Model=""@_model""
+                   OnValidSubmit=""@HandleValid""
+                   ShowValidationSummary=""true""
+                   SubmitButtonText=""Submit"">
+    <DxFormItem FieldName=""Name"" LabelText=""Name""
+                Required=""true"" RequiredMessage=""Name is required."">
+        <DxTextBox @bind-Value=""@_model.Name"" />
+    </DxFormItem>
+    <DxFormItem FieldName=""Email"" LabelText=""Email""
+                Required=""true"" Email=""true""
+                RequiredMessage=""Email is required.""
+                EmailMessage=""Invalid email format."">
+        <DxTextBox @bind-Value=""@_model.Email"" />
+    </DxFormItem>
+    <DxFormItem FieldName=""Password"" LabelText=""Password""
+                Required=""true"" MinLength=""8""
+                RequiredMessage=""Password is required.""
+                MinLengthMessage=""Password must be at least 8 characters."">
+        <DxTextBox @bind-Value=""@_model.Password"" />
+    </DxFormItem>
+</DxFormValidation>")
+            </Code>
+        </ExampleBlock>
+    </Examples>
+</ComponentDoc>
+
+@code {
+    // --- Basic Required Validation ---
+    private RegistrationModel _basicModel = new();
+    private bool _basicSubmitted;
+    private void HandleBasicValid(EditContext ctx) { _basicSubmitted = true; }
+
+    // --- Email + MinLength ---
+    private RegistrationModel _emailModel = new();
+    private bool _emailSubmitted;
+    private void HandleEmailValid(EditContext ctx) { _emailSubmitted = true; }
+
+    // --- Validation Summary ---
+    private RegistrationModel _summaryModel = new();
+    private bool _summarySubmitted;
+    private void HandleSummaryValid(EditContext ctx) { _summarySubmitted = true; }
+
+    public class RegistrationModel
+    {
+        public string Name { get; set; } = "";
+        public string Email { get; set; } = "";
+        public string Password { get; set; } = "";
+    }
+}

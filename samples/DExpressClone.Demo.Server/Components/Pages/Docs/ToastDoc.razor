@@ -1,0 +1,90 @@
+@page "/docs/toast"
+@rendermode InteractiveServer
+@inject DxToastService ToastService
+
+<ComponentDoc Title="DxToastService / DxToastProvider" Description="A toast notification system consisting of an injectable service for showing toasts and a provider component placed in the layout to render them.">
+    <ParametersContent>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td colspan="4"><strong>DxToastService Methods</strong></td></tr>
+                <tr><td><code>Show(message, type, timeoutMs, title?)</code></td><td><code>void</code></td><td>—</td><td>Shows a toast with the specified message, type, timeout in milliseconds, and optional title.</td></tr>
+                <tr><td><code>ShowSuccess(message, title?)</code></td><td><code>void</code></td><td>—</td><td>Shows a success toast with an optional title.</td></tr>
+                <tr><td><code>ShowError(message, title?)</code></td><td><code>void</code></td><td>—</td><td>Shows an error toast with an optional title.</td></tr>
+                <tr><td><code>ShowWarning(message, title?)</code></td><td><code>void</code></td><td>—</td><td>Shows a warning toast with an optional title.</td></tr>
+                <tr><td><code>ShowInfo(message, title?)</code></td><td><code>void</code></td><td>—</td><td>Shows an info toast with an optional title.</td></tr>
+                <tr><td colspan="4"><strong>DxToastProvider Parameters</strong></td></tr>
+                <tr><td><code>Position</code></td><td><code>ToastPosition</code></td><td><code>TopRight</code></td><td>Position of the toast container: TopRight, TopLeft, BottomRight, BottomLeft, TopCenter, BottomCenter.</td></tr>
+                <tr><td><code>MaxToasts</code></td><td><code>int</code></td><td><code>5</code></td><td>Maximum number of toasts displayed simultaneously.</td></tr>
+            </tbody>
+        </table>
+    </ParametersContent>
+    <EventsContent>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td colspan="3">DxToastService is a service, not a component. Toasts are dismissed automatically via timeout or manually by the user clicking the close button.</td></tr>
+            </tbody>
+        </table>
+    </EventsContent>
+    <Examples>
+        <ExampleBlock Title="Toast Types" Description="Trigger different toast types using the convenience methods on DxToastService.">
+            <Demo>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <DxButton Text="Success" RenderStyle="ButtonRenderStyle.Success" Click="@ShowSuccess" />
+                    <DxButton Text="Error" RenderStyle="ButtonRenderStyle.Danger" Click="@ShowError" />
+                    <DxButton Text="Warning" RenderStyle="ButtonRenderStyle.Warning" Click="@ShowWarning" />
+                    <DxButton Text="Info" RenderStyle="ButtonRenderStyle.Info" Click="@ShowInfo" />
+                </div>
+            </Demo>
+            <Code>
+@(@"@inject DxToastService ToastService
+
+<DxButton Text=""Success"" RenderStyle=""ButtonRenderStyle.Success"" Click=""@ShowSuccess"" />
+<DxButton Text=""Error"" RenderStyle=""ButtonRenderStyle.Danger"" Click=""@ShowError"" />
+<DxButton Text=""Warning"" RenderStyle=""ButtonRenderStyle.Warning"" Click=""@ShowWarning"" />
+<DxButton Text=""Info"" RenderStyle=""ButtonRenderStyle.Info"" Click=""@ShowInfo"" />
+
+@code {
+    private void ShowSuccess() => ToastService.ShowSuccess(""Operation completed successfully!"");
+    private void ShowError() => ToastService.ShowError(""Something went wrong!"");
+    private void ShowWarning() => ToastService.ShowWarning(""Please check your input."");
+    private void ShowInfo() => ToastService.ShowInfo(""Here is some information."");
+}")
+            </Code>
+        </ExampleBlock>
+
+        <ExampleBlock Title="Custom Title" Description="Pass an optional title to give the toast a header.">
+            <Demo>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <DxButton Text="Success with Title" RenderStyle="ButtonRenderStyle.Success" Click="@ShowSuccessWithTitle" />
+                    <DxButton Text="Error with Title" RenderStyle="ButtonRenderStyle.Danger" Click="@ShowErrorWithTitle" />
+                </div>
+            </Demo>
+            <Code>
+@(@"ToastService.ShowSuccess(""File saved successfully."", ""Saved"");
+ToastService.ShowError(""Unable to connect to server."", ""Connection Failed"");")
+            </Code>
+        </ExampleBlock>
+
+        <ExampleBlock Title="No Auto-Dismiss" Description="Use Show() with a timeout of 0 to create a toast that stays until the user dismisses it manually.">
+            <Demo>
+                <DxButton Text="Show Persistent Error" RenderStyle="ButtonRenderStyle.Danger" Click="@ShowPersistentError" />
+            </Demo>
+            <Code>
+@(@"ToastService.Show(""This error will not auto-dismiss. Click the close button to remove it."",
+    ToastType.Error, 0, ""Persistent Error"");")
+            </Code>
+        </ExampleBlock>
+    </Examples>
+</ComponentDoc>
+
+@code {
+    private void ShowSuccess() => ToastService.ShowSuccess("Operation completed successfully!");
+    private void ShowError() => ToastService.ShowError("Something went wrong!");
+    private void ShowWarning() => ToastService.ShowWarning("Please check your input.");
+    private void ShowInfo() => ToastService.ShowInfo("Here is some information.");
+    private void ShowSuccessWithTitle() => ToastService.ShowSuccess("File saved successfully.", "Saved");
+    private void ShowErrorWithTitle() => ToastService.ShowError("Unable to connect to server.", "Connection Failed");
+    private void ShowPersistentError() => ToastService.Show("This error will not auto-dismiss. Click the close button to remove it.", ToastType.Error, 0, "Persistent Error");
+}

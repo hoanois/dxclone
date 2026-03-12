@@ -1,0 +1,70 @@
+@page "/docs/getting-started"
+@rendermode InteractiveServer
+
+<div class="doc-page">
+    <h1>Getting Started</h1>
+    <p class="doc-description">Learn how to install and configure DExpressClone components in your Blazor application.</p>
+
+    <section class="doc-section">
+        <h2>Installation</h2>
+        <div class="getting-started-step">
+            <h3>1. Add NuGet Package</h3>
+            <CodeBlock Language="shell" Code="dotnet add package DExpressClone.Components" />
+        </div>
+        <div class="getting-started-step">
+            <h3>2. Add Imports</h3>
+            <CodeBlock Language="razor" Code="@(@"@using DExpressClone.Components.Layout.DxButton
+@using DExpressClone.Components.Editors.DxTextBox
+@using DExpressClone.Components.Editors.DxCheckBox
+@using DExpressClone.Components.Editors.DxComboBox
+@using DExpressClone.Components.Editors.DxNumericEdit
+@using DExpressClone.Components.Editors.DxRadioGroup
+@using DExpressClone.Components.Editors.DxDateEdit
+@using DExpressClone.Components.Layout.DxPanel
+@using DExpressClone.Components.Layout.DxTabs
+@using DExpressClone.Components.Layout.DxAccordion
+@using DExpressClone.Components.Layout.DxToolbar
+@using DExpressClone.Components.Grid
+@using DExpressClone.Components.Charts")" />
+        </div>
+        <div class="getting-started-step">
+            <h3>3. Add CSS References</h3>
+            <CodeBlock Language="html" Code="@(@"<link rel=""stylesheet"" href=""_content/DExpressClone.Components/css/dx-theme-fluent.css"" />
+<link rel=""stylesheet"" href=""_content/DExpressClone.Components/css/dx-base.css"" />
+<link rel=""stylesheet"" href=""_content/DExpressClone.Components/css/dx-editors.css"" />
+<link rel=""stylesheet"" href=""_content/DExpressClone.Components/css/dx-layout.css"" />
+<link rel=""stylesheet"" href=""_content/DExpressClone.Components/css/dx-grid.css"" />
+<link rel=""stylesheet"" href=""_content/DExpressClone.Components/css/dx-charts.css"" />")" />
+        </div>
+        <div class="getting-started-step">
+            <h3>4. Add JS Reference</h3>
+            <CodeBlock Language="html" Code="@(@"<script src=""_content/DExpressClone.Components/js/dx-interop.js""></script>")" />
+        </div>
+    </section>
+
+    <section class="doc-section">
+        <h2>Your First Component</h2>
+        <ExampleBlock Title="Hello Button">
+            <Demo>
+                <DxButton Text="Click Me!" RenderStyle="ButtonRenderStyle.Primary" Click="@(() => _clicked = true)" />
+                @if (_clicked)
+                {
+                    <p style="margin-top: 0.5rem;">Button was clicked!</p>
+                }
+            </Demo>
+            <Code>
+@(@"<DxButton Text=""Click Me!""
+         RenderStyle=""ButtonRenderStyle.Primary""
+         Click=""@(() => _clicked = true)"" />
+
+@code {
+    private bool _clicked;
+}")
+            </Code>
+        </ExampleBlock>
+    </section>
+</div>
+
+@code {
+    private bool _clicked;
+}

@@ -1,0 +1,143 @@
+@page "/editors"
+@rendermode InteractiveServer
+
+<PageTitle>Editors Demo - DExpressClone</PageTitle>
+
+<h1>Editors Demo</h1>
+<p>Demonstrating all editor components with two-way data binding.</p>
+
+<div class="demo-editors-layout">
+    <div class="demo-editors-form">
+        <h2>Employee Form</h2>
+
+        <div class="demo-field">
+            <label>First Name</label>
+            <DxTextBox Text="@_firstName" TextChanged="@(v => _firstName = v)" NullText="Enter first name..." />
+        </div>
+
+        <div class="demo-field">
+            <label>Last Name</label>
+            <DxTextBox Text="@_lastName" TextChanged="@(v => _lastName = v)" NullText="Enter last name..." />
+        </div>
+
+        <div class="demo-field">
+            <label>Email</label>
+            <DxTextBox Text="@_email" TextChanged="@(v => _email = v)" NullText="Enter email..." />
+        </div>
+
+        <div class="demo-field">
+            <label>Age</label>
+            <DxNumericEdit TValue="int" Value="@_age" ValueChanged="@(v => _age = v)" MinValue="18" MaxValue="100" />
+        </div>
+
+        <div class="demo-field">
+            <label>Salary</label>
+            <DxNumericEdit TValue="double" Value="@_salary" ValueChanged="@(v => _salary = v)" MinValue="0" DisplayFormat="C2" />
+        </div>
+
+        <div class="demo-field">
+            <DxCheckBox Checked="@_isActive" CheckedChanged="@(v => _isActive = v)" LabelText="Is Active" />
+        </div>
+
+        <div class="demo-field">
+            <DxCheckBox Checked="@_newsletter" CheckedChanged="@(v => _newsletter = v)" LabelText="Subscribe to Newsletter" />
+        </div>
+
+        <div class="demo-field">
+            <label>Department (Radio)</label>
+            <DxRadioGroup TValue="string"
+                          Items="@_departments"
+                          Value="@_selectedDepartment"
+                          ValueChanged="@(v => _selectedDepartment = v)"
+                          Layout="RadioGroupLayout.Horizontal" />
+        </div>
+
+        <div class="demo-field">
+            <label>Department (ComboBox)</label>
+            <DxComboBox TData="string" TValue="string"
+                        Data="@_allDepartments"
+                        Value="@_comboDepartment"
+                        ValueChanged="@(v => _comboDepartment = v)"
+                        TextFieldName="@(d => d)"
+                        ValueFieldName="@(d => d)"
+                        NullText="Select department..." />
+        </div>
+
+        <div class="demo-field">
+            <label>Hire Date</label>
+            <DxDateEdit Date="@_hireDate" DateChanged="@(v => _hireDate = v)" />
+        </div>
+
+        <div class="demo-field">
+            <label>Birth Date</label>
+            <DxDateEdit Date="@_birthDate" DateChanged="@(v => _birthDate = v)" DisplayFormat="yyyy-MM-dd" />
+        </div>
+    </div>
+
+    <div class="demo-editors-summary">
+        <h2>Bound Values</h2>
+        <div class="demo-summary-panel">
+            <div class="demo-summary-row">
+                <span class="demo-summary-label">First Name:</span>
+                <span>@(_firstName ?? "(empty)")</span>
+            </div>
+            <div class="demo-summary-row">
+                <span class="demo-summary-label">Last Name:</span>
+                <span>@(_lastName ?? "(empty)")</span>
+            </div>
+            <div class="demo-summary-row">
+                <span class="demo-summary-label">Email:</span>
+                <span>@(_email ?? "(empty)")</span>
+            </div>
+            <div class="demo-summary-row">
+                <span class="demo-summary-label">Age:</span>
+                <span>@_age</span>
+            </div>
+            <div class="demo-summary-row">
+                <span class="demo-summary-label">Salary:</span>
+                <span>@_salary.ToString("C2")</span>
+            </div>
+            <div class="demo-summary-row">
+                <span class="demo-summary-label">Is Active:</span>
+                <span>@(_isActive == true ? "Yes" : _isActive == false ? "No" : "Indeterminate")</span>
+            </div>
+            <div class="demo-summary-row">
+                <span class="demo-summary-label">Newsletter:</span>
+                <span>@(_newsletter == true ? "Subscribed" : "Not subscribed")</span>
+            </div>
+            <div class="demo-summary-row">
+                <span class="demo-summary-label">Department (Radio):</span>
+                <span>@(_selectedDepartment ?? "(none)")</span>
+            </div>
+            <div class="demo-summary-row">
+                <span class="demo-summary-label">Department (ComboBox):</span>
+                <span>@(_comboDepartment ?? "(none)")</span>
+            </div>
+            <div class="demo-summary-row">
+                <span class="demo-summary-label">Hire Date:</span>
+                <span>@(_hireDate?.ToString("yyyy-MM-dd") ?? "(not set)")</span>
+            </div>
+            <div class="demo-summary-row">
+                <span class="demo-summary-label">Birth Date:</span>
+                <span>@(_birthDate?.ToString("yyyy-MM-dd") ?? "(not set)")</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private string? _firstName = "John";
+    private string? _lastName = "Doe";
+    private string? _email = "john.doe@company.com";
+    private int _age = 30;
+    private double _salary = 75000;
+    private bool? _isActive = true;
+    private bool? _newsletter = false;
+    private string? _selectedDepartment = "Engineering";
+    private string? _comboDepartment;
+    private DateTime? _hireDate = DateTime.Today;
+    private DateTime? _birthDate = new DateTime(1994, 6, 15);
+
+    private List<string> _departments = new() { "Engineering", "Marketing", "Sales", "HR", "Finance" };
+    private List<string> _allDepartments = SampleDataService.GetDepartments();
+}

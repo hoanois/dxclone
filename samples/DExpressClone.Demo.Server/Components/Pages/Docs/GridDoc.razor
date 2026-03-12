@@ -1,0 +1,91 @@
+@page "/docs/grid"
+@rendermode InteractiveServer
+@using DExpressClone.Demo.Server.Data
+
+<ComponentDoc Title="DxGrid" Description="A high-performance data grid with sorting, filtering, selection, virtual scrolling, and row detail templates.">
+    <ParametersContent>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>Data</code></td><td><code>IEnumerable&lt;TItem&gt;?</code></td><td><code>null</code></td><td>The data source for grid rows.</td></tr>
+                <tr><td><code>PageSize</code></td><td><code>int</code></td><td><code>0</code></td><td>Number of rows per page. 0 = no paging.</td></tr>
+                <tr><td><code>AllowSort</code></td><td><code>bool</code></td><td><code>true</code></td><td>Enable column sorting.</td></tr>
+                <tr><td><code>ShowFilterRow</code></td><td><code>bool</code></td><td><code>false</code></td><td>Show the filter row below headers.</td></tr>
+                <tr><td><code>AllowSelection</code></td><td><code>bool</code></td><td><code>false</code></td><td>Enable row selection.</td></tr>
+                <tr><td><code>SelectionMode</code></td><td><code>GridSelectionMode</code></td><td><code>Single</code></td><td>Selection mode: Single or Multiple.</td></tr>
+                <tr><td><code>GridHeight</code></td><td><code>string</code></td><td><code>"500px"</code></td><td>Height of the grid container.</td></tr>
+                <tr><td><code>RowHeight</code></td><td><code>int</code></td><td><code>36</code></td><td>Height of each row in pixels.</td></tr>
+                <tr><td><code>KeyFieldName</code></td><td><code>string?</code></td><td><code>null</code></td><td>Key field for row identity.</td></tr>
+                <tr><td><code>Columns</code></td><td><code>RenderFragment?</code></td><td><code>null</code></td><td>Column definitions (DxGridColumn).</td></tr>
+            </tbody>
+        </table>
+    </ParametersContent>
+    <EventsContent>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>RowClick</code></td><td><code>EventCallback&lt;TItem&gt;</code></td><td>Fires when a row is clicked.</td></tr>
+                <tr><td><code>RowDoubleClick</code></td><td><code>EventCallback&lt;TItem&gt;</code></td><td>Fires when a row is double-clicked.</td></tr>
+                <tr><td><code>SelectedItemsChanged</code></td><td><code>EventCallback&lt;IEnumerable&lt;TItem&gt;&gt;</code></td><td>Fires when selected items change.</td></tr>
+                <tr><td><code>SortChanged</code></td><td><code>EventCallback&lt;GridSortDescriptor&gt;</code></td><td>Fires when sort changes.</td></tr>
+                <tr><td><code>FilterChanged</code></td><td><code>EventCallback&lt;GridFilterDescriptor&gt;</code></td><td>Fires when filter changes.</td></tr>
+            </tbody>
+        </table>
+    </EventsContent>
+    <Examples>
+        <ExampleBlock Title="Basic Grid" Description="Simple grid displaying data with columns.">
+            <Demo>
+                <DxGrid TItem="Employee" Data="@_employees" GridHeight="250px" PageSize="10">
+                    <Columns>
+                        <DxGridDataColumn Caption="First Name" FieldName="@nameof(Employee.FirstName)" />
+                        <DxGridDataColumn Caption="Last Name" FieldName="@nameof(Employee.LastName)" />
+                        <DxGridDataColumn Caption="Department" FieldName="@nameof(Employee.Department)" />
+                    </Columns>
+                </DxGrid>
+            </Demo>
+            <Code>
+@(@"<DxGrid TItem=""Employee"" Data=""@_employees"" GridHeight=""250px"">
+    <Columns>
+        <DxGridDataColumn
+                     Caption=""Name""
+                     FieldName=""@nameof(Employee.Name)"" />
+        <DxGridDataColumn
+                     Caption=""Position""
+                     FieldName=""@nameof(Employee.Position)"" />
+        <DxGridDataColumn
+                     Caption=""Department""
+                     FieldName=""@nameof(Employee.Department)"" />
+    </Columns>
+</DxGrid>")
+            </Code>
+        </ExampleBlock>
+
+        <ExampleBlock Title="Sorting and Filtering" Description="Enable column sorting and the filter row.">
+            <Demo>
+                <DxGrid TItem="Employee" Data="@_employees" AllowSort="true" ShowFilterRow="true" GridHeight="300px" PageSize="10">
+                    <Columns>
+                        <DxGridDataColumn Caption="First Name" FieldName="@nameof(Employee.FirstName)" />
+                        <DxGridDataColumn Caption="Email" FieldName="@nameof(Employee.Email)" />
+                        <DxGridDataColumn Caption="Department" FieldName="@nameof(Employee.Department)" />
+                    </Columns>
+                </DxGrid>
+            </Demo>
+            <Code>
+@(@"<DxGrid TItem=""Employee"" Data=""@_employees""
+       AllowSort=""true""
+       ShowFilterRow=""true""
+       GridHeight=""300px"">
+    <Columns>
+        <DxGridDataColumn
+                     Caption=""Name""
+                     FieldName=""@nameof(Employee.Name)"" />
+    </Columns>
+</DxGrid>")
+            </Code>
+        </ExampleBlock>
+    </Examples>
+</ComponentDoc>
+
+@code {
+    private List<Employee> _employees = new SampleDataService().GenerateEmployees(10);
+}

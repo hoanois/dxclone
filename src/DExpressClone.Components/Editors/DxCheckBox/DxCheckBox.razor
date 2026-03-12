@@ -1,0 +1,50 @@
+@namespace DExpressClone.Components.Editors.DxCheckBox
+@inherits DExpressClone.Components.Core.DxFormEditorBase<bool?>
+
+<div class="@RootCssClass"
+     id="@Id"
+     @onclick="HandleClickAsync"
+     @onfocus="HandleFocusAsync"
+     @onblur="HandleBlurAsync"
+     @onmouseenter="HandleMouseEnter"
+     @onmouseleave="HandleMouseLeave"
+     tabindex="@(TabIndex ?? 0)"
+     role="checkbox"
+     aria-checked="@AriaChecked"
+     aria-disabled="@(!Enabled)"
+     @attributes="AdditionalAttributes">
+
+    @if (LabelPosition == LabelPosition.Left && !string.IsNullOrEmpty(LabelText))
+    {
+        <span class="dx-checkbox-label">@LabelText</span>
+    }
+
+    <span class="dx-checkbox-box">
+        @if (Checked == true)
+        {
+            <svg class="dx-checkbox-checkmark" viewBox="0 0 16 16" fill="none">
+                <path d="M3 8L6.5 11.5L13 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        }
+        else if (Checked is null && AllowIndeterminate)
+        {
+            <svg class="dx-checkbox-indeterminate" viewBox="0 0 16 16" fill="none">
+                <rect x="3" y="7" width="10" height="2" rx="1" fill="currentColor"/>
+            </svg>
+        }
+    </span>
+
+    @if (LabelPosition == LabelPosition.Right && !string.IsNullOrEmpty(LabelText))
+    {
+        <span class="dx-checkbox-label">@LabelText</span>
+    }
+</div>
+
+@code {
+    private string AriaChecked => Checked switch
+    {
+        true => "true",
+        false => "false",
+        null => "mixed"
+    };
+}

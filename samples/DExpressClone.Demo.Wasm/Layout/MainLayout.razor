@@ -1,0 +1,49 @@
+@inherits LayoutComponentBase
+@inject IJSRuntime JS
+
+<div class="demo-layout">
+    <aside class="demo-sidebar">
+        <div class="demo-sidebar-header">
+            <div class="demo-logo">
+                <span class="demo-logo-icon">DX</span>
+                <span class="demo-logo-text">DExpressClone</span>
+            </div>
+        </div>
+        <nav class="demo-nav">
+            <NavLink class="demo-nav-link" href="" Match="NavLinkMatch.All">
+                <span>Home</span>
+            </NavLink>
+            <NavLink class="demo-nav-link" href="grid">
+                <span>Grid Demo</span>
+            </NavLink>
+            <NavLink class="demo-nav-link" href="editors">
+                <span>Editors Demo</span>
+            </NavLink>
+            <NavLink class="demo-nav-link" href="charts">
+                <span>Charts Demo</span>
+            </NavLink>
+        </nav>
+    </aside>
+    <div class="demo-main">
+        <header class="demo-header">
+            <div class="demo-header-spacer"></div>
+            <button class="demo-theme-btn" @onclick="ToggleTheme">
+                @(_isDark ? "Light" : "Dark") Theme
+            </button>
+        </header>
+        <main class="demo-content">
+            @Body
+        </main>
+    </div>
+</div>
+
+@code {
+    private bool _isDark = false;
+
+    private async Task ToggleTheme()
+    {
+        _isDark = !_isDark;
+        var theme = _isDark ? "dark" : "light";
+        await JS.InvokeVoidAsync("eval", $"document.documentElement.setAttribute('data-dx-theme', '{theme}')");
+    }
+}

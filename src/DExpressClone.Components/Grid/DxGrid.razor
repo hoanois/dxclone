@@ -1,0 +1,98 @@
+@namespace DExpressClone.Components.Grid
+@typeparam TItem
+@inherits DExpressClone.Components.Core.DxDataBoundComponentBase<TItem>
+@using DExpressClone.Components.Grid.Internal
+@using DExpressClone.Components.Grid.Models
+@using DExpressClone.Components.Grid.DataProcessing
+
+<CascadingValue Value="(IDxGridColumnOwner)this" IsFixed="true">
+    @Columns
+</CascadingValue>
+
+<div class="@GridCssClass" id="@Id" style="@GridStyle" @attributes="AdditionalAttributes">
+    @if (IsDataLoading)
+    {
+        @if (LoadingTemplate is not null)
+        {
+            <div class="dx-grid-loading-overlay">
+                @LoadingTemplate
+            </div>
+        }
+        else
+        {
+            <div class="dx-grid-loading-overlay">
+                <span>Loading...</span>
+            </div>
+        }
+    }
+    else if (ProcessedData.Count == 0 && !IsDataLoading)
+    {
+        @if (EmptyDataTemplate is not null)
+        {
+            @EmptyDataTemplate
+        }
+        else
+        {
+            <div class="dx-grid-empty">No data to display.</div>
+        }
+    }
+    else
+    {
+        <div class="dx-grid-scroll-container">
+            <GridHeader TItem="TItem"
+                        Columns="@_columns"
+                        SortDescriptors="@_sortDescriptors"
+                        OnSortChanged="@HandleSortChanged"
+                        AllowSort="@AllowSort" />
+
+            @if (ShowFilterRow)
+            {
+                <GridFilterRow Columns="@_columns"
+                               FilterDescriptors="@_filterDescriptors"
+                               OnFilterChanged="@HandleFilterChanged" />
+            }
+
+            @if (IsVirtualizationMode)
+            {
+                <VirtualGridViewport TItem="TItem"
+                                     Items="@ProcessedData"
+                                     Columns="@_columns"
+                                     RowHeight="@RowHeight"
+                                     Height="@GridHeight"
+                                     VirtualizationWindow="@_virtualizationState.CurrentWindow"
+                                     OnScroll="@HandleScroll"
+                                     OnRowClick="@HandleRowClick"
+                                     OnRowDoubleClick="@HandleRowDoubleClick"
+                                     OnSelectionToggled="@HandleSelectionToggled"
+                                     IsItemSelected="@_selectionModel.IsSelected"
+                                     IsItemFocused="@IsItemFocused" />
+            }
+            else
+            {
+                <div class="dx-grid-body" style="max-height:@GridHeight;">
+                    @foreach (var item in PagedData)
+                    {
+                        <GridRow TItem="TItem"
+                                 Item="@item"
+                                 Columns="@_columns"
+                                 IsSelected="@_selectionModel.IsSelected(item)"
+                                 IsFocused="@IsItemFocused(item)"
+                                 RowIndex="@(((IList<TItem>)ProcessedData).IndexOf(item))"
+                                 RowHeight="@RowHeight"
+                                 RowClick="@HandleRowClick"
+                                 RowDoubleClick="@HandleRowDoubleClick"
+                                 SelectionToggled="@HandleSelectionToggled" />
+                    }
+                </div>
+            }
+        </div>
+
+        @if (!IsVirtualizationMode)
+        {
+            <GridPager PageIndex="@_pageIndex"
+                       PageCount="@PageCount"
+                       PageSize="@PageSize"
+                       PageIndexChanged="@HandlePageIndexChanged" />
+        }
+    }
+</div>

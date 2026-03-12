@@ -1,0 +1,77 @@
+@page "/docs/numericedit"
+@rendermode InteractiveServer
+
+<ComponentDoc Title="DxNumericEdit" Description="A generic numeric editor with spin buttons, min/max validation, and display formatting.">
+    <ParametersContent>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>Value</code></td><td><code>TValue?</code></td><td><code>null</code></td><td>The numeric value.</td></tr>
+                <tr><td><code>MinValue</code></td><td><code>TValue?</code></td><td><code>null</code></td><td>Minimum allowed value.</td></tr>
+                <tr><td><code>MaxValue</code></td><td><code>TValue?</code></td><td><code>null</code></td><td>Maximum allowed value.</td></tr>
+                <tr><td><code>Increment</code></td><td><code>TValue?</code></td><td><code>null</code></td><td>Step value for spin buttons.</td></tr>
+                <tr><td><code>DisplayFormat</code></td><td><code>string?</code></td><td><code>null</code></td><td>Format string for display (e.g., "C2", "N0").</td></tr>
+                <tr><td><code>ShowSpinButtons</code></td><td><code>bool</code></td><td><code>true</code></td><td>Whether to show increment/decrement buttons.</td></tr>
+                <tr><td><code>NullText</code></td><td><code>string?</code></td><td><code>null</code></td><td>Placeholder text when value is null.</td></tr>
+                <tr><td><code>Enabled</code></td><td><code>bool</code></td><td><code>true</code></td><td>Whether the editor is enabled.</td></tr>
+            </tbody>
+        </table>
+    </ParametersContent>
+    <EventsContent>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>ValueChanged</code></td><td><code>EventCallback&lt;TValue&gt;</code></td><td>Fires when the value changes.</td></tr>
+            </tbody>
+        </table>
+    </EventsContent>
+    <Examples>
+        <ExampleBlock Title="Basic Numeric Input" Description="Simple integer input with spin buttons.">
+            <Demo>
+                <DxNumericEdit TValue="int" @bind-Value="_quantity" NullText="Enter quantity..." />
+                <p style="margin-top: 0.5rem; font-size: 0.9rem;">Value: @_quantity</p>
+            </Demo>
+            <Code>
+@(@"<DxNumericEdit TValue=""int""
+              @bind-Value=""_quantity""
+              NullText=""Enter quantity..."" />
+
+@code {
+    private int _quantity = 1;
+}")
+            </Code>
+        </ExampleBlock>
+
+        <ExampleBlock Title="Min/Max Range" Description="Restrict the value to a specific range.">
+            <Demo>
+                <DxNumericEdit TValue="int" @bind-Value="_rangeValue" MinValue="0" MaxValue="100" Increment="5" />
+                <p style="margin-top: 0.5rem; font-size: 0.9rem;">Value: @_rangeValue (range: 0-100, step: 5)</p>
+            </Demo>
+            <Code>
+@(@"<DxNumericEdit TValue=""int""
+              @bind-Value=""_rangeValue""
+              MinValue=""0""
+              MaxValue=""100""
+              Increment=""5"" />")
+            </Code>
+        </ExampleBlock>
+
+        <ExampleBlock Title="Without Spin Buttons" Description="Hide the spin buttons for a clean text-only input.">
+            <Demo>
+                <DxNumericEdit TValue="decimal" @bind-Value="_price" ShowSpinButtons="false" NullText="Enter price..." />
+            </Demo>
+            <Code>
+@(@"<DxNumericEdit TValue=""decimal""
+              @bind-Value=""_price""
+              ShowSpinButtons=""false""
+              NullText=""Enter price..."" />")
+            </Code>
+        </ExampleBlock>
+    </Examples>
+</ComponentDoc>
+
+@code {
+    private int _quantity = 1;
+    private int _rangeValue = 50;
+    private decimal _price = 29.99m;
+}

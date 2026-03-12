@@ -1,0 +1,19 @@
+@namespace DExpressClone.Components.Layout
+@inherits DExpressClone.Components.Core.DxComponentBase
+
+<div class="@ContainerCssClass" aria-live="polite" aria-atomic="false">
+    @foreach (var toast in _toasts)
+    {
+        <div class="@GetToastCssClass(toast)" role="alert">
+            <div class="dx-toast-icon">@GetToastIcon(toast.Type)</div>
+            <div class="dx-toast-content">
+                @if (!string.IsNullOrEmpty(toast.Title))
+                {
+                    <div class="dx-toast-title">@toast.Title</div>
+                }
+                <div class="dx-toast-message">@toast.Message</div>
+            </div>
+            <button class="dx-toast-close" @onclick="() => DismissToast(toast.Id)" aria-label="Dismiss">&times;</button>
+        </div>
+    }
+</div>

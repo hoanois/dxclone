@@ -1,0 +1,51 @@
+@namespace DExpressClone.Components.Charts.Internal
+@using DExpressClone.Components.Charts.Models
+
+@if (Scale is not null)
+{
+    <g class="dx-chart-axis">
+        @* X axis line *@
+        <line x1="@F(Scale.PlotLeft)"
+              y1="@F(Scale.PlotTop + Scale.PlotHeight)"
+              x2="@F(Scale.PlotLeft + Scale.PlotWidth)"
+              y2="@F(Scale.PlotTop + Scale.PlotHeight)"
+              class="dx-chart-axis-line" />
+
+        @* Y axis line *@
+        <line x1="@F(Scale.PlotLeft)"
+              y1="@F(Scale.PlotTop)"
+              x2="@F(Scale.PlotLeft)"
+              y2="@F(Scale.PlotTop + Scale.PlotHeight)"
+              class="dx-chart-axis-line" />
+
+        @* X axis ticks and labels *@
+        @foreach (var tick in XTicks)
+        {
+            var x = Scale.MapX(tick);
+            var yBase = Scale.PlotTop + Scale.PlotHeight;
+            <line x1="@F(x)" y1="@F(yBase)" x2="@F(x)" y2="@F(yBase + 6)" class="dx-chart-tick" />
+            @((MarkupString)$"<text x=\"{F(x)}\" y=\"{F(yBase + 20)}\" text-anchor=\"middle\" class=\"dx-chart-tick-label\">{FormatX(tick)}</text>")
+        }
+
+        @* Y axis ticks and labels *@
+        @foreach (var tick in YTicks)
+        {
+            var y = Scale.MapY(tick);
+            var xBase = Scale.PlotLeft;
+            <line x1="@F(xBase - 6)" y1="@F(y)" x2="@F(xBase)" y2="@F(y)" class="dx-chart-tick" />
+            @((MarkupString)$"<text x=\"{F(xBase - 10)}\" y=\"{F(y + 4)}\" text-anchor=\"end\" class=\"dx-chart-tick-label\">{FormatY(tick)}</text>")
+        }
+
+        @* X axis title *@
+        @if (!string.IsNullOrEmpty(XAxisDescriptor?.Title))
+        {
+            @((MarkupString)$"<text x=\"{F(Scale.PlotLeft + Scale.PlotWidth / 2)}\" y=\"{F(Scale.PlotTop + Scale.PlotHeight + 42)}\" text-anchor=\"middle\" class=\"dx-chart-axis-title\">{XAxisDescriptor!.Title}</text>")
+        }
+
+        @* Y axis title *@
+        @if (!string.IsNullOrEmpty(YAxisDescriptor?.Title))
+        {
+            @((MarkupString)$"<text x=\"{F(12)}\" y=\"{F(Scale.PlotTop + Scale.PlotHeight / 2)}\" text-anchor=\"middle\" transform=\"rotate(-90, {F(12)}, {F(Scale.PlotTop + Scale.PlotHeight / 2)})\" class=\"dx-chart-axis-title\">{YAxisDescriptor!.Title}</text>")
+        }
+    </g>
+}

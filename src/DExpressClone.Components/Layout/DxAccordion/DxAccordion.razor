@@ -1,0 +1,8 @@
+@namespace DExpressClone.Components.Layout
+@inherits DExpressClone.Components.Core.DxComponentBase
+
+<CascadingValue Value="this" IsFixed="true">
+    <div id="@Id" class="@CssClassString" @attributes="AdditionalAttributes">
+        @ChildContent
+    </div>
+</CascadingValue>

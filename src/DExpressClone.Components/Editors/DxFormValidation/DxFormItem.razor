@@ -1,0 +1,20 @@
+@namespace DExpressClone.Components.Editors.DxFormValidation
+@inherits DExpressClone.Components.Core.DxComponentBase
+
+<CascadingValue Value="true" Name="SuppressEditorValidation">
+    <CascadingValue Value="OnEditorBlurAction" Name="FormItemBlurAction">
+        <div class="@ItemCssClass">
+            @if (!string.IsNullOrEmpty(LabelText))
+            {
+                <label class="dx-form-item-label">@LabelText</label>
+            }
+            <div class="dx-form-item-editor">
+                @ChildContent
+            </div>
+            @foreach (var message in ValidationMessages)
+            {
+                <div class="dx-form-item-error">@message</div>
+            }
+        </div>
+    </CascadingValue>
+</CascadingValue>

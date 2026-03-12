@@ -1,0 +1,31 @@
+@page "/grid"
+@inject SampleDataService DataService
+
+<PageTitle>Grid Demo - WASM</PageTitle>
+
+<h1>Data Grid Demo</h1>
+
+<DxGrid TItem="Employee"
+        Data="@_employees"
+        AllowSort="true"
+        AllowSelection="true"
+        PageSize="15"
+        GridHeight="450px"
+        KeyFieldName="Id">
+    <Columns>
+        <DxGridDataColumn FieldName="Id" Caption="ID" Width="70px" />
+        <DxGridDataColumn FieldName="FirstName" Caption="First Name" Width="140px" />
+        <DxGridDataColumn FieldName="LastName" Caption="Last Name" Width="140px" />
+        <DxGridDataColumn FieldName="Department" Caption="Department" Width="160px" />
+        <DxGridDataColumn FieldName="Salary" Caption="Salary" DisplayFormat="{0:C2}" Width="120px" />
+    </Columns>
+</DxGrid>
+
+@code {
+    private List<Employee> _employees = new();
+
+    protected override void OnInitialized()
+    {
+        _employees = DataService.GenerateEmployees(200);
+    }
+}

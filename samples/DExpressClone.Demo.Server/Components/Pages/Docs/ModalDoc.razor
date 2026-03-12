@@ -1,0 +1,147 @@
+@page "/docs/modal"
+@rendermode InteractiveServer
+
+<ComponentDoc Title="DxModal" Description="A modal dialog overlay with customizable header, body, footer, sizing, and close behavior.">
+    <ParametersContent>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>Visible</code></td><td><code>bool</code></td><td><code>false</code></td><td>Whether the modal is visible.</td></tr>
+                <tr><td><code>VisibleChanged</code></td><td><code>EventCallback&lt;bool&gt;</code></td><td>—</td><td>Fires when the visible state changes. Supports <code>@@bind-Visible</code>.</td></tr>
+                <tr><td><code>HeaderText</code></td><td><code>string?</code></td><td><code>null</code></td><td>Text displayed in the modal header.</td></tr>
+                <tr><td><code>HeaderTemplate</code></td><td><code>RenderFragment?</code></td><td><code>null</code></td><td>Custom header template. Overrides HeaderText when provided.</td></tr>
+                <tr><td><code>BodyContent</code></td><td><code>RenderFragment?</code></td><td><code>null</code></td><td>The modal body content.</td></tr>
+                <tr><td><code>FooterTemplate</code></td><td><code>RenderFragment?</code></td><td><code>null</code></td><td>Custom footer template.</td></tr>
+                <tr><td><code>Size</code></td><td><code>ModalSize</code></td><td><code>Medium</code></td><td>The size of the modal. Options: Small, Medium, Large, FullScreen.</td></tr>
+                <tr><td><code>CloseOnBackdropClick</code></td><td><code>bool</code></td><td><code>true</code></td><td>Whether clicking the backdrop closes the modal.</td></tr>
+                <tr><td><code>CloseOnEscape</code></td><td><code>bool</code></td><td><code>true</code></td><td>Whether pressing Escape closes the modal.</td></tr>
+                <tr><td><code>ShowCloseButton</code></td><td><code>bool</code></td><td><code>true</code></td><td>Whether to show the close button in the header.</td></tr>
+                <tr><td><code>CssClass</code></td><td><code>string?</code></td><td><code>null</code></td><td>Additional CSS class applied to the modal container.</td></tr>
+            </tbody>
+        </table>
+    </ParametersContent>
+    <EventsContent>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>VisibleChanged</code></td><td><code>EventCallback&lt;bool&gt;</code></td><td>Fires when the modal visibility changes. Use with <code>@@bind-Visible</code>.</td></tr>
+                <tr><td><code>OnClosed</code></td><td><code>EventCallback</code></td><td>Fires after the modal has been closed.</td></tr>
+            </tbody>
+        </table>
+    </EventsContent>
+    <Examples>
+        <ExampleBlock Title="Basic Modal" Description="Open and close a modal with a button using HeaderText and BodyContent.">
+            <Demo>
+                <DxButton Text="Open Modal" Click="@(() => _basicVisible = true)" />
+                <DxModal @bind-Visible="_basicVisible" HeaderText="Basic Modal">
+                    <BodyContent>
+                        <p>This is a basic modal dialog with a header and body content.</p>
+                        <p>Click the close button, press Escape, or click the backdrop to dismiss.</p>
+                    </BodyContent>
+                </DxModal>
+            </Demo>
+            <Code>
+@(@"<DxButton Text=""Open Modal"" Click=""@(() => _basicVisible = true)"" />
+<DxModal @bind-Visible=""_basicVisible"" HeaderText=""Basic Modal"">
+    <BodyContent>
+        <p>This is a basic modal dialog with a header and body content.</p>
+        <p>Click the close button, press Escape, or click the backdrop to dismiss.</p>
+    </BodyContent>
+</DxModal>
+
+@code {
+    private bool _basicVisible;
+}")
+            </Code>
+        </ExampleBlock>
+
+        <ExampleBlock Title="Modal Sizes" Description="Open modals in different sizes: Small, Medium, Large, and FullScreen.">
+            <Demo>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <DxButton Text="Small" Click="@(() => OpenSize(ModalSize.Small))" />
+                    <DxButton Text="Medium" Click="@(() => OpenSize(ModalSize.Medium))" />
+                    <DxButton Text="Large" Click="@(() => OpenSize(ModalSize.Large))" />
+                    <DxButton Text="Full Screen" Click="@(() => OpenSize(ModalSize.FullScreen))" />
+                </div>
+                <DxModal @bind-Visible="_sizeVisible" HeaderText="@($"{_currentSize} Modal")" Size="_currentSize">
+                    <BodyContent>
+                        <p>This modal is displayed with <strong>@_currentSize</strong> size.</p>
+                    </BodyContent>
+                </DxModal>
+            </Demo>
+            <Code>
+@(@"<DxButton Text=""Small"" Click=""@(() => OpenSize(ModalSize.Small))"" />
+<DxButton Text=""Medium"" Click=""@(() => OpenSize(ModalSize.Medium))"" />
+<DxButton Text=""Large"" Click=""@(() => OpenSize(ModalSize.Large))"" />
+<DxButton Text=""Full Screen"" Click=""@(() => OpenSize(ModalSize.FullScreen))"" />
+
+<DxModal @bind-Visible=""_sizeVisible""
+         HeaderText=""@($""{_currentSize} Modal"")""
+         Size=""_currentSize"">
+    <BodyContent>
+        <p>This modal is displayed with <strong>@_currentSize</strong> size.</p>
+    </BodyContent>
+</DxModal>
+
+@code {
+    private bool _sizeVisible;
+    private ModalSize _currentSize = ModalSize.Medium;
+
+    private void OpenSize(ModalSize size)
+    {
+        _currentSize = size;
+        _sizeVisible = true;
+    }
+}")
+            </Code>
+        </ExampleBlock>
+
+        <ExampleBlock Title="Custom Footer" Description="Modal with a custom FooterTemplate containing action buttons.">
+            <Demo>
+                <DxButton Text="Open with Footer" Click="@(() => _footerVisible = true)" />
+                <DxModal @bind-Visible="_footerVisible" HeaderText="Confirm Action">
+                    <BodyContent>
+                        <p>Are you sure you want to proceed with this action? This cannot be undone.</p>
+                    </BodyContent>
+                    <FooterTemplate>
+                        <div style="display: flex; gap: 0.5rem; justify-content: flex-end;">
+                            <DxButton Text="Cancel" Click="@(() => _footerVisible = false)" />
+                            <DxButton Text="Confirm" Click="@(() => _footerVisible = false)" />
+                        </div>
+                    </FooterTemplate>
+                </DxModal>
+            </Demo>
+            <Code>
+@(@"<DxButton Text=""Open with Footer"" Click=""@(() => _footerVisible = true)"" />
+<DxModal @bind-Visible=""_footerVisible"" HeaderText=""Confirm Action"">
+    <BodyContent>
+        <p>Are you sure you want to proceed with this action? This cannot be undone.</p>
+    </BodyContent>
+    <FooterTemplate>
+        <div style=""display: flex; gap: 0.5rem; justify-content: flex-end;"">
+            <DxButton Text=""Cancel"" Click=""@(() => _footerVisible = false)"" />
+            <DxButton Text=""Confirm"" Click=""@(() => _footerVisible = false)"" />
+        </div>
+    </FooterTemplate>
+</DxModal>
+
+@code {
+    private bool _footerVisible;
+}")
+            </Code>
+        </ExampleBlock>
+    </Examples>
+</ComponentDoc>
+
+@code {
+    private bool _basicVisible;
+    private bool _sizeVisible;
+    private ModalSize _currentSize = ModalSize.Medium;
+    private bool _footerVisible;
+
+    private void OpenSize(ModalSize size)
+    {
+        _currentSize = size;
+        _sizeVisible = true;
+    }
+}

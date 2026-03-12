@@ -1,0 +1,11 @@
+@namespace DExpressClone.Components.Layout
+@inherits DExpressClone.Components.Core.DxComponentBase
+@implements IDisposable
+
+@if (ParentTabs != null && ParentTabs.ShouldRenderTab(this))
+{
+    var isActive = ParentTabs.IsActiveTab(this);
+    <div class="dx-tab-page" role="tabpanel" style="@(isActive ? "" : "display:none;")">
+        @ChildContent
+    </div>
+}

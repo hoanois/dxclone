@@ -1,0 +1,153 @@
+/* ==========================================================================
+   DxChart — Chart Component Styles
+   ========================================================================== */
+
+/* --- Container --- */
+.dx-chart {
+    position: relative;
+    display: inline-block;
+    font-family: var(--dx-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
+}
+
+.dx-chart-svg {
+    display: block;
+}
+
+/* --- Title --- */
+.dx-chart-title {
+    font-size: var(--dx-font-size-lg, 16px);
+    font-weight: 600;
+    fill: var(--dx-color-text, #333);
+}
+
+/* --- Grid --- */
+.dx-chart-grid-line {
+    stroke: var(--dx-color-border, #e0e0e0);
+    stroke-width: 1;
+    opacity: 0.3;
+}
+
+/* --- Axis --- */
+.dx-chart-axis-line {
+    stroke: var(--dx-color-text, #666);
+    stroke-width: 1;
+}
+
+.dx-chart-tick {
+    stroke: var(--dx-color-text, #666);
+    stroke-width: 1;
+}
+
+.dx-chart-tick-label {
+    font-size: var(--dx-font-size-sm, 11px);
+    fill: var(--dx-color-text-secondary, #888);
+}
+
+.dx-chart-axis-title {
+    font-size: var(--dx-font-size-sm, 12px);
+    font-weight: 500;
+    fill: var(--dx-color-text, #555);
+}
+
+/* --- Line Chart --- */
+.dx-chart-line-path {
+    stroke-width: 2;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.dx-chart-data-point {
+    cursor: pointer;
+    transition: transform 0.15s ease, r 0.15s ease;
+}
+
+.dx-chart-data-point:hover {
+    r: 6;
+}
+
+/* --- Bar Chart --- */
+.dx-chart-bar-rect {
+    cursor: pointer;
+    transition: opacity 0.15s ease;
+}
+
+.dx-chart-bar-rect:hover {
+    opacity: 0.8;
+}
+
+/* --- Pie Chart --- */
+.dx-chart-pie-slice {
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    transform-origin: center;
+}
+
+.dx-chart-pie-slice:hover {
+    transform: scale(1.04);
+}
+
+.dx-chart-pie-label {
+    font-size: var(--dx-font-size-sm, 11px);
+    fill: #fff;
+    pointer-events: none;
+    font-weight: 600;
+}
+
+/* --- Legend --- */
+.dx-chart-legend {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    padding: 8px 0;
+}
+
+.dx-chart-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--dx-font-size-sm, 12px);
+    color: var(--dx-color-text, #555);
+}
+
+.dx-chart-legend-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.dx-chart-legend-label {
+    white-space: nowrap;
+}
+
+/* --- Tooltip --- */
+.dx-chart-tooltip {
+    position: absolute;
+    background: var(--dx-color-bg, #fff);
+    border: 1px solid var(--dx-color-border, #ddd);
+    border-radius: 4px;
+    padding: 6px 10px;
+    font-size: var(--dx-font-size-sm, 12px);
+    color: var(--dx-color-text, #333);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    pointer-events: none;
+    z-index: 1000;
+    white-space: nowrap;
+}
+
+/* --- Default Series Colors --- */
+:root {
+    --dx-chart-series-0-color: #5470c6;
+    --dx-chart-series-1-color: #91cc75;
+    --dx-chart-series-2-color: #fac858;
+    --dx-chart-series-3-color: #ee6666;
+    --dx-chart-series-4-color: #73c0de;
+    --dx-chart-series-5-color: #3ba272;
+    --dx-chart-series-6-color: #fc8452;
+    --dx-chart-series-7-color: #9a60b4;
+    --dx-chart-series-8-color: #ea7ccc;
+    --dx-chart-series-9-color: #48b8d0;
+}

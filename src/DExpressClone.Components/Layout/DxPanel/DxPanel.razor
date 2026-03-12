@@ -1,0 +1,33 @@
+@namespace DExpressClone.Components.Layout
+@inherits DExpressClone.Components.Core.DxComponentBase
+
+@if (Visible)
+{
+    <div id="@Id" class="@CssClassString" @attributes="AdditionalAttributes">
+        <div class="dx-panel-header" @onclick="ToggleCollapse">
+            @if (HeaderTemplate != null)
+            {
+                @HeaderTemplate
+            }
+            else if (!string.IsNullOrEmpty(HeaderText))
+            {
+                <span class="dx-panel-header-text">@HeaderText</span>
+            }
+            @if (ShowCollapseButton)
+            {
+                <button type="button" class="dx-panel-collapse-btn" aria-label="@(Collapsed ? "Expand" : "Collapse")">
+                    <span class="dx-panel-collapse-icon @(Collapsed ? "dx-panel-collapse-icon--collapsed" : "")"></span>
+                </button>
+            }
+        </div>
+        <div class="dx-panel-body" style="@(Collapsed ? "display:none;" : "")">
+            @ChildContent
+        </div>
+        @if (FooterTemplate != null)
+        {
+            <div class="dx-panel-footer" style="@(Collapsed ? "display:none;" : "")">
+                @FooterTemplate
+            </div>
+        }
+    </div>
+}

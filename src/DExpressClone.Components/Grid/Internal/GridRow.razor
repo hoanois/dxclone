@@ -1,0 +1,39 @@
+@namespace DExpressClone.Components.Grid.Internal
+@typeparam TItem
+
+<div class="@RowCssClass"
+     style="height:@(RowHeight)px;"
+     @onclick="HandleClick"
+     @ondblclick="HandleDoubleClick">
+    @foreach (var column in Columns)
+    {
+        if (!column.Visible)
+            continue;
+
+        var style = !string.IsNullOrEmpty(column.Width) ? $"width:{column.Width};" : "";
+
+        <div class="@GetCellCssClass(column)" style="@style">
+            @if (column is DxGridDataColumn dataCol)
+            {
+                if (dataCol.CellTemplate is not null)
+                {
+                    @dataCol.CellTemplate((object)Item!)
+                }
+                else
+                {
+                    @GetCellDisplayValue(dataCol)
+                }
+            }
+            else if (column is DxGridCommandColumn cmdCol && cmdCol.CellTemplate is not null)
+            {
+                @cmdCol.CellTemplate((object)Item!)
+            }
+            else if (column is DxGridSelectionColumn)
+            {
+                <input type="checkbox" checked="@IsSelected"
+                       @onclick:stopPropagation="true"
+                       @onchange="HandleSelectionToggle" />
+            }
+        </div>
+    }
+</div>

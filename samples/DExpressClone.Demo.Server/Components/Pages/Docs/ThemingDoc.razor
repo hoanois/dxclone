@@ -1,0 +1,130 @@
+@page "/docs/theming"
+@rendermode InteractiveServer
+
+<ComponentDoc Title="Theming" Description="DExpressClone uses a 3-layer CSS custom properties system for complete theme customization and built-in dark mode support.">
+    <Examples>
+        <ExampleBlock Title="CSS Variable Architecture" Description="The theme system uses three layers: primitives, semantic tokens, and component tokens.">
+            <Demo>
+                <div style="padding: 1rem; background: var(--dx-bg-surface); border-radius: 8px;">
+                    <p style="color: var(--dx-fg-primary);">This text uses <code>--dx-fg-primary</code></p>
+                    <p style="color: var(--dx-fg-secondary);">This text uses <code>--dx-fg-secondary</code></p>
+                    <p style="color: var(--dx-color-primary);">This text uses <code>--dx-color-primary</code></p>
+                </div>
+            </Demo>
+            <Code>
+@(@"/* Layer 1: Primitives */
+:root {
+    --dx-blue-50: #eff6ff;
+    --dx-blue-500: #0078d4;
+    --dx-blue-600: #0066b4;
+    --dx-gray-50: #fafafa;
+    --dx-gray-900: #1a1a1a;
+}
+
+/* Layer 2: Semantic Tokens */
+:root {
+    --dx-color-primary: var(--dx-blue-500);
+    --dx-color-primary-hover: var(--dx-blue-600);
+    --dx-bg-surface: #ffffff;
+    --dx-fg-primary: var(--dx-gray-900);
+    --dx-fg-secondary: #666666;
+    --dx-border-color: #e0e0e0;
+}
+
+/* Layer 3: Component Tokens */
+:root {
+    --dx-btn-bg: var(--dx-color-primary);
+    --dx-btn-fg: #ffffff;
+    --dx-input-bg: var(--dx-bg-surface);
+    --dx-input-border: var(--dx-border-color);
+}")
+            </Code>
+        </ExampleBlock>
+
+        <ExampleBlock Title="Dark Mode" Description="Dark mode is activated via the data-dx-theme attribute on the root element.">
+            <Demo>
+                <div style="display: flex; gap: 1rem;">
+                    <div style="padding: 1rem; background: #fff; color: #1a1a1a; border-radius: 8px; border: 1px solid #e0e0e0;">
+                        <strong>Light Theme</strong>
+                        <p style="font-size: 0.9rem;">Clean and bright</p>
+                    </div>
+                    <div style="padding: 1rem; background: #1e1e1e; color: #e0e0e0; border-radius: 8px; border: 1px solid #333;">
+                        <strong>Dark Theme</strong>
+                        <p style="font-size: 0.9rem;">Easy on the eyes</p>
+                    </div>
+                </div>
+            </Demo>
+            <Code>
+@(@"/* Activate dark mode */
+<html data-dx-theme=""dark"">
+
+/* Dark mode overrides */
+[data-dx-theme=""dark""] {
+    --dx-bg-surface: #1e1e1e;
+    --dx-fg-primary: #e0e0e0;
+    --dx-fg-secondary: #999;
+    --dx-border-color: #333;
+    --dx-color-primary: #4da6ff;
+}")
+            </Code>
+        </ExampleBlock>
+
+        <ExampleBlock Title="Custom Theme" Description="Override CSS variables to create your own theme.">
+            <Demo>
+                <div style="padding: 1rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 8px; color: white;">
+                    <strong>Custom Theme Example</strong>
+                    <p style="font-size: 0.9rem; opacity: 0.9;">Override variables to match your brand.</p>
+                    <DxButton Text="Branded Button" RenderStyle="ButtonRenderStyle.Primary" />
+                </div>
+            </Demo>
+            <Code>
+@(@"/* Override in your app's CSS */
+:root {
+    /* Change the primary color to purple */
+    --dx-color-primary: #764ba2;
+    --dx-color-primary-hover: #5e3a82;
+
+    /* Change border radius */
+    --dx-border-radius-sm: 4px;
+    --dx-border-radius-md: 8px;
+    --dx-border-radius-lg: 12px;
+
+    /* Change font */
+    --dx-font-family: 'Inter', sans-serif;
+}")
+            </Code>
+        </ExampleBlock>
+
+        <ExampleBlock Title="Available CSS Variables" Description="Key CSS variables you can customize.">
+            <Demo>
+                <table class="params-table">
+                    <thead><tr><th>Variable</th><th>Description</th><th>Default (Light)</th></tr></thead>
+                    <tbody>
+                        <tr><td><code>--dx-color-primary</code></td><td>Primary brand color</td><td>#0078d4</td></tr>
+                        <tr><td><code>--dx-color-success</code></td><td>Success state color</td><td>#107c10</td></tr>
+                        <tr><td><code>--dx-color-danger</code></td><td>Danger/error color</td><td>#d13438</td></tr>
+                        <tr><td><code>--dx-color-warning</code></td><td>Warning color</td><td>#ffb900</td></tr>
+                        <tr><td><code>--dx-bg-surface</code></td><td>Surface background</td><td>#ffffff</td></tr>
+                        <tr><td><code>--dx-fg-primary</code></td><td>Primary text color</td><td>#1a1a1a</td></tr>
+                        <tr><td><code>--dx-border-color</code></td><td>Default border color</td><td>#e0e0e0</td></tr>
+                        <tr><td><code>--dx-shadow-sm</code></td><td>Small shadow</td><td>0 1px 2px rgba(0,0,0,0.1)</td></tr>
+                    </tbody>
+                </table>
+            </Demo>
+            <Code>
+@(@"/* Example: Customize everything at once */
+:root {
+    --dx-color-primary: #6366f1;   /* Indigo */
+    --dx-color-success: #22c55e;   /* Green */
+    --dx-color-danger: #ef4444;    /* Red */
+    --dx-color-warning: #f59e0b;   /* Amber */
+    --dx-bg-surface: #fefefe;
+    --dx-fg-primary: #111827;
+    --dx-border-color: #d1d5db;
+    --dx-font-family: 'Inter', system-ui, sans-serif;
+    --dx-border-radius-md: 6px;
+}")
+            </Code>
+        </ExampleBlock>
+    </Examples>
+</ComponentDoc>

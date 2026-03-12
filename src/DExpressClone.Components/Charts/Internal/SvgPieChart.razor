@@ -1,0 +1,21 @@
+@namespace DExpressClone.Components.Charts.Internal
+@using DExpressClone.Components.Charts.Models
+
+<g class="dx-chart-pie-series">
+    @foreach (var slice in ComputeSlices())
+    {
+        <path d="@slice.Path"
+              fill="@slice.Color"
+              class="dx-chart-pie-slice"
+              data-label="@slice.Label"
+              data-value="@F(slice.Percentage)" />
+
+        @if (ShowLabels)
+        {
+            var labelR = InnerRadius > 0 ? (Radius + InnerRadius) / 2 : Radius * 0.65;
+            var lx = CenterX + labelR * Math.Cos(slice.MidAngle);
+            var ly = CenterY + labelR * Math.Sin(slice.MidAngle);
+            @((MarkupString)$"<text x=\"{F(lx)}\" y=\"{F(ly)}\" text-anchor=\"middle\" dominant-baseline=\"central\" class=\"dx-chart-pie-label\">{slice.Percentage:F1}%</text>")
+        }
+    }
+</g>

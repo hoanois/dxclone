@@ -1,0 +1,58 @@
+@namespace DExpressClone.Components.Editors.DxDateEdit
+@inherits DExpressClone.Components.Core.DxFormEditorBase<DateTime?>
+
+<div class="@RootCssClass"
+     id="@Id"
+     @onmouseenter="HandleMouseEnter"
+     @onmouseleave="HandleMouseLeave"
+     @attributes="AdditionalAttributes">
+
+    @if (!string.IsNullOrEmpty(LabelText))
+    {
+        <label class="dx-dateedit-label">@LabelText</label>
+    }
+
+    <div class="dx-dateedit-container" @ref="_containerRef">
+        <input @key="_inputKey"
+               class="dx-dateedit-input"
+               type="text"
+               value="@DisplayValue"
+               placeholder="@NullText"
+               disabled="@(!Enabled)"
+               readonly="@ReadOnly"
+               tabindex="@(TabIndex ?? 0)"
+               @onchange="HandleInputChangeAsync"
+               @onfocus="HandleFocusAsync"
+               @onblur="HandleBlurAsync" />
+
+        <button class="dx-dateedit-button"
+                type="button"
+                tabindex="-1"
+                disabled="@(!Enabled || ReadOnly)"
+                @onclick="ToggleCalendar"
+                aria-label="Open calendar">
+            <svg viewBox="0 0 16 16" fill="none" width="14" height="14">
+                <rect x="2" y="3" width="12" height="11" rx="1.5" stroke="currentColor" stroke-width="1.2"/>
+                <path d="M2 6.5H14" stroke="currentColor" stroke-width="1.2"/>
+                <path d="M5 1.5V4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                <path d="M11 1.5V4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+            </svg>
+        </button>
+    </div>
+
+    @if (IsCalendarOpen)
+    {
+        <div class="dx-dropdown-overlay" @onclick="HandleClickOutside"></div>
+        <DExpressClone.Components.Editors.DxDateEdit.Internal.DatePickerCalendar
+            CssClass="@(_dropUp ? "dx-dateedit-calendar--dropup" : "")"
+            SelectedDate="@Date"
+            MinDate="@MinDate"
+            MaxDate="@MaxDate"
+            OnDateSelected="HandleDateSelectedAsync" />
+    }
+
+    @if (!IsValid && ShowBuiltInValidation)
+    {
+        <div class="dx-editor-validation-message">@ValidationMessage</div>
+    }
+</div>

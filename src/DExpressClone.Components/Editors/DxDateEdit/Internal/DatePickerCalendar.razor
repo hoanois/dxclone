@@ -1,0 +1,39 @@
+@namespace DExpressClone.Components.Editors.DxDateEdit.Internal
+@inherits DExpressClone.Components.Core.DxComponentBase
+
+<div class="@BuildCssClass("dx-dateedit-calendar")">
+    <div class="dx-calendar-header">
+        <button class="dx-calendar-nav-btn" type="button" @onclick="PreviousMonth" aria-label="Previous month">
+            <svg viewBox="0 0 16 16" fill="none" width="12" height="12">
+                <path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
+        <span class="dx-calendar-title">@MonthYearDisplay</span>
+        <button class="dx-calendar-nav-btn" type="button" @onclick="NextMonth" aria-label="Next month">
+            <svg viewBox="0 0 16 16" fill="none" width="12" height="12">
+                <path d="M6 3L11 8L6 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
+    </div>
+
+    <div class="dx-calendar-grid">
+        @foreach (var dayName in DayNames)
+        {
+            <div class="dx-calendar-day-header">@dayName</div>
+        }
+        @foreach (var day in GetCalendarDays())
+        {
+            var d = day;
+            <button class="@GetDayCssClass(d)"
+                    type="button"
+                    disabled="@IsDateDisabled(d)"
+                    @onclick="() => SelectDateAsync(d)">
+                @d.Day
+            </button>
+        }
+    </div>
+
+    <div class="dx-calendar-footer">
+        <button class="dx-calendar-today-btn" type="button" @onclick="SelectTodayAsync">Today</button>
+    </div>
+</div>

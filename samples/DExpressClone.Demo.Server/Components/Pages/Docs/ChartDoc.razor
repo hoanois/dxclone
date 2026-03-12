@@ -1,0 +1,125 @@
+@page "/docs/chart"
+@rendermode InteractiveServer
+
+<ComponentDoc Title="DxChart" Description="SVG-based chart component supporting line, bar, and pie chart types with legends and tooltips.">
+    <ParametersContent>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>Data</code></td><td><code>IEnumerable&lt;TItem&gt;?</code></td><td><code>null</code></td><td>The data source for the chart.</td></tr>
+                <tr><td><code>Width</code></td><td><code>int</code></td><td><code>600</code></td><td>Chart width in pixels.</td></tr>
+                <tr><td><code>Height</code></td><td><code>int</code></td><td><code>400</code></td><td>Chart height in pixels.</td></tr>
+                <tr><td><code>Title</code></td><td><code>string?</code></td><td><code>null</code></td><td>Chart title displayed at the top.</td></tr>
+                <tr><td><code>ShowLegend</code></td><td><code>bool</code></td><td><code>true</code></td><td>Whether to display the legend.</td></tr>
+                <tr><td><code>ShowTooltip</code></td><td><code>bool</code></td><td><code>true</code></td><td>Whether to show tooltips on hover.</td></tr>
+                <tr><td><code>ChildContent</code></td><td><code>RenderFragment?</code></td><td><code>null</code></td><td>Series definitions (DxChartLineSeries, DxChartBarSeries, DxChartPieSeries).</td></tr>
+            </tbody>
+        </table>
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">Series Parameters (Common)</h3>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>Name</code></td><td><code>string?</code></td><td><code>null</code></td><td>Series name for legend display.</td></tr>
+                <tr><td><code>Color</code></td><td><code>string?</code></td><td><code>null</code></td><td>Custom color for the series.</td></tr>
+                <tr><td><code>ArgumentField</code></td><td><code>Func&lt;TItem, object&gt;?</code></td><td><code>null</code></td><td>Function to extract the argument (X-axis) value.</td></tr>
+                <tr><td><code>ValueField</code></td><td><code>Func&lt;TItem, double&gt;?</code></td><td><code>null</code></td><td>Function to extract the value (Y-axis).</td></tr>
+            </tbody>
+        </table>
+    </ParametersContent>
+    <Examples>
+        <ExampleBlock Title="Line Chart" Description="Display trends over time with a line series.">
+            <Demo>
+                <DxChart TItem="ChartDataPoint" Data="_salesData" Width="500" Height="300" Title="Monthly Sales">
+                    <DxChartLineSeries TItem="ChartDataPoint"
+                                      Name="Sales"
+                                      ArgumentField="@(d => (object)d.Month)"
+                                      ValueField="@(d => d.Value)"
+                                      Color="#0078d4" />
+                </DxChart>
+            </Demo>
+            <Code>
+@(@"<DxChart TItem=""DataPoint"" Data=""_salesData""
+       Width=""500"" Height=""300"" Title=""Monthly Sales"">
+    <DxChartLineSeries TItem=""DataPoint""
+                       Name=""Sales""
+                       ArgumentField=""@(d => (object)d.Month)""
+                       ValueField=""@(d => d.Value)""
+                       Color=""#0078d4"" />
+</DxChart>
+
+@code {
+    record DataPoint(string Month, double Value);
+    List<DataPoint> _salesData = new()
+    {
+        new(""Jan"", 120), new(""Feb"", 150),
+        new(""Mar"", 180), new(""Apr"", 220)
+    };
+}")
+            </Code>
+        </ExampleBlock>
+
+        <ExampleBlock Title="Bar Chart" Description="Compare values across categories with a bar series.">
+            <Demo>
+                <DxChart TItem="ChartDataPoint" Data="_regionData" Width="500" Height="300" Title="Revenue by Region">
+                    <DxChartBarSeries TItem="ChartDataPoint"
+                                     Name="Revenue"
+                                     ArgumentField="@(d => (object)d.Month)"
+                                     ValueField="@(d => d.Value)"
+                                     Color="#107c10" />
+                </DxChart>
+            </Demo>
+            <Code>
+@(@"<DxChart TItem=""DataPoint"" Data=""_regionData""
+       Width=""500"" Height=""300"" Title=""Revenue by Region"">
+    <DxChartBarSeries TItem=""DataPoint""
+                      Name=""Revenue""
+                      ArgumentField=""@(d => (object)d.Region)""
+                      ValueField=""@(d => d.Value)""
+                      Color=""#107c10"" />
+</DxChart>")
+            </Code>
+        </ExampleBlock>
+
+        <ExampleBlock Title="Pie Chart" Description="Show proportional data distribution.">
+            <Demo>
+                <DxChart TItem="ChartDataPoint" Data="_shareData" Width="400" Height="300" Title="Market Share">
+                    <DxChartPieSeries TItem="ChartDataPoint"
+                                     Name="Share"
+                                     ArgumentField="@(d => (object)d.Month)"
+                                     ValueField="@(d => d.Value)" />
+                </DxChart>
+            </Demo>
+            <Code>
+@(@"<DxChart TItem=""DataPoint"" Data=""_shareData""
+       Width=""400"" Height=""300"" Title=""Market Share"">
+    <DxChartPieSeries TItem=""DataPoint""
+                      Name=""Share""
+                      ArgumentField=""@(d => (object)d.Category)""
+                      ValueField=""@(d => d.Value)"" />
+</DxChart>")
+            </Code>
+        </ExampleBlock>
+    </Examples>
+</ComponentDoc>
+
+@code {
+    private record ChartDataPoint(string Month, double Value);
+
+    private List<ChartDataPoint> _salesData = new()
+    {
+        new("Jan", 120), new("Feb", 150), new("Mar", 180),
+        new("Apr", 220), new("May", 195), new("Jun", 260)
+    };
+
+    private List<ChartDataPoint> _regionData = new()
+    {
+        new("North", 350), new("South", 280),
+        new("East", 420), new("West", 310)
+    };
+
+    private List<ChartDataPoint> _shareData = new()
+    {
+        new("Product A", 35), new("Product B", 25),
+        new("Product C", 20), new("Product D", 20)
+    };
+}

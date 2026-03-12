@@ -1,0 +1,49 @@
+@namespace DExpressClone.Components.Grid.Internal
+@typeparam TItem
+
+<div class="dx-grid-header">
+    <div class="dx-grid-header-row">
+        @foreach (var column in Columns)
+        {
+            if (!column.Visible)
+                continue;
+
+            var style = !string.IsNullOrEmpty(column.Width) ? $"width:{column.Width};" : "";
+
+            <div class="dx-grid-header-cell" style="@style">
+                @if (column is DxGridDataColumn dataCol)
+                {
+                    <div class="dx-grid-header-cell-content"
+                         @onclick="() => OnHeaderClick(dataCol)"
+                         style="cursor: @(dataCol.AllowSort && AllowSort ? "pointer" : "default")">
+                        <span class="dx-grid-header-caption">@dataCol.DisplayCaption</span>
+                        @if (dataCol.AllowSort && AllowSort)
+                        {
+                            var sortDesc = GetSortDescriptor(dataCol.FieldName);
+                            @if (sortDesc?.SortOrder == Models.GridSortOrder.Ascending)
+                            {
+                                <span class="dx-grid-sort-indicator dx-grid-sort-asc">&#9650;</span>
+                            }
+                            else if (sortDesc?.SortOrder == Models.GridSortOrder.Descending)
+                            {
+                                <span class="dx-grid-sort-indicator dx-grid-sort-desc">&#9660;</span>
+                            }
+                        }
+                    </div>
+                    @if (AllowColumnResize)
+                    {
+                        <div class="dx-grid-resize-handle"></div>
+                    }
+                }
+                else if (column is DxGridCommandColumn cmdCol)
+                {
+                    <span class="dx-grid-header-caption">@(cmdCol.HeaderText ?? cmdCol.Caption)</span>
+                }
+                else if (column is DxGridSelectionColumn)
+                {
+                    <span class="dx-grid-header-caption"></span>
+                }
+            </div>
+        }
+    </div>
+</div>

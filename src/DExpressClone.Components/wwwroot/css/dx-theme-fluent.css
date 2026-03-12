@@ -1,0 +1,282 @@
+/* ==========================================================================
+   DExpressClone Fluent Theme — 3-Layer CSS Variable System
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Layer 1: Primitive Tokens
+   -------------------------------------------------------------------------- */
+:root {
+    /* Neutrals */
+    --dx-neutral-0: #000000;
+    --dx-neutral-5: #0a0a0a;
+    --dx-neutral-10: #1a1a1a;
+    --dx-neutral-15: #262626;
+    --dx-neutral-20: #333333;
+    --dx-neutral-25: #404040;
+    --dx-neutral-30: #4d4d4d;
+    --dx-neutral-35: #595959;
+    --dx-neutral-40: #666666;
+    --dx-neutral-45: #737373;
+    --dx-neutral-50: #808080;
+    --dx-neutral-55: #8c8c8c;
+    --dx-neutral-60: #999999;
+    --dx-neutral-65: #a6a6a6;
+    --dx-neutral-70: #b3b3b3;
+    --dx-neutral-75: #bfbfbf;
+    --dx-neutral-80: #cccccc;
+    --dx-neutral-85: #d9d9d9;
+    --dx-neutral-90: #e6e6e6;
+    --dx-neutral-95: #f0f0f0;
+    --dx-neutral-100: #f5f5f5;
+    --dx-neutral-105: #fafafa;
+    --dx-neutral-110: #ffffff;
+
+    /* Accent (Brand Blue) */
+    --dx-accent-10: #003966;
+    --dx-accent-20: #004d8c;
+    --dx-accent-30: #0063b1;
+    --dx-accent-40: #0078d4;
+    --dx-accent-50: #2899f5;
+    --dx-accent-60: #60b3f7;
+    --dx-accent-70: #a0d2fb;
+
+    /* Status Colors */
+    --dx-error-10: #6e0811;
+    --dx-error-20: #a4262c;
+    --dx-error-30: #d13438;
+    --dx-error-40: #e74856;
+    --dx-error-50: #f1707b;
+
+    --dx-warning-10: #7a4b00;
+    --dx-warning-20: #b5651d;
+    --dx-warning-30: #f7630c;
+    --dx-warning-40: #ff9349;
+    --dx-warning-50: #fcb97d;
+
+    --dx-success-10: #094509;
+    --dx-success-20: #107c10;
+    --dx-success-30: #13a10e;
+    --dx-success-40: #54b054;
+    --dx-success-50: #9fd89f;
+
+    --dx-info-10: #003966;
+    --dx-info-20: #0063b1;
+    --dx-info-30: #0078d4;
+    --dx-info-40: #2899f5;
+    --dx-info-50: #60b3f7;
+}
+
+/* --------------------------------------------------------------------------
+   Layer 2: Semantic Tokens
+   -------------------------------------------------------------------------- */
+:root {
+    /* Backgrounds */
+    --dx-color-background: var(--dx-neutral-110);
+    --dx-color-surface: var(--dx-neutral-105);
+    --dx-color-surface-alt: var(--dx-neutral-100);
+
+    /* Borders */
+    --dx-color-border: var(--dx-neutral-85);
+    --dx-color-border-strong: var(--dx-neutral-70);
+
+    /* Text */
+    --dx-color-text-primary: var(--dx-neutral-10);
+    --dx-color-text-secondary: var(--dx-neutral-40);
+    --dx-color-text-disabled: var(--dx-neutral-65);
+    --dx-color-text-inverse: var(--dx-neutral-110);
+
+    /* Interactive */
+    --dx-color-interactive: var(--dx-accent-40);
+    --dx-color-interactive-hover: var(--dx-accent-30);
+    --dx-color-interactive-pressed: var(--dx-accent-20);
+    --dx-color-interactive-disabled: var(--dx-neutral-80);
+
+    /* Status */
+    --dx-color-error: var(--dx-error-30);
+    --dx-color-warning: var(--dx-warning-30);
+    --dx-color-success: var(--dx-success-30);
+    --dx-color-info: var(--dx-info-30);
+
+    /* Focus ring */
+    --dx-color-focus-ring: var(--dx-accent-40);
+    --dx-focus-ring-width: 2px;
+    --dx-focus-ring-offset: 2px;
+
+    /* Typography */
+    --dx-font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', 'Helvetica Neue', sans-serif;
+    --dx-font-family-mono: 'Cascadia Code', 'Consolas', 'Courier New', monospace;
+    --dx-font-size-xs: 0.625rem;    /* 10px */
+    --dx-font-size-sm: 0.75rem;     /* 12px */
+    --dx-font-size-md: 0.875rem;    /* 14px */
+    --dx-font-size-lg: 1rem;        /* 16px */
+    --dx-font-size-xl: 1.25rem;     /* 20px */
+    --dx-font-size-2xl: 1.5rem;     /* 24px */
+    --dx-font-size-3xl: 2rem;       /* 32px */
+
+    --dx-font-weight-regular: 400;
+    --dx-font-weight-medium: 500;
+    --dx-font-weight-semibold: 600;
+    --dx-font-weight-bold: 700;
+
+    --dx-line-height-tight: 1.2;
+    --dx-line-height-normal: 1.5;
+    --dx-line-height-loose: 1.75;
+
+    /* Spacing */
+    --dx-spacing-0: 0;
+    --dx-spacing-1: 0.25rem;   /* 4px */
+    --dx-spacing-2: 0.5rem;    /* 8px */
+    --dx-spacing-3: 0.75rem;   /* 12px */
+    --dx-spacing-4: 1rem;      /* 16px */
+    --dx-spacing-5: 1.25rem;   /* 20px */
+    --dx-spacing-6: 1.5rem;    /* 24px */
+    --dx-spacing-8: 2rem;      /* 32px */
+    --dx-spacing-10: 2.5rem;   /* 40px */
+    --dx-spacing-12: 3rem;     /* 48px */
+
+    /* Border Radius */
+    --dx-radius-none: 0;
+    --dx-radius-sm: 2px;
+    --dx-radius-md: 4px;
+    --dx-radius-lg: 8px;
+    --dx-radius-xl: 12px;
+    --dx-radius-full: 9999px;
+
+    /* Shadows */
+    --dx-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.08);
+    --dx-shadow-md: 0 2px 8px rgba(0, 0, 0, 0.12);
+    --dx-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.14);
+    --dx-shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.18);
+
+    /* Transitions */
+    --dx-transition-fast: 100ms ease-in-out;
+    --dx-transition-normal: 200ms ease-in-out;
+    --dx-transition-slow: 350ms ease-in-out;
+
+    /* Z-Index layers */
+    --dx-z-dropdown: 1000;
+    --dx-z-sticky: 1020;
+    --dx-z-fixed: 1030;
+    --dx-z-modal-backdrop: 1040;
+    --dx-z-modal: 1050;
+    --dx-z-popover: 1060;
+    --dx-z-tooltip: 1070;
+    --dx-z-toast: 1080;
+}
+
+/* --------------------------------------------------------------------------
+   Layer 3: Component Tokens
+   -------------------------------------------------------------------------- */
+:root {
+    /* Button */
+    --dx-btn-height: 32px;
+    --dx-btn-height-sm: 24px;
+    --dx-btn-height-lg: 40px;
+    --dx-btn-padding-x: var(--dx-spacing-4);
+    --dx-btn-border-radius: var(--dx-radius-md);
+    --dx-btn-font-size: var(--dx-font-size-md);
+
+    /* Input */
+    --dx-input-height: 32px;
+    --dx-input-height-sm: 24px;
+    --dx-input-height-lg: 40px;
+    --dx-input-padding-x: var(--dx-spacing-2);
+    --dx-input-border-radius: var(--dx-radius-md);
+    --dx-input-border-color: var(--dx-color-border);
+    --dx-input-border-color-hover: var(--dx-color-border-strong);
+    --dx-input-border-color-focus: var(--dx-color-interactive);
+    --dx-input-bg: var(--dx-color-background);
+    --dx-input-font-size: var(--dx-font-size-md);
+
+    /* Grid / Data Grid */
+    --dx-grid-row-height: 36px;
+    --dx-grid-header-height: 40px;
+    --dx-grid-header-bg: var(--dx-color-surface);
+    --dx-grid-row-bg: var(--dx-color-background);
+    --dx-grid-row-bg-alt: var(--dx-color-surface);
+    --dx-grid-row-bg-hover: var(--dx-color-surface-alt);
+    --dx-grid-row-bg-selected: rgba(0, 120, 212, 0.08);
+    --dx-grid-border-color: var(--dx-color-border);
+    --dx-grid-font-size: var(--dx-font-size-md);
+
+    /* Tabs */
+    --dx-tab-height: 36px;
+    --dx-tab-padding-x: var(--dx-spacing-4);
+
+    /* Card */
+    --dx-card-padding: var(--dx-spacing-4);
+    --dx-card-border-radius: var(--dx-radius-lg);
+    --dx-card-shadow: var(--dx-shadow-sm);
+
+    /* Popup / Modal */
+    --dx-popup-border-radius: var(--dx-radius-lg);
+    --dx-popup-shadow: var(--dx-shadow-lg);
+    --dx-popup-padding: var(--dx-spacing-6);
+
+    /* Toolbar */
+    --dx-toolbar-height: 44px;
+    --dx-toolbar-padding-x: var(--dx-spacing-3);
+
+    /* TreeView */
+    --dx-tree-indent: 24px;
+    --dx-tree-node-height: 32px;
+
+    /* Chart Palette (10 colors) */
+    --dx-chart-color-1: #0078d4;
+    --dx-chart-color-2: #e74856;
+    --dx-chart-color-3: #13a10e;
+    --dx-chart-color-4: #f7630c;
+    --dx-chart-color-5: #8764b8;
+    --dx-chart-color-6: #00b7c3;
+    --dx-chart-color-7: #c239b3;
+    --dx-chart-color-8: #107c10;
+    --dx-chart-color-9: #b4a0ff;
+    --dx-chart-color-10: #f08c00;
+}
+
+/* --------------------------------------------------------------------------
+   Dark Theme Override
+   -------------------------------------------------------------------------- */
+[data-dx-theme="dark"] {
+    /* Layer 2 overrides for dark mode */
+
+    /* Backgrounds */
+    --dx-color-background: var(--dx-neutral-10);
+    --dx-color-surface: var(--dx-neutral-15);
+    --dx-color-surface-alt: var(--dx-neutral-20);
+
+    /* Borders */
+    --dx-color-border: var(--dx-neutral-30);
+    --dx-color-border-strong: var(--dx-neutral-40);
+
+    /* Text */
+    --dx-color-text-primary: var(--dx-neutral-100);
+    --dx-color-text-secondary: var(--dx-neutral-70);
+    --dx-color-text-disabled: var(--dx-neutral-45);
+    --dx-color-text-inverse: var(--dx-neutral-10);
+
+    /* Interactive */
+    --dx-color-interactive: var(--dx-accent-50);
+    --dx-color-interactive-hover: var(--dx-accent-60);
+    --dx-color-interactive-pressed: var(--dx-accent-40);
+    --dx-color-interactive-disabled: var(--dx-neutral-30);
+
+    /* Status */
+    --dx-color-error: var(--dx-error-40);
+    --dx-color-warning: var(--dx-warning-40);
+    --dx-color-success: var(--dx-success-40);
+    --dx-color-info: var(--dx-info-40);
+
+    /* Focus ring */
+    --dx-color-focus-ring: var(--dx-accent-50);
+
+    /* Shadows (stronger on dark backgrounds) */
+    --dx-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.24);
+    --dx-shadow-md: 0 2px 8px rgba(0, 0, 0, 0.32);
+    --dx-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.40);
+    --dx-shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.48);
+
+    /* Component token overrides */
+    --dx-grid-row-bg-selected: rgba(40, 153, 245, 0.15);
+    --dx-input-bg: var(--dx-neutral-15);
+}

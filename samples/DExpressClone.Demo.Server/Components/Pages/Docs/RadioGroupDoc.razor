@@ -1,0 +1,65 @@
+@page "/docs/radiogroup"
+@rendermode InteractiveServer
+
+<ComponentDoc Title="DxRadioGroup" Description="A radio button group component for selecting a single value from a list, with horizontal or vertical layout.">
+    <ParametersContent>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>Items</code></td><td><code>IEnumerable&lt;TValue&gt;?</code></td><td><code>null</code></td><td>Simple list of items to display.</td></tr>
+                <tr><td><code>Value</code></td><td><code>TValue?</code></td><td><code>null</code></td><td>The currently selected value.</td></tr>
+                <tr><td><code>Layout</code></td><td><code>RadioGroupLayout</code></td><td><code>Vertical</code></td><td>Layout direction: Vertical or Horizontal.</td></tr>
+                <tr><td><code>LabelText</code></td><td><code>string?</code></td><td><code>null</code></td><td>Label text for the group.</td></tr>
+                <tr><td><code>Enabled</code></td><td><code>bool</code></td><td><code>true</code></td><td>Whether the group is enabled.</td></tr>
+            </tbody>
+        </table>
+    </ParametersContent>
+    <EventsContent>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>ValueChanged</code></td><td><code>EventCallback&lt;TValue&gt;</code></td><td>Fires when the selected value changes.</td></tr>
+            </tbody>
+        </table>
+    </EventsContent>
+    <Examples>
+        <ExampleBlock Title="Vertical Layout" Description="Default vertical radio group.">
+            <Demo>
+                <DxRadioGroup TValue="string" Items="_colors" @bind-Value="_selectedColor" LabelText="Favorite Color" />
+                <p style="margin-top: 0.5rem; font-size: 0.9rem;">Selected: @_selectedColor</p>
+            </Demo>
+            <Code>
+@(@"<DxRadioGroup TValue=""string""
+             Items=""_colors""
+             @bind-Value=""_selectedColor""
+             LabelText=""Favorite Color"" />
+
+@code {
+    private string[] _colors = { ""Red"", ""Green"", ""Blue"", ""Yellow"" };
+    private string? _selectedColor = ""Blue"";
+}")
+            </Code>
+        </ExampleBlock>
+
+        <ExampleBlock Title="Horizontal Layout" Description="Display radio options in a horizontal row.">
+            <Demo>
+                <DxRadioGroup TValue="string" Items="_sizes" @bind-Value="_selectedSize" Layout="RadioGroupLayout.Horizontal" LabelText="Size" />
+                <p style="margin-top: 0.5rem; font-size: 0.9rem;">Selected: @_selectedSize</p>
+            </Demo>
+            <Code>
+@(@"<DxRadioGroup TValue=""string""
+             Items=""_sizes""
+             @bind-Value=""_selectedSize""
+             Layout=""RadioGroupLayout.Horizontal""
+             LabelText=""Size"" />")
+            </Code>
+        </ExampleBlock>
+    </Examples>
+</ComponentDoc>
+
+@code {
+    private string[] _colors = { "Red", "Green", "Blue", "Yellow" };
+    private string? _selectedColor = "Blue";
+    private string[] _sizes = { "S", "M", "L", "XL" };
+    private string? _selectedSize = "M";
+}

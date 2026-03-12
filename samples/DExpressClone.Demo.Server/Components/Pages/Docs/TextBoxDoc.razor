@@ -1,0 +1,85 @@
+@page "/docs/textbox"
+@rendermode InteractiveServer
+
+<ComponentDoc Title="DxTextBox" Description="A text input component with support for password mode, placeholder text, clear button, and input masking.">
+    <ParametersContent>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>Text</code></td><td><code>string?</code></td><td><code>null</code></td><td>The text value of the editor.</td></tr>
+                <tr><td><code>Password</code></td><td><code>bool</code></td><td><code>false</code></td><td>Enables password masking mode.</td></tr>
+                <tr><td><code>MaxLength</code></td><td><code>int?</code></td><td><code>null</code></td><td>Maximum number of characters allowed.</td></tr>
+                <tr><td><code>ClearButtonDisplayMode</code></td><td><code>ClearButtonDisplayMode</code></td><td><code>Never</code></td><td>When to show the clear button: Never or Auto.</td></tr>
+                <tr><td><code>NullText</code></td><td><code>string?</code></td><td><code>null</code></td><td>Placeholder text when value is empty.</td></tr>
+                <tr><td><code>LabelText</code></td><td><code>string?</code></td><td><code>null</code></td><td>Floating label text.</td></tr>
+                <tr><td><code>Enabled</code></td><td><code>bool</code></td><td><code>true</code></td><td>Whether the editor is enabled.</td></tr>
+                <tr><td><code>ReadOnly</code></td><td><code>bool</code></td><td><code>false</code></td><td>Whether the editor is read-only.</td></tr>
+            </tbody>
+        </table>
+    </ParametersContent>
+    <EventsContent>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>TextChanged</code></td><td><code>EventCallback&lt;string&gt;</code></td><td>Fires when the text value changes.</td></tr>
+                <tr><td><code>ValueChanged</code></td><td><code>EventCallback&lt;string&gt;</code></td><td>Fires when the bound value changes.</td></tr>
+            </tbody>
+        </table>
+    </EventsContent>
+    <Examples>
+        <ExampleBlock Title="Basic Text Input" Description="Simple text input with placeholder.">
+            <Demo>
+                <DxTextBox NullText="Enter your name..." @bind-Text="_name" />
+                <p style="margin-top: 0.5rem; font-size: 0.9rem;">Value: @_name</p>
+            </Demo>
+            <Code>
+@(@"<DxTextBox NullText=""Enter your name..."" @bind-Text=""_name"" />
+
+@code {
+    private string? _name;
+}")
+            </Code>
+        </ExampleBlock>
+
+        <ExampleBlock Title="Password Mode" Description="Masks the input for sensitive data like passwords.">
+            <Demo>
+                <DxTextBox NullText="Enter password..." Password="true" @bind-Text="_password" />
+            </Demo>
+            <Code>
+@(@"<DxTextBox NullText=""Enter password...""
+          Password=""true""
+          @bind-Text=""_password"" />")
+            </Code>
+        </ExampleBlock>
+
+        <ExampleBlock Title="Clear Button" Description="Shows a clear button when the input has a value.">
+            <Demo>
+                <DxTextBox NullText="Type something..." ClearButtonDisplayMode="ClearButtonDisplayMode.Auto" @bind-Text="_clearText" />
+            </Demo>
+            <Code>
+@(@"<DxTextBox NullText=""Type something...""
+          ClearButtonDisplayMode=""ClearButtonDisplayMode.Auto""
+          @bind-Text=""_clearText"" />")
+            </Code>
+        </ExampleBlock>
+
+        <ExampleBlock Title="Disabled and ReadOnly" Description="Control user interaction with Enabled and ReadOnly properties.">
+            <Demo>
+                <div style="display: flex; flex-direction: column; gap: 0.75rem; max-width: 300px;">
+                    <DxTextBox Text="Disabled input" Enabled="false" />
+                    <DxTextBox Text="Read-only input" ReadOnly="true" />
+                </div>
+            </Demo>
+            <Code>
+@(@"<DxTextBox Text=""Disabled input"" Enabled=""false"" />
+<DxTextBox Text=""Read-only input"" ReadOnly=""true"" />")
+            </Code>
+        </ExampleBlock>
+    </Examples>
+</ComponentDoc>
+
+@code {
+    private string? _name;
+    private string? _password;
+    private string? _clearText;
+}

@@ -1,0 +1,38 @@
+@inherits LayoutComponentBase
+
+<div class="demo-layout">
+    <NavMenu />
+    <div class="demo-main">
+        <header class="demo-header">
+            <button class="demo-sidebar-toggle" onclick="document.querySelector('.demo-sidebar')?.classList.toggle('demo-sidebar--open')">
+                <span class="demo-hamburger"></span>
+            </button>
+            <div class="demo-header-spacer"></div>
+            <div class="demo-theme-toggle">
+                <button id="theme-toggle-btn" class="demo-theme-btn" onclick="window.__toggleDxTheme()" title="Toggle dark/light theme">
+                    <span class="demo-theme-icon">&#9790;</span>
+                    <span>Dark</span>
+                </button>
+            </div>
+        </header>
+        <main class="demo-content">
+            @Body
+        </main>
+        <DxToastProvider @rendermode="InteractiveServer" Position="ToastPosition.TopRight" />
+    </div>
+</div>
+
+<script suppress-error="BL9992">
+    window.__toggleDxTheme = function() {
+        var html = document.documentElement;
+        var isDark = html.getAttribute('data-dx-theme') === 'dark';
+        var newTheme = isDark ? 'light' : 'dark';
+        html.setAttribute('data-dx-theme', newTheme);
+        var btn = document.getElementById('theme-toggle-btn');
+        if (btn) {
+            btn.innerHTML = isDark
+                ? '<span class="demo-theme-icon">&#9790;</span><span>Dark</span>'
+                : '<span class="demo-theme-icon">&#9728;</span><span>Light</span>';
+        }
+    };
+</script>

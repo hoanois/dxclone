@@ -1,0 +1,103 @@
+@page "/docs/combobox"
+@rendermode InteractiveServer
+
+<ComponentDoc Title="DxComboBox" Description="A combo box editor with dropdown selection, filtering, keyboard navigation, and custom item templates.">
+    <ParametersContent>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>Data</code></td><td><code>IEnumerable&lt;TData&gt;?</code></td><td><code>null</code></td><td>The data source for dropdown items.</td></tr>
+                <tr><td><code>Value</code></td><td><code>TValue?</code></td><td><code>null</code></td><td>The selected value.</td></tr>
+                <tr><td><code>ValueFieldName</code></td><td><code>Func&lt;TData, TValue&gt;?</code></td><td><code>null</code></td><td>Function to extract value from data item.</td></tr>
+                <tr><td><code>TextFieldName</code></td><td><code>Func&lt;TData, string&gt;?</code></td><td><code>null</code></td><td>Function to extract display text from data item.</td></tr>
+                <tr><td><code>FilteringMode</code></td><td><code>ComboBoxFilteringMode</code></td><td><code>Contains</code></td><td>Filtering mode: Contains or StartsWith.</td></tr>
+                <tr><td><code>AllowUserInput</code></td><td><code>bool</code></td><td><code>false</code></td><td>Allow typing custom input.</td></tr>
+                <tr><td><code>ClearButtonDisplayMode</code></td><td><code>ClearButtonDisplayMode</code></td><td><code>Never</code></td><td>When to show the clear button.</td></tr>
+                <tr><td><code>NullText</code></td><td><code>string?</code></td><td><code>null</code></td><td>Placeholder text.</td></tr>
+                <tr><td><code>Enabled</code></td><td><code>bool</code></td><td><code>true</code></td><td>Whether the editor is enabled.</td></tr>
+            </tbody>
+        </table>
+    </ParametersContent>
+    <EventsContent>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>ValueChanged</code></td><td><code>EventCallback&lt;TValue&gt;</code></td><td>Fires when the selected value changes.</td></tr>
+            </tbody>
+        </table>
+    </EventsContent>
+    <Examples>
+        <ExampleBlock Title="Simple String List" Description="Basic combo box with a list of strings.">
+            <Demo>
+                <DxComboBox TData="string" TValue="string"
+                           Data="_countries"
+                           @bind-Value="_selectedCountry"
+                           NullText="Select a country..." />
+                <p style="margin-top: 0.5rem; font-size: 0.9rem;">Selected: @_selectedCountry</p>
+            </Demo>
+            <Code>
+@(@"<DxComboBox TData=""string"" TValue=""string""
+           Data=""_countries""
+           @bind-Value=""_selectedCountry""
+           NullText=""Select a country..."" />
+
+@code {
+    private string[] _countries = { ""USA"", ""Canada"", ""UK"", ""Germany"", ""France"", ""Japan"" };
+    private string? _selectedCountry;
+}")
+            </Code>
+        </ExampleBlock>
+
+        <ExampleBlock Title="With Filtering" Description="Type to filter dropdown items. Supports Contains and StartsWith modes.">
+            <Demo>
+                <div style="display: flex; flex-direction: column; gap: 0.75rem; max-width: 300px;">
+                    <DxComboBox TData="string" TValue="string"
+                               Data="_countries"
+                               @bind-Value="_filterCountry"
+                               FilteringMode="ComboBoxFilteringMode.Contains"
+                               NullText="Type to filter (Contains)..." />
+                    <DxComboBox TData="string" TValue="string"
+                               Data="_countries"
+                               @bind-Value="_startsWithCountry"
+                               FilteringMode="ComboBoxFilteringMode.StartsWith"
+                               NullText="Type to filter (StartsWith)..." />
+                </div>
+            </Demo>
+            <Code>
+@(@"<DxComboBox TData=""string"" TValue=""string""
+           Data=""_countries""
+           FilteringMode=""ComboBoxFilteringMode.Contains""
+           NullText=""Type to filter..."" />
+
+<DxComboBox TData=""string"" TValue=""string""
+           Data=""_countries""
+           FilteringMode=""ComboBoxFilteringMode.StartsWith""
+           NullText=""Type to filter (StartsWith)..."" />")
+            </Code>
+        </ExampleBlock>
+
+        <ExampleBlock Title="Clear Button" Description="Show a clear button to reset the selection.">
+            <Demo>
+                <DxComboBox TData="string" TValue="string"
+                           Data="_countries"
+                           @bind-Value="_clearableCountry"
+                           ClearButtonDisplayMode="ClearButtonDisplayMode.Auto"
+                           NullText="Select (clearable)..." />
+            </Demo>
+            <Code>
+@(@"<DxComboBox TData=""string"" TValue=""string""
+           Data=""_countries""
+           ClearButtonDisplayMode=""ClearButtonDisplayMode.Auto""
+           NullText=""Select (clearable)..."" />")
+            </Code>
+        </ExampleBlock>
+    </Examples>
+</ComponentDoc>
+
+@code {
+    private string[] _countries = { "USA", "Canada", "UK", "Germany", "France", "Japan", "Australia", "Brazil" };
+    private string? _selectedCountry;
+    private string? _filterCountry;
+    private string? _startsWithCountry;
+    private string? _clearableCountry;
+}

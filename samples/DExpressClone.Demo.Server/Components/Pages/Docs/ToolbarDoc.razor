@@ -1,0 +1,106 @@
+@page "/docs/toolbar"
+@rendermode InteractiveServer
+
+<ComponentDoc Title="DxToolbar" Description="A toolbar component for organizing action buttons and controls with left/right alignment support.">
+    <ParametersContent>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>Title</code></td><td><code>string?</code></td><td><code>null</code></td><td>Toolbar title text.</td></tr>
+                <tr><td><code>ChildContent</code></td><td><code>RenderFragment?</code></td><td><code>null</code></td><td>DxToolbarItem children.</td></tr>
+            </tbody>
+        </table>
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">DxToolbarItem Parameters</h3>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>Text</code></td><td><code>string?</code></td><td><code>null</code></td><td>Item display text.</td></tr>
+                <tr><td><code>IconCssClass</code></td><td><code>string?</code></td><td><code>null</code></td><td>Icon CSS class.</td></tr>
+                <tr><td><code>Alignment</code></td><td><code>ToolbarItemAlignment</code></td><td><code>Left</code></td><td>Alignment: Left or Right.</td></tr>
+                <tr><td><code>BeginGroup</code></td><td><code>bool</code></td><td><code>false</code></td><td>Whether to add a separator before this item.</td></tr>
+                <tr><td><code>Visible</code></td><td><code>bool</code></td><td><code>true</code></td><td>Whether the item is visible.</td></tr>
+                <tr><td><code>Enabled</code></td><td><code>bool</code></td><td><code>true</code></td><td>Whether the item is enabled.</td></tr>
+                <tr><td><code>Template</code></td><td><code>RenderFragment?</code></td><td><code>null</code></td><td>Custom item template.</td></tr>
+            </tbody>
+        </table>
+    </ParametersContent>
+    <EventsContent>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>Click</code></td><td><code>EventCallback&lt;MouseEventArgs&gt;</code></td><td>Fires when a toolbar item is clicked.</td></tr>
+            </tbody>
+        </table>
+    </EventsContent>
+    <Examples>
+        <ExampleBlock Title="Basic Toolbar" Description="A toolbar with left-aligned and right-aligned items.">
+            <Demo>
+                <DxToolbar>
+                    <DxToolbarItem Text="New" />
+                    <DxToolbarItem Text="Open" />
+                    <DxToolbarItem Text="Save" />
+                    <DxToolbarItem Text="Help" Alignment="ToolbarItemAlignment.Right" />
+                </DxToolbar>
+            </Demo>
+            <Code>
+@(@"<DxToolbar>
+    <DxToolbarItem Text=""New"" />
+    <DxToolbarItem Text=""Open"" />
+    <DxToolbarItem Text=""Save"" />
+    <DxToolbarItem Text=""Help""
+                  Alignment=""ToolbarItemAlignment.Right"" />
+</DxToolbar>")
+            </Code>
+        </ExampleBlock>
+
+        <ExampleBlock Title="Toolbar with Groups" Description="Use BeginGroup to add visual separators between item groups.">
+            <Demo>
+                <DxToolbar>
+                    <DxToolbarItem Text="Cut" />
+                    <DxToolbarItem Text="Copy" />
+                    <DxToolbarItem Text="Paste" />
+                    <DxToolbarItem Text="Bold" BeginGroup="true" />
+                    <DxToolbarItem Text="Italic" />
+                    <DxToolbarItem Text="Underline" />
+                </DxToolbar>
+            </Demo>
+            <Code>
+@(@"<DxToolbar>
+    <DxToolbarItem Text=""Cut"" />
+    <DxToolbarItem Text=""Copy"" />
+    <DxToolbarItem Text=""Paste"" />
+    <DxToolbarItem Text=""Bold"" BeginGroup=""true"" />
+    <DxToolbarItem Text=""Italic"" />
+    <DxToolbarItem Text=""Underline"" />
+</DxToolbar>")
+            </Code>
+        </ExampleBlock>
+
+        <ExampleBlock Title="Click Events" Description="Handle toolbar item clicks.">
+            <Demo>
+                <DxToolbar>
+                    <DxToolbarItem Text="Action 1" Click="@(() => _lastAction = "Action 1")" />
+                    <DxToolbarItem Text="Action 2" Click="@(() => _lastAction = "Action 2")" />
+                    <DxToolbarItem Text="Action 3" Click="@(() => _lastAction = "Action 3")" />
+                </DxToolbar>
+                <p style="margin-top: 0.5rem; font-size: 0.9rem;">Last clicked: @_lastAction</p>
+            </Demo>
+            <Code>
+@(@"<DxToolbar>
+    <DxToolbarItem Text=""Action 1""
+                  Click=""@(() => _lastAction = ""Action 1"")"" />
+    <DxToolbarItem Text=""Action 2""
+                  Click=""@(() => _lastAction = ""Action 2"")"" />
+</DxToolbar>
+
+@code {
+    private string _lastAction = ""None"";
+}")
+            </Code>
+        </ExampleBlock>
+    </Examples>
+</ComponentDoc>
+
+@code {
+    private string _lastAction = "None";
+}

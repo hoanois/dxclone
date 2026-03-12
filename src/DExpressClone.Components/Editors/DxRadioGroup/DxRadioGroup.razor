@@ -1,0 +1,43 @@
+@namespace DExpressClone.Components.Editors.DxRadioGroup
+@typeparam TValue
+@inherits DExpressClone.Components.Core.DxFormEditorBase<TValue>
+
+<div class="@RootCssClass"
+     id="@Id"
+     role="radiogroup"
+     @onmouseenter="HandleMouseEnter"
+     @onmouseleave="HandleMouseLeave"
+     @attributes="AdditionalAttributes">
+
+    @if (!string.IsNullOrEmpty(LabelText))
+    {
+        <label class="dx-radio-group-label">@LabelText</label>
+    }
+
+    @foreach (var item in GetRadioItems())
+    {
+        var itemValue = item.Value;
+        <div class="@GetRadioItemCssClass(itemValue)"
+             role="radio"
+             aria-checked="@IsSelected(itemValue)"
+             tabindex="@(TabIndex ?? 0)"
+             @onclick="() => HandleItemClickAsync(itemValue)"
+             @onfocus="HandleFocusAsync"
+             @onblur="HandleBlurAsync">
+            <span class="dx-radio-circle"></span>
+            @if (ItemTemplate is not null && itemValue is not null)
+            {
+                @ItemTemplate(itemValue)
+            }
+            else
+            {
+                <span class="dx-radio-label">@item.Text</span>
+            }
+        </div>
+    }
+
+    @if (!IsValid && ShowBuiltInValidation)
+    {
+        <div class="dx-editor-validation-message">@ValidationMessage</div>
+    }
+</div>

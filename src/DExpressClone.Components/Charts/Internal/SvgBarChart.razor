@@ -1,0 +1,20 @@
+@namespace DExpressClone.Components.Charts.Internal
+@using DExpressClone.Components.Charts.Models
+
+@if (Scale is not null)
+{
+    <g class="dx-chart-bar-series">
+        @foreach (var bar in ComputeBars())
+        {
+            <rect x="@F(bar.X)"
+                  y="@F(bar.Y)"
+                  width="@F(bar.Width)"
+                  height="@F(bar.Height)"
+                  fill="@bar.Color"
+                  class="dx-chart-bar-rect"
+                  data-series="@bar.Series.Name"
+                  data-label="@bar.Point.Label"
+                  data-value="@F(bar.Point.Y)" />
+        }
+    </g>
+}

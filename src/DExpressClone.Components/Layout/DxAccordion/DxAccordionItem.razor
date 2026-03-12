@@ -1,0 +1,22 @@
+@namespace DExpressClone.Components.Layout
+@inherits DExpressClone.Components.Core.DxComponentBase
+@implements IDisposable
+
+<div class="@CssClassString">
+    <div class="dx-accordion-header" @onclick="ToggleExpanded" role="button" tabindex="0">
+        @if (HeaderTemplate != null)
+        {
+            @HeaderTemplate
+        }
+        else
+        {
+            <span class="dx-accordion-header-text">@HeaderText</span>
+        }
+        <span class="dx-accordion-chevron @(Expanded ? "dx-accordion-chevron--expanded" : "")"></span>
+    </div>
+    <div class="dx-accordion-body-wrapper @(Expanded ? "dx-accordion-body-wrapper--expanded" : "")">
+        <div class="dx-accordion-body">
+            @ChildContent
+        </div>
+    </div>
+</div>

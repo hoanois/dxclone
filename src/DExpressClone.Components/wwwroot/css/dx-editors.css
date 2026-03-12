@@ -1,0 +1,676 @@
+/* ============================================================
+   DExpressClone Editor Components — Consolidated Stylesheet
+   ============================================================ */
+
+/* --- CSS Variables --- */
+:root {
+    --dx-editor-height: 34px;
+    --dx-editor-font-size: 14px;
+    --dx-editor-font-family: inherit;
+    --dx-editor-border-color: #c4c4c4;
+    --dx-editor-border-radius: 4px;
+    --dx-editor-focus-ring-color: rgba(0, 120, 212, 0.4);
+    --dx-editor-focus-border-color: #0078d4;
+    --dx-editor-bg: #ffffff;
+    --dx-editor-color: #1a1a1a;
+    --dx-editor-placeholder-color: #999;
+    --dx-editor-disabled-bg: #f5f5f5;
+    --dx-editor-disabled-color: #a0a0a0;
+    --dx-editor-disabled-border-color: #e0e0e0;
+    --dx-editor-readonly-bg: #fafafa;
+    --dx-editor-valid-color: #28a745;
+    --dx-editor-invalid-color: #dc3545;
+
+    --dx-checkbox-size: 18px;
+    --dx-checkbox-border-color: #c4c4c4;
+    --dx-checkbox-checked-bg: #0078d4;
+    --dx-checkbox-checked-color: #ffffff;
+
+    --dx-radio-size: 18px;
+    --dx-radio-border-color: #c4c4c4;
+    --dx-radio-checked-color: #0078d4;
+    --dx-radio-dot-size: 8px;
+
+    --dx-calendar-cell-size: 32px;
+    --dx-calendar-bg: #ffffff;
+    --dx-calendar-border-color: #e0e0e0;
+    --dx-calendar-today-color: #0078d4;
+    --dx-calendar-selected-bg: #0078d4;
+    --dx-calendar-selected-color: #ffffff;
+    --dx-calendar-hover-bg: #f0f0f0;
+    --dx-calendar-disabled-color: #ccc;
+
+    --dx-dropdown-bg: #ffffff;
+    --dx-dropdown-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    --dx-dropdown-border-color: #e0e0e0;
+    --dx-dropdown-max-height: 250px;
+    --dx-dropdown-item-hover-bg: #f0f0f0;
+    --dx-dropdown-item-selected-bg: #e8f0fe;
+
+    --dx-spin-btn-width: 24px;
+}
+
+/* ============================================================
+   Base Input Styling
+   ============================================================ */
+.dx-textbox,
+.dx-numeric,
+.dx-dateedit,
+.dx-combobox {
+    display: inline-flex;
+    flex-direction: column;
+    font-family: var(--dx-editor-font-family);
+    font-size: var(--dx-editor-font-size);
+    position: relative;
+}
+
+.dx-textbox-container,
+.dx-numeric-container,
+.dx-dateedit-container,
+.dx-combobox-container {
+    display: flex;
+    align-items: center;
+    height: var(--dx-editor-height);
+    border: 1px solid var(--dx-editor-border-color);
+    border-radius: var(--dx-editor-border-radius);
+    background: var(--dx-editor-bg);
+    overflow: hidden;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.dx-textbox-input,
+.dx-numeric-input,
+.dx-dateedit-input,
+.dx-combobox-input {
+    flex: 1;
+    height: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: var(--dx-editor-color);
+    font-family: inherit;
+    font-size: inherit;
+    padding: 0 8px;
+    min-width: 0;
+}
+
+.dx-textbox-input::placeholder,
+.dx-numeric-input::placeholder,
+.dx-dateedit-input::placeholder,
+.dx-combobox-input::placeholder {
+    color: var(--dx-editor-placeholder-color);
+}
+
+/* Label */
+.dx-textbox-label,
+.dx-numeric-label,
+.dx-dateedit-label,
+.dx-combobox-label,
+.dx-radio-group-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--dx-editor-color);
+    margin-bottom: 4px;
+}
+
+/* Focus state */
+.dx-state-focused > .dx-textbox-container,
+.dx-state-focused > .dx-numeric-container,
+.dx-state-focused > .dx-dateedit-container,
+.dx-state-focused > .dx-combobox-container {
+    border-color: var(--dx-editor-focus-border-color);
+    box-shadow: 0 0 0 2px var(--dx-editor-focus-ring-color);
+}
+
+/* Hover state */
+.dx-state-hovered > .dx-textbox-container,
+.dx-state-hovered > .dx-numeric-container,
+.dx-state-hovered > .dx-dateedit-container,
+.dx-state-hovered > .dx-combobox-container {
+    border-color: var(--dx-editor-focus-border-color);
+}
+
+/* Disabled state */
+.dx-state-disabled > .dx-textbox-container,
+.dx-state-disabled > .dx-numeric-container,
+.dx-state-disabled > .dx-dateedit-container,
+.dx-state-disabled > .dx-combobox-container {
+    background: var(--dx-editor-disabled-bg);
+    border-color: var(--dx-editor-disabled-border-color);
+    cursor: not-allowed;
+}
+
+.dx-state-disabled .dx-textbox-input,
+.dx-state-disabled .dx-numeric-input,
+.dx-state-disabled .dx-dateedit-input,
+.dx-state-disabled .dx-combobox-input {
+    color: var(--dx-editor-disabled-color);
+    cursor: not-allowed;
+}
+
+/* Read-only state */
+.dx-state-readonly > .dx-textbox-container,
+.dx-state-readonly > .dx-numeric-container,
+.dx-state-readonly > .dx-dateedit-container,
+.dx-state-readonly > .dx-combobox-container {
+    background: var(--dx-editor-readonly-bg);
+}
+
+/* Validation states */
+.dx-invalid > .dx-textbox-container,
+.dx-invalid > .dx-numeric-container,
+.dx-invalid > .dx-dateedit-container,
+.dx-invalid > .dx-combobox-container {
+    border-color: var(--dx-editor-invalid-color);
+}
+
+.dx-invalid.dx-state-focused > .dx-textbox-container,
+.dx-invalid.dx-state-focused > .dx-numeric-container,
+.dx-invalid.dx-state-focused > .dx-dateedit-container,
+.dx-invalid.dx-state-focused > .dx-combobox-container {
+    box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.3);
+}
+
+.dx-valid > .dx-textbox-container,
+.dx-valid > .dx-numeric-container,
+.dx-valid > .dx-dateedit-container,
+.dx-valid > .dx-combobox-container {
+    border-color: var(--dx-editor-valid-color);
+}
+
+.dx-editor-validation-message {
+    font-size: 12px;
+    color: var(--dx-editor-invalid-color);
+    margin-top: 4px;
+}
+
+/* ============================================================
+   Clear Button
+   ============================================================ */
+.dx-textbox-clear-btn,
+.dx-combobox-clear-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 100%;
+    border: none;
+    background: transparent;
+    color: var(--dx-editor-placeholder-color);
+    cursor: pointer;
+    padding: 0;
+    flex-shrink: 0;
+}
+
+.dx-textbox-clear-btn:hover,
+.dx-combobox-clear-btn:hover {
+    color: var(--dx-editor-color);
+}
+
+/* ============================================================
+   Checkbox
+   ============================================================ */
+.dx-checkbox {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-family: var(--dx-editor-font-family);
+    font-size: var(--dx-editor-font-size);
+    user-select: none;
+    outline: none;
+}
+
+.dx-checkbox.dx-state-disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.dx-checkbox--label-left {
+    flex-direction: row-reverse;
+}
+
+.dx-checkbox-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--dx-checkbox-size);
+    height: var(--dx-checkbox-size);
+    min-width: var(--dx-checkbox-size);
+    border: 2px solid var(--dx-checkbox-border-color);
+    border-radius: 3px;
+    background: var(--dx-editor-bg);
+    transition: background-color 0.15s, border-color 0.15s;
+    color: var(--dx-checkbox-checked-color);
+}
+
+.dx-checkbox--checked .dx-checkbox-box {
+    background: var(--dx-checkbox-checked-bg);
+    border-color: var(--dx-checkbox-checked-bg);
+}
+
+.dx-checkbox--indeterminate .dx-checkbox-box {
+    background: var(--dx-checkbox-checked-bg);
+    border-color: var(--dx-checkbox-checked-bg);
+}
+
+.dx-checkbox.dx-state-focused .dx-checkbox-box {
+    box-shadow: 0 0 0 2px var(--dx-editor-focus-ring-color);
+}
+
+.dx-checkbox.dx-state-hovered .dx-checkbox-box {
+    border-color: var(--dx-editor-focus-border-color);
+}
+
+.dx-checkbox-checkmark,
+.dx-checkbox-indeterminate {
+    width: 12px;
+    height: 12px;
+}
+
+.dx-checkbox-label {
+    color: var(--dx-editor-color);
+    line-height: 1.4;
+}
+
+/* ============================================================
+   Spin Buttons (Numeric Edit)
+   ============================================================ */
+.dx-numeric-spin-buttons {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    flex-shrink: 0;
+    border-left: 1px solid var(--dx-editor-border-color);
+}
+
+.dx-numeric-spin-up,
+.dx-numeric-spin-down {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--dx-spin-btn-width);
+    flex: 1;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+    color: var(--dx-editor-color);
+}
+
+.dx-numeric-spin-up {
+    border-bottom: 1px solid var(--dx-editor-border-color);
+}
+
+.dx-numeric-spin-up:hover,
+.dx-numeric-spin-down:hover {
+    background: var(--dx-dropdown-item-hover-bg);
+}
+
+.dx-numeric-spin-up:disabled,
+.dx-numeric-spin-down:disabled {
+    color: var(--dx-editor-disabled-color);
+    cursor: not-allowed;
+}
+
+/* ============================================================
+   Radio Group / Radio Buttons
+   ============================================================ */
+.dx-radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-family: var(--dx-editor-font-family);
+    font-size: var(--dx-editor-font-size);
+}
+
+.dx-radio-group--horizontal {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.dx-radio-group.dx-state-disabled {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.dx-radio {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    user-select: none;
+    outline: none;
+}
+
+.dx-radio-circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--dx-radio-size);
+    height: var(--dx-radio-size);
+    min-width: var(--dx-radio-size);
+    border: 2px solid var(--dx-radio-border-color);
+    border-radius: 50%;
+    background: var(--dx-editor-bg);
+    transition: border-color 0.15s;
+}
+
+.dx-radio--checked .dx-radio-circle {
+    border-color: var(--dx-radio-checked-color);
+}
+
+.dx-radio--checked .dx-radio-circle::after {
+    content: '';
+    display: block;
+    width: var(--dx-radio-dot-size);
+    height: var(--dx-radio-dot-size);
+    border-radius: 50%;
+    background: var(--dx-radio-checked-color);
+}
+
+.dx-radio.dx-state-focused .dx-radio-circle,
+.dx-radio:focus-visible .dx-radio-circle {
+    box-shadow: 0 0 0 2px var(--dx-editor-focus-ring-color);
+}
+
+.dx-radio:hover .dx-radio-circle {
+    border-color: var(--dx-editor-focus-border-color);
+}
+
+.dx-radio-label {
+    color: var(--dx-editor-color);
+    line-height: 1.4;
+}
+
+/* ============================================================
+   Date Edit — Calendar
+   ============================================================ */
+.dx-dateedit-button,
+.dx-combobox-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 100%;
+    border: none;
+    border-left: 1px solid var(--dx-editor-border-color);
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+    color: var(--dx-editor-color);
+    flex-shrink: 0;
+}
+
+.dx-dateedit-button:hover,
+.dx-combobox-button:hover {
+    background: var(--dx-dropdown-item-hover-bg);
+}
+
+.dx-dateedit-button:disabled,
+.dx-combobox-button:disabled {
+    color: var(--dx-editor-disabled-color);
+    cursor: not-allowed;
+}
+
+.dx-dateedit-calendar {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    background: var(--dx-calendar-bg);
+    border: 1px solid var(--dx-calendar-border-color);
+    border-radius: var(--dx-editor-border-radius);
+    box-shadow: var(--dx-dropdown-shadow);
+    padding: 8px;
+    margin-top: 4px;
+    min-width: 260px;
+}
+
+.dx-calendar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 0;
+    margin-bottom: 8px;
+}
+
+.dx-calendar-title {
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--dx-editor-color);
+}
+
+.dx-calendar-nav-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border: none;
+    border-radius: var(--dx-editor-border-radius);
+    background: transparent;
+    cursor: pointer;
+    color: var(--dx-editor-color);
+}
+
+.dx-calendar-nav-btn:hover {
+    background: var(--dx-dropdown-item-hover-bg);
+}
+
+.dx-calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+    text-align: center;
+}
+
+.dx-calendar-day-header {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--dx-editor-placeholder-color);
+    padding: 4px 0;
+}
+
+.dx-calendar-day {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--dx-calendar-cell-size);
+    height: var(--dx-calendar-cell-size);
+    border: none;
+    border-radius: var(--dx-editor-border-radius);
+    background: transparent;
+    cursor: pointer;
+    font-size: 13px;
+    color: var(--dx-editor-color);
+    padding: 0;
+}
+
+.dx-calendar-day:hover:not(:disabled) {
+    background: var(--dx-calendar-hover-bg);
+}
+
+.dx-calendar-day--today {
+    font-weight: 700;
+    color: var(--dx-calendar-today-color);
+}
+
+.dx-calendar-day--selected {
+    background: var(--dx-calendar-selected-bg) !important;
+    color: var(--dx-calendar-selected-color);
+    font-weight: 600;
+}
+
+.dx-calendar-day--disabled {
+    color: var(--dx-calendar-disabled-color);
+    cursor: not-allowed;
+}
+
+.dx-calendar-day--other-month {
+    opacity: 0.4;
+}
+
+.dx-calendar-footer {
+    display: flex;
+    justify-content: center;
+    padding-top: 8px;
+    border-top: 1px solid var(--dx-calendar-border-color);
+    margin-top: 8px;
+}
+
+.dx-calendar-today-btn {
+    border: none;
+    background: transparent;
+    color: var(--dx-calendar-today-color);
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: var(--dx-editor-border-radius);
+}
+
+.dx-calendar-today-btn:hover {
+    background: var(--dx-calendar-hover-bg);
+}
+
+/* ============================================================
+   ComboBox — Dropdown
+   ============================================================ */
+.dx-combobox-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: var(--dx-dropdown-bg);
+    border: 1px solid var(--dx-dropdown-border-color);
+    border-radius: var(--dx-editor-border-radius);
+    box-shadow: var(--dx-dropdown-shadow);
+    margin-top: 4px;
+    max-height: var(--dx-dropdown-max-height);
+    overflow-y: auto;
+}
+
+.dx-combobox-dropdown--editor-width {
+    min-width: 100%;
+    width: 100%;
+}
+
+.dx-combobox-item {
+    display: flex;
+    align-items: center;
+    padding: 6px 10px;
+    cursor: pointer;
+    font-size: var(--dx-editor-font-size);
+    color: var(--dx-editor-color);
+    transition: background-color 0.1s;
+}
+
+.dx-combobox-item:hover,
+.dx-combobox-item--highlighted {
+    background: var(--dx-dropdown-item-hover-bg);
+}
+
+.dx-combobox-item--selected {
+    background: var(--dx-dropdown-item-selected-bg);
+    font-weight: 600;
+}
+
+.dx-combobox-no-data {
+    padding: 12px;
+    text-align: center;
+    color: var(--dx-editor-placeholder-color);
+    font-size: 13px;
+}
+
+/* ============================================================
+   Dropup positioning — opens popup above when near bottom of viewport
+   ============================================================ */
+.dx-dateedit-calendar--dropup {
+    top: auto;
+    bottom: 100%;
+    margin-top: 0;
+    margin-bottom: 4px;
+}
+
+.dx-combobox-dropdown--dropup {
+    top: auto;
+    bottom: 100%;
+    margin-top: 0;
+    margin-bottom: 4px;
+}
+
+/* ============================================================
+   Dropdown Overlay — Captures clicks outside open dropdowns
+   ============================================================ */
+.dx-dropdown-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    background: transparent;
+    cursor: default;
+}
+
+/* ============================================================
+   DxFormValidation
+   ============================================================ */
+.dx-form-validation {
+    display: flex;
+    flex-direction: column;
+    gap: var(--dx-spacing-4, 16px);
+}
+
+.dx-form-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.dx-form-item-label {
+    font-size: var(--dx-editor-font-size);
+    font-weight: 600;
+    color: var(--dx-editor-color);
+}
+
+.dx-form-item-editor {
+    display: flex;
+    flex-direction: column;
+}
+
+.dx-form-item-error {
+    font-size: 12px;
+    color: var(--dx-editor-invalid-color);
+    margin-top: 2px;
+}
+
+.dx-form-validation-summary {
+    border: 1px solid var(--dx-editor-invalid-color);
+    border-radius: var(--dx-editor-border-radius);
+    background: rgba(220, 53, 69, 0.06);
+    padding: 12px 16px;
+}
+
+.dx-form-validation-summary ul {
+    margin: 0;
+    padding-left: 20px;
+    list-style: disc;
+    color: var(--dx-editor-invalid-color);
+    font-size: 13px;
+}
+
+.dx-form-validation-summary ul li {
+    margin-bottom: 4px;
+}
+
+.dx-form-validation-summary ul li:last-child {
+    margin-bottom: 0;
+}
+
+.dx-form-validation-actions {
+    display: flex;
+    gap: 8px;
+    padding-top: 8px;
+}

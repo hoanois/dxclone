@@ -1,0 +1,35 @@
+@namespace DExpressClone.Components.Editors.DxFormValidation
+@inherits DExpressClone.Components.Core.DxComponentBase
+
+<div class="@RootCssClass">
+    <CascadingValue Value="_editContext">
+        <CascadingValue Value="this">
+            <EditForm EditContext="_editContext" OnSubmit="HandleSubmit">
+                @ChildContent
+
+                @if (ShowValidationSummary)
+                {
+                    var errors = GetAllErrors();
+                    if (errors.Count > 0)
+                    {
+                        <div class="dx-form-validation-summary">
+                            <ul>
+                                @foreach (var error in errors)
+                                {
+                                    <li>@error</li>
+                                }
+                            </ul>
+                        </div>
+                    }
+                }
+
+                @if (ShowSubmitButton)
+                {
+                    <div class="dx-form-validation-actions">
+                        <button type="submit" class="dx-btn dx-btn--contained dx-btn--primary">@SubmitButtonText</button>
+                    </div>
+                }
+            </EditForm>
+        </CascadingValue>
+    </CascadingValue>
+</div>

@@ -1,0 +1,98 @@
+@page "/docs/panel"
+@rendermode InteractiveServer
+
+<ComponentDoc Title="DxPanel" Description="A collapsible panel container with header, content, and optional footer sections.">
+    <ParametersContent>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>HeaderText</code></td><td><code>string?</code></td><td><code>null</code></td><td>Text displayed in the panel header.</td></tr>
+                <tr><td><code>HeaderTemplate</code></td><td><code>RenderFragment?</code></td><td><code>null</code></td><td>Custom header template.</td></tr>
+                <tr><td><code>ChildContent</code></td><td><code>RenderFragment?</code></td><td><code>null</code></td><td>The panel body content.</td></tr>
+                <tr><td><code>FooterTemplate</code></td><td><code>RenderFragment?</code></td><td><code>null</code></td><td>Custom footer template.</td></tr>
+                <tr><td><code>ShowCollapseButton</code></td><td><code>bool</code></td><td><code>false</code></td><td>Whether to show the collapse/expand button.</td></tr>
+                <tr><td><code>Collapsed</code></td><td><code>bool</code></td><td><code>false</code></td><td>Whether the panel is collapsed.</td></tr>
+                <tr><td><code>Visible</code></td><td><code>bool</code></td><td><code>true</code></td><td>Whether the panel is visible.</td></tr>
+            </tbody>
+        </table>
+    </ParametersContent>
+    <EventsContent>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>CollapsedChanged</code></td><td><code>EventCallback&lt;bool&gt;</code></td><td>Fires when the collapsed state changes.</td></tr>
+            </tbody>
+        </table>
+    </EventsContent>
+    <Examples>
+        <ExampleBlock Title="Basic Panel" Description="Simple panel with header and content.">
+            <Demo>
+                <DxPanel HeaderText="User Information">
+                    <p>Name: John Doe</p>
+                    <p>Email: john.doe&#64;example.com</p>
+                </DxPanel>
+            </Demo>
+            <Code>
+@(@"<DxPanel HeaderText=""User Information"">
+    <p>Name: John Doe</p>
+    <p>Email: john.doe@example.com</p>
+</DxPanel>")
+            </Code>
+        </ExampleBlock>
+
+        <ExampleBlock Title="Collapsible Panel" Description="Panel with a collapse/expand toggle button.">
+            <Demo>
+                <DxPanel HeaderText="Settings" ShowCollapseButton="true" @bind-Collapsed="_collapsed">
+                    <p>Display density: Comfortable</p>
+                    <p>Theme: Light</p>
+                    <p>Language: English</p>
+                </DxPanel>
+                <p style="margin-top: 0.5rem; font-size: 0.9rem;">Collapsed: @_collapsed</p>
+            </Demo>
+            <Code>
+@(@"<DxPanel HeaderText=""Settings""
+        ShowCollapseButton=""true""
+        @bind-Collapsed=""_collapsed"">
+    <p>Display density: Comfortable</p>
+    <p>Theme: Light</p>
+    <p>Language: English</p>
+</DxPanel>
+
+@code {
+    private bool _collapsed;
+}")
+            </Code>
+        </ExampleBlock>
+
+        <ExampleBlock Title="Panel with Footer" Description="Panel with a custom footer section.">
+            <Demo>
+                <DxPanel HeaderText="Order Summary">
+                    <ChildContent>
+                        <p>Item: Blazor Components License</p>
+                        <p>Quantity: 1</p>
+                    </ChildContent>
+                    <FooterTemplate>
+                        <div style="text-align: right; font-weight: bold;">Total: $299.00</div>
+                    </FooterTemplate>
+                </DxPanel>
+            </Demo>
+            <Code>
+@(@"<DxPanel HeaderText=""Order Summary"">
+    <ChildContent>
+        <p>Item: Blazor Components License</p>
+        <p>Quantity: 1</p>
+    </ChildContent>
+    <FooterTemplate>
+        <div style=""text-align: right; font-weight: bold;"">
+            Total: $299.00
+        </div>
+    </FooterTemplate>
+</DxPanel>")
+            </Code>
+        </ExampleBlock>
+    </Examples>
+</ComponentDoc>
+
+@code {
+    private bool _collapsed;
+}

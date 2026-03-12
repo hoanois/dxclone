@@ -1,0 +1,99 @@
+@page "/docs/button"
+@rendermode InteractiveServer
+
+<ComponentDoc Title="DxButton" Description="A versatile button component with multiple render styles, icon support, and navigation capabilities.">
+    <ParametersContent>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>Text</code></td><td><code>string?</code></td><td><code>null</code></td><td>The button's display text.</td></tr>
+                <tr><td><code>IconCssClass</code></td><td><code>string?</code></td><td><code>null</code></td><td>CSS class for the button icon.</td></tr>
+                <tr><td><code>RenderStyle</code></td><td><code>ButtonRenderStyle</code></td><td><code>Primary</code></td><td>Visual style: Primary, Secondary, Success, Danger, Warning, Info, Light, Dark.</td></tr>
+                <tr><td><code>RenderStyleMode</code></td><td><code>ButtonRenderStyleMode</code></td><td><code>Contained</code></td><td>Button variant: Contained, Outlined, Text.</td></tr>
+                <tr><td><code>NavigateUrl</code></td><td><code>string?</code></td><td><code>null</code></td><td>URL to navigate to when clicked.</td></tr>
+                <tr><td><code>ButtonType</code></td><td><code>ButtonType</code></td><td><code>Button</code></td><td>HTML button type: Button, Submit, Reset.</td></tr>
+                <tr><td><code>Enabled</code></td><td><code>bool</code></td><td><code>true</code></td><td>Whether the button is enabled.</td></tr>
+                <tr><td><code>CssClass</code></td><td><code>string?</code></td><td><code>null</code></td><td>Additional CSS classes.</td></tr>
+            </tbody>
+        </table>
+    </ParametersContent>
+    <EventsContent>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>Click</code></td><td><code>EventCallback&lt;MouseEventArgs&gt;</code></td><td>Fires when the button is clicked.</td></tr>
+            </tbody>
+        </table>
+    </EventsContent>
+    <Examples>
+        <ExampleBlock Title="Render Styles" Description="Buttons support multiple visual styles for different purposes.">
+            <Demo>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <DxButton Text="Primary" RenderStyle="ButtonRenderStyle.Primary" />
+                    <DxButton Text="Secondary" RenderStyle="ButtonRenderStyle.Secondary" />
+                    <DxButton Text="Success" RenderStyle="ButtonRenderStyle.Success" />
+                    <DxButton Text="Danger" RenderStyle="ButtonRenderStyle.Danger" />
+                    <DxButton Text="Warning" RenderStyle="ButtonRenderStyle.Warning" />
+                    <DxButton Text="Info" RenderStyle="ButtonRenderStyle.Info" />
+                </div>
+            </Demo>
+            <Code>
+@(@"<DxButton Text=""Primary"" RenderStyle=""ButtonRenderStyle.Primary"" />
+<DxButton Text=""Secondary"" RenderStyle=""ButtonRenderStyle.Secondary"" />
+<DxButton Text=""Success"" RenderStyle=""ButtonRenderStyle.Success"" />
+<DxButton Text=""Danger"" RenderStyle=""ButtonRenderStyle.Danger"" />
+<DxButton Text=""Warning"" RenderStyle=""ButtonRenderStyle.Warning"" />
+<DxButton Text=""Info"" RenderStyle=""ButtonRenderStyle.Info"" />")
+            </Code>
+        </ExampleBlock>
+
+        <ExampleBlock Title="Style Modes" Description="Each render style supports three modes: Contained, Outlined, and Text.">
+            <Demo>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center;">
+                    <DxButton Text="Contained" RenderStyle="ButtonRenderStyle.Primary" RenderStyleMode="ButtonRenderStyleMode.Contained" />
+                    <DxButton Text="Outlined" RenderStyle="ButtonRenderStyle.Primary" RenderStyleMode="ButtonRenderStyleMode.Outlined" />
+                    <DxButton Text="Text" RenderStyle="ButtonRenderStyle.Primary" RenderStyleMode="ButtonRenderStyleMode.Text" />
+                </div>
+            </Demo>
+            <Code>
+@(@"<DxButton Text=""Contained"" RenderStyleMode=""ButtonRenderStyleMode.Contained"" />
+<DxButton Text=""Outlined"" RenderStyleMode=""ButtonRenderStyleMode.Outlined"" />
+<DxButton Text=""Text"" RenderStyleMode=""ButtonRenderStyleMode.Text"" />")
+            </Code>
+        </ExampleBlock>
+
+        <ExampleBlock Title="Disabled State" Description="Buttons can be disabled to prevent user interaction.">
+            <Demo>
+                <div style="display: flex; gap: 0.5rem;">
+                    <DxButton Text="Enabled" RenderStyle="ButtonRenderStyle.Primary" />
+                    <DxButton Text="Disabled" RenderStyle="ButtonRenderStyle.Primary" Enabled="false" />
+                </div>
+            </Demo>
+            <Code>
+@(@"<DxButton Text=""Enabled"" RenderStyle=""ButtonRenderStyle.Primary"" />
+<DxButton Text=""Disabled"" RenderStyle=""ButtonRenderStyle.Primary"" Enabled=""false"" />")
+            </Code>
+        </ExampleBlock>
+
+        <ExampleBlock Title="Click Event" Description="Handle button clicks with the Click event callback.">
+            <Demo>
+                <DxButton Text="@($"Clicked {_count} times")" RenderStyle="ButtonRenderStyle.Primary" Click="@OnClick" />
+            </Demo>
+            <Code>
+@(@"<DxButton Text=""@($""Clicked {_count} times"")""
+         RenderStyle=""ButtonRenderStyle.Primary""
+         Click=""@OnClick"" />
+
+@code {
+    private int _count;
+    private void OnClick() => _count++;
+}")
+            </Code>
+        </ExampleBlock>
+    </Examples>
+</ComponentDoc>
+
+@code {
+    private int _count;
+    private void OnClick() => _count++;
+}

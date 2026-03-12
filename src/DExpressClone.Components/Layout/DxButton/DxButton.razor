@@ -1,0 +1,50 @@
+@namespace DExpressClone.Components.Layout
+@inherits DExpressClone.Components.Core.DxInteractiveComponentBase
+
+@if (!string.IsNullOrEmpty(NavigateUrl))
+{
+    <a id="@Id"
+       class="@CssClassString"
+       href="@NavigateUrl"
+       tabindex="@TabIndex"
+       @attributes="AdditionalAttributes"
+       @onfocus="HandleFocusAsync"
+       @onblur="HandleBlurAsync"
+       @onmouseenter="HandleMouseEnter"
+       @onmouseleave="HandleMouseLeave"
+       @onclick="HandleClick">
+        @if (!string.IsNullOrEmpty(IconCssClass))
+        {
+            <i class="@IconCssClass dx-btn-icon"></i>
+        }
+        @if (!string.IsNullOrEmpty(Text))
+        {
+            <span class="dx-btn-text">@Text</span>
+        }
+        @ChildContent
+    </a>
+}
+else
+{
+    <button id="@Id"
+            class="@CssClassString"
+            type="@ButtonTypeString"
+            disabled="@(!Enabled)"
+            tabindex="@TabIndex"
+            @attributes="AdditionalAttributes"
+            @onfocus="HandleFocusAsync"
+            @onblur="HandleBlurAsync"
+            @onmouseenter="HandleMouseEnter"
+            @onmouseleave="HandleMouseLeave"
+            @onclick="HandleClick">
+        @if (!string.IsNullOrEmpty(IconCssClass))
+        {
+            <i class="@IconCssClass dx-btn-icon"></i>
+        }
+        @if (!string.IsNullOrEmpty(Text))
+        {
+            <span class="dx-btn-text">@Text</span>
+        }
+        @ChildContent
+    </button>
+}

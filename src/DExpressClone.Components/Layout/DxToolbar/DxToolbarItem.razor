@@ -1,0 +1,34 @@
+@namespace DExpressClone.Components.Layout
+@inherits DExpressClone.Components.Core.DxComponentBase
+
+@if (Visible)
+{
+    @if (BeginGroup)
+    {
+        <div class="dx-toolbar-separator"></div>
+    }
+
+    @if (Template != null)
+    {
+        <div class="@CssClassString" @attributes="AdditionalAttributes">
+            @Template
+        </div>
+    }
+    else
+    {
+        <button type="button"
+                class="@CssClassString"
+                disabled="@(!Enabled)"
+                @onclick="HandleClick"
+                @attributes="AdditionalAttributes">
+            @if (!string.IsNullOrEmpty(IconCssClass))
+            {
+                <i class="@IconCssClass dx-toolbar-item-icon"></i>
+            }
+            @if (!string.IsNullOrEmpty(Text))
+            {
+                <span class="dx-toolbar-item-text">@Text</span>
+            }
+        </button>
+    }
+}

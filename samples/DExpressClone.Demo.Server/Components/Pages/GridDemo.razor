@@ -1,0 +1,73 @@
+@page "/grid"
+@rendermode InteractiveServer
+@inject SampleDataService DataService
+
+<PageTitle>Grid Demo - DExpressClone</PageTitle>
+
+<h1>Data Grid Demo</h1>
+<p>The DxGrid component provides sorting, selection, paging, and virtual scrolling for large datasets.</p>
+
+<h2>Employee Grid (1000 rows)</h2>
+<DxGrid TItem="Employee"
+        Data="@_employees"
+        AllowSort="true"
+        AllowSelection="true"
+        PageSize="20"
+        GridHeight="500px"
+        KeyFieldName="Id"
+        SelectedItemsChanged="@OnEmployeeSelected">
+    <Columns>
+        <DxGridDataColumn FieldName="Id" Caption="ID" Width="80px" />
+        <DxGridDataColumn FieldName="FirstName" Caption="First Name" Width="150px" />
+        <DxGridDataColumn FieldName="LastName" Caption="Last Name" Width="150px" />
+        <DxGridDataColumn FieldName="Email" Caption="Email" Width="250px" />
+        <DxGridDataColumn FieldName="Department" Caption="Department" Width="180px" />
+        <DxGridDataColumn FieldName="Salary" Caption="Salary" DisplayFormat="{0:C2}" Width="130px" TextAlignment="GridTextAlignment.Right" />
+        <DxGridDataColumn FieldName="HireDate" Caption="Hire Date" DisplayFormat="{0:yyyy-MM-dd}" Width="130px" />
+    </Columns>
+</DxGrid>
+
+@if (_selectedEmployee != null)
+{
+    <div class="demo-selection-info">
+        <h3>Selected Employee</h3>
+        <p><strong>Name:</strong> @_selectedEmployee.FirstName @_selectedEmployee.LastName</p>
+        <p><strong>Email:</strong> @_selectedEmployee.Email</p>
+        <p><strong>Department:</strong> @_selectedEmployee.Department</p>
+        <p><strong>Salary:</strong> @_selectedEmployee.Salary.ToString("C2")</p>
+    </div>
+}
+
+<h2 style="margin-top: 2rem;">Product Grid</h2>
+<DxGrid TItem="Product"
+        Data="@_products"
+        AllowSort="true"
+        PageSize="10"
+        GridHeight="350px"
+        KeyFieldName="Id">
+    <Columns>
+        <DxGridDataColumn FieldName="Id" Caption="ID" Width="60px" />
+        <DxGridDataColumn FieldName="Name" Caption="Product Name" Width="200px" />
+        <DxGridDataColumn FieldName="Category" Caption="Category" Width="150px" />
+        <DxGridDataColumn FieldName="Price" Caption="Price" DisplayFormat="{0:C2}" Width="100px" TextAlignment="GridTextAlignment.Right" />
+        <DxGridDataColumn FieldName="Stock" Caption="Stock" Width="80px" TextAlignment="GridTextAlignment.Right" />
+        <DxGridDataColumn FieldName="Rating" Caption="Rating" DisplayFormat="{0:F1}" Width="80px" TextAlignment="GridTextAlignment.Center" />
+    </Columns>
+</DxGrid>
+
+@code {
+    private List<Employee> _employees = new();
+    private List<Product> _products = new();
+    private Employee? _selectedEmployee;
+
+    protected override void OnInitialized()
+    {
+        _employees = DataService.GenerateEmployees(1000);
+        _products = DataService.GenerateProducts(50);
+    }
+
+    private void OnEmployeeSelected(IEnumerable<Employee> selectedItems)
+    {
+        _selectedEmployee = selectedItems.FirstOrDefault();
+    }
+}

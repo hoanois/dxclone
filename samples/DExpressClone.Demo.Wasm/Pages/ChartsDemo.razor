@@ -1,0 +1,38 @@
+@page "/charts"
+@inject SampleDataService DataService
+
+<PageTitle>Charts Demo - WASM</PageTitle>
+
+<h1>Charts Demo</h1>
+
+<h2>Monthly Revenue</h2>
+<DxChart TItem="SalesData" Data="@_sales" Width="550" Height="300" Title="Revenue Trend" ShowLegend="true">
+    <DxChartLineSeries TItem="SalesData"
+                       Name="Revenue"
+                       ArgumentField="@(d => (object)d.Month)"
+                       ValueField="@(d => d.Revenue)"
+                       Color="#0078d4" />
+</DxChart>
+
+<h2>Revenue vs Expenses</h2>
+<DxChart TItem="SalesData" Data="@_sales" Width="550" Height="300" Title="Revenue vs Expenses" ShowLegend="true">
+    <DxChartBarSeries TItem="SalesData"
+                      Name="Revenue"
+                      ArgumentField="@(d => (object)d.Month)"
+                      ValueField="@(d => d.Revenue)"
+                      Color="#0078d4" />
+    <DxChartBarSeries TItem="SalesData"
+                      Name="Expenses"
+                      ArgumentField="@(d => (object)d.Month)"
+                      ValueField="@(d => d.Expenses)"
+                      Color="#d13438" />
+</DxChart>
+
+@code {
+    private List<SalesData> _sales = new();
+
+    protected override void OnInitialized()
+    {
+        _sales = DataService.GenerateMonthlySales();
+    }
+}

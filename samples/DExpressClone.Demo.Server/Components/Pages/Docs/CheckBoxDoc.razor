@@ -1,0 +1,80 @@
+@page "/docs/checkbox"
+@rendermode InteractiveServer
+
+<ComponentDoc Title="DxCheckBox" Description="A tri-state checkbox component supporting checked, unchecked, and indeterminate states.">
+    <ParametersContent>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>Checked</code></td><td><code>bool?</code></td><td><code>null</code></td><td>The checked state: true, false, or null (indeterminate).</td></tr>
+                <tr><td><code>LabelPosition</code></td><td><code>LabelPosition</code></td><td><code>Right</code></td><td>Position of the label: Right or Left.</td></tr>
+                <tr><td><code>AllowIndeterminate</code></td><td><code>bool</code></td><td><code>false</code></td><td>Whether the indeterminate (null) state is allowed.</td></tr>
+                <tr><td><code>LabelText</code></td><td><code>string?</code></td><td><code>null</code></td><td>Text label for the checkbox.</td></tr>
+                <tr><td><code>Enabled</code></td><td><code>bool</code></td><td><code>true</code></td><td>Whether the checkbox is enabled.</td></tr>
+                <tr><td><code>ReadOnly</code></td><td><code>bool</code></td><td><code>false</code></td><td>Whether the checkbox is read-only.</td></tr>
+            </tbody>
+        </table>
+    </ParametersContent>
+    <EventsContent>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>CheckedChanged</code></td><td><code>EventCallback&lt;bool?&gt;</code></td><td>Fires when the checked state changes.</td></tr>
+            </tbody>
+        </table>
+    </EventsContent>
+    <Examples>
+        <ExampleBlock Title="Basic Checkbox" Description="Simple two-state checkbox.">
+            <Demo>
+                <DxCheckBox LabelText="I agree to the terms" @bind-Checked="_agreed" />
+                <p style="margin-top: 0.5rem; font-size: 0.9rem;">Checked: @_agreed</p>
+            </Demo>
+            <Code>
+@(@"<DxCheckBox LabelText=""I agree to the terms""
+           @bind-Checked=""_agreed"" />
+
+@code {
+    private bool? _agreed = false;
+}")
+            </Code>
+        </ExampleBlock>
+
+        <ExampleBlock Title="Tri-State (Indeterminate)" Description="Allows cycling through checked, unchecked, and indeterminate states.">
+            <Demo>
+                <DxCheckBox LabelText="Select all" AllowIndeterminate="true" @bind-Checked="_triState" />
+                <p style="margin-top: 0.5rem; font-size: 0.9rem;">
+                    State: @(_triState switch { true => "Checked", false => "Unchecked", null => "Indeterminate" })
+                </p>
+            </Demo>
+            <Code>
+@(@"<DxCheckBox LabelText=""Select all""
+           AllowIndeterminate=""true""
+           @bind-Checked=""_triState"" />
+
+@code {
+    private bool? _triState = null;
+}")
+            </Code>
+        </ExampleBlock>
+
+        <ExampleBlock Title="Label Position" Description="Place the label to the left or right of the checkbox.">
+            <Demo>
+                <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                    <DxCheckBox LabelText="Label on right (default)" Checked="true" />
+                    <DxCheckBox LabelText="Label on left" LabelPosition="LabelPosition.Left" Checked="true" />
+                </div>
+            </Demo>
+            <Code>
+@(@"<DxCheckBox LabelText=""Label on right (default)"" Checked=""true"" />
+<DxCheckBox LabelText=""Label on left""
+           LabelPosition=""LabelPosition.Left""
+           Checked=""true"" />")
+            </Code>
+        </ExampleBlock>
+    </Examples>
+</ComponentDoc>
+
+@code {
+    private bool? _agreed = false;
+    private bool? _triState = null;
+}

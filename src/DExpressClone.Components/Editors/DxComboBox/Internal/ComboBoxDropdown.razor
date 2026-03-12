@@ -1,0 +1,30 @@
+@namespace DExpressClone.Components.Editors.DxComboBox.Internal
+@typeparam TData
+@typeparam TValue
+@inherits DExpressClone.Components.Core.DxComponentBase
+
+<div class="@DropdownCssClass">
+    @{ int index = 0; }
+    @foreach (var item in Items)
+    {
+        var currentItem = item;
+        var currentIndex = index;
+        <div class="@GetCssClass(currentItem, currentIndex)"
+             @onclick="() => HandleItemClickAsync(currentItem)">
+            @if (ItemTemplate is not null)
+            {
+                @ItemTemplate(currentItem)
+            }
+            else
+            {
+                @GetText(currentItem)
+            }
+        </div>
+        index++;
+    }
+
+    @if (!Items.Any())
+    {
+        <div class="dx-combobox-no-data">No data to display</div>
+    }
+</div>

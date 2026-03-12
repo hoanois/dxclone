@@ -1,0 +1,109 @@
+@page "/docs/tabs"
+@rendermode InteractiveServer
+
+<ComponentDoc Title="DxTabs" Description="A tabbed container component with support for lazy rendering and programmatic tab switching.">
+    <ParametersContent>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>ActiveTabIndex</code></td><td><code>int</code></td><td><code>0</code></td><td>Index of the currently active tab.</td></tr>
+                <tr><td><code>RenderMode</code></td><td><code>TabRenderMode</code></td><td><code>AllTabs</code></td><td>Render mode: AllTabs or LazyLoad.</td></tr>
+                <tr><td><code>ChildContent</code></td><td><code>RenderFragment?</code></td><td><code>null</code></td><td>DxTabPage children.</td></tr>
+            </tbody>
+        </table>
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">DxTabPage Parameters</h3>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>Text</code></td><td><code>string?</code></td><td><code>null</code></td><td>Tab header text.</td></tr>
+                <tr><td><code>IconCssClass</code></td><td><code>string?</code></td><td><code>null</code></td><td>Icon CSS class for the tab header.</td></tr>
+                <tr><td><code>Visible</code></td><td><code>bool</code></td><td><code>true</code></td><td>Whether the tab is visible.</td></tr>
+                <tr><td><code>Enabled</code></td><td><code>bool</code></td><td><code>true</code></td><td>Whether the tab is enabled.</td></tr>
+                <tr><td><code>ChildContent</code></td><td><code>RenderFragment?</code></td><td><code>null</code></td><td>Tab page content.</td></tr>
+            </tbody>
+        </table>
+    </ParametersContent>
+    <EventsContent>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>ActiveTabIndexChanged</code></td><td><code>EventCallback&lt;int&gt;</code></td><td>Fires when the active tab changes.</td></tr>
+            </tbody>
+        </table>
+    </EventsContent>
+    <Examples>
+        <ExampleBlock Title="Basic Tabs" Description="Simple tabbed content with multiple pages.">
+            <Demo>
+                <DxTabs>
+                    <DxTabPage Text="Profile">
+                        <p>User profile information goes here.</p>
+                    </DxTabPage>
+                    <DxTabPage Text="Settings">
+                        <p>Application settings panel.</p>
+                    </DxTabPage>
+                    <DxTabPage Text="Notifications">
+                        <p>Notification preferences and history.</p>
+                    </DxTabPage>
+                </DxTabs>
+            </Demo>
+            <Code>
+@(@"<DxTabs>
+    <DxTabPage Text=""Profile"">
+        <p>User profile information goes here.</p>
+    </DxTabPage>
+    <DxTabPage Text=""Settings"">
+        <p>Application settings panel.</p>
+    </DxTabPage>
+    <DxTabPage Text=""Notifications"">
+        <p>Notification preferences and history.</p>
+    </DxTabPage>
+</DxTabs>")
+            </Code>
+        </ExampleBlock>
+
+        <ExampleBlock Title="Programmatic Tab Control" Description="Control the active tab via code.">
+            <Demo>
+                <DxTabs @bind-ActiveTabIndex="_activeTab">
+                    <DxTabPage Text="Tab 1">
+                        <p>Content of Tab 1</p>
+                    </DxTabPage>
+                    <DxTabPage Text="Tab 2">
+                        <p>Content of Tab 2</p>
+                    </DxTabPage>
+                    <DxTabPage Text="Tab 3">
+                        <p>Content of Tab 3</p>
+                    </DxTabPage>
+                </DxTabs>
+                <div style="margin-top: 0.75rem; display: flex; gap: 0.5rem;">
+                    <DxButton Text="Go to Tab 1" RenderStyle="ButtonRenderStyle.Secondary" Click="@(() => _activeTab = 0)" />
+                    <DxButton Text="Go to Tab 2" RenderStyle="ButtonRenderStyle.Secondary" Click="@(() => _activeTab = 1)" />
+                    <DxButton Text="Go to Tab 3" RenderStyle="ButtonRenderStyle.Secondary" Click="@(() => _activeTab = 2)" />
+                </div>
+            </Demo>
+            <Code>
+@(@"<DxTabs @bind-ActiveTabIndex=""_activeTab"">
+    <DxTabPage Text=""Tab 1"">
+        <p>Content of Tab 1</p>
+    </DxTabPage>
+    <DxTabPage Text=""Tab 2"">
+        <p>Content of Tab 2</p>
+    </DxTabPage>
+    <DxTabPage Text=""Tab 3"">
+        <p>Content of Tab 3</p>
+    </DxTabPage>
+</DxTabs>
+
+<DxButton Text=""Go to Tab 1"" Click=""@(() => _activeTab = 0)"" />
+<DxButton Text=""Go to Tab 2"" Click=""@(() => _activeTab = 1)"" />
+
+@code {
+    private int _activeTab;
+}")
+            </Code>
+        </ExampleBlock>
+    </Examples>
+</ComponentDoc>
+
+@code {
+    private int _activeTab;
+}

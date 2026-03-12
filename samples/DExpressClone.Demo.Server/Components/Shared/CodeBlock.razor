@@ -1,0 +1,31 @@
+@inject IJSRuntime JS
+
+<div class="code-block">
+    <div class="code-block-header">
+        <span class="code-block-lang">@Language</span>
+        <button class="copy-btn @(_copied ? "copy-btn--copied" : "")" @onclick="CopyCode">
+            @(_copied ? "Copied!" : "Copy")
+        </button>
+    </div>
+    <pre><code>@Code</code></pre>
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public string Code { get; set; } = "";
+
+    [Parameter]
+    public string Language { get; set; } = "razor";
+
+    private bool _copied;
+
+    private async Task CopyCode()
+    {
+        await JS.InvokeVoidAsync("navigator.clipboard.writeText", Code);
+        _copied = true;
+        StateHasChanged();
+        await Task.Delay(2000);
+        _copied = false;
+        StateHasChanged();
+    }
+}

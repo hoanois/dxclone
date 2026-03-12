@@ -1,0 +1,42 @@
+@rendermode InteractiveServer
+
+<div class="doc-page">
+    <h1>@Title</h1>
+    <p class="doc-description">@Description</p>
+
+    @if (ParametersContent is not null)
+    {
+        <section class="doc-section">
+            <h2>Parameters</h2>
+            <div class="params-table-wrapper">
+                @ParametersContent
+            </div>
+        </section>
+    }
+
+    @if (EventsContent is not null)
+    {
+        <section class="doc-section">
+            <h2>Events</h2>
+            <div class="params-table-wrapper">
+                @EventsContent
+            </div>
+        </section>
+    }
+
+    @if (Examples is not null)
+    {
+        <section class="doc-section">
+            <h2>Examples</h2>
+            @Examples
+        </section>
+    }
+</div>
+
+@code {
+    [Parameter, EditorRequired] public string Title { get; set; } = "";
+    [Parameter] public string? Description { get; set; }
+    [Parameter] public RenderFragment? ParametersContent { get; set; }
+    [Parameter] public RenderFragment? EventsContent { get; set; }
+    [Parameter] public RenderFragment? Examples { get; set; }
+}

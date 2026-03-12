@@ -1,0 +1,120 @@
+@page "/layout"
+@rendermode InteractiveServer
+
+<PageTitle>Layout Demo - DExpressClone</PageTitle>
+
+<h1>Layout Components Demo</h1>
+<p>Buttons, Panels, Tabs, Accordion, and Toolbar components.</p>
+
+<h2>Buttons</h2>
+<p>All RenderStyle and RenderStyleMode combinations:</p>
+
+<div class="demo-button-grid">
+    <div>
+        <h3>Contained</h3>
+        <div class="demo-button-row">
+            <DxButton Text="Primary" RenderStyle="ButtonRenderStyle.Primary" RenderStyleMode="ButtonRenderStyleMode.Contained" />
+            <DxButton Text="Secondary" RenderStyle="ButtonRenderStyle.Secondary" RenderStyleMode="ButtonRenderStyleMode.Contained" />
+            <DxButton Text="Danger" RenderStyle="ButtonRenderStyle.Danger" RenderStyleMode="ButtonRenderStyleMode.Contained" />
+            <DxButton Text="Success" RenderStyle="ButtonRenderStyle.Success" RenderStyleMode="ButtonRenderStyleMode.Contained" />
+            <DxButton Text="Warning" RenderStyle="ButtonRenderStyle.Warning" RenderStyleMode="ButtonRenderStyleMode.Contained" />
+            <DxButton Text="Info" RenderStyle="ButtonRenderStyle.Info" RenderStyleMode="ButtonRenderStyleMode.Contained" />
+        </div>
+    </div>
+    <div>
+        <h3>Outlined</h3>
+        <div class="demo-button-row">
+            <DxButton Text="Primary" RenderStyle="ButtonRenderStyle.Primary" RenderStyleMode="ButtonRenderStyleMode.Outlined" />
+            <DxButton Text="Secondary" RenderStyle="ButtonRenderStyle.Secondary" RenderStyleMode="ButtonRenderStyleMode.Outlined" />
+            <DxButton Text="Danger" RenderStyle="ButtonRenderStyle.Danger" RenderStyleMode="ButtonRenderStyleMode.Outlined" />
+            <DxButton Text="Success" RenderStyle="ButtonRenderStyle.Success" RenderStyleMode="ButtonRenderStyleMode.Outlined" />
+            <DxButton Text="Warning" RenderStyle="ButtonRenderStyle.Warning" RenderStyleMode="ButtonRenderStyleMode.Outlined" />
+            <DxButton Text="Info" RenderStyle="ButtonRenderStyle.Info" RenderStyleMode="ButtonRenderStyleMode.Outlined" />
+        </div>
+    </div>
+    <div>
+        <h3>Text</h3>
+        <div class="demo-button-row">
+            <DxButton Text="Primary" RenderStyle="ButtonRenderStyle.Primary" RenderStyleMode="ButtonRenderStyleMode.Text" />
+            <DxButton Text="Secondary" RenderStyle="ButtonRenderStyle.Secondary" RenderStyleMode="ButtonRenderStyleMode.Text" />
+            <DxButton Text="Danger" RenderStyle="ButtonRenderStyle.Danger" RenderStyleMode="ButtonRenderStyleMode.Text" />
+            <DxButton Text="Success" RenderStyle="ButtonRenderStyle.Success" RenderStyleMode="ButtonRenderStyleMode.Text" />
+            <DxButton Text="Warning" RenderStyle="ButtonRenderStyle.Warning" RenderStyleMode="ButtonRenderStyleMode.Text" />
+            <DxButton Text="Info" RenderStyle="ButtonRenderStyle.Info" RenderStyleMode="ButtonRenderStyleMode.Text" />
+        </div>
+    </div>
+</div>
+
+<h2>Panels</h2>
+<div class="demo-panels">
+    <DxPanel HeaderText="Collapsible Panel - Section A" ShowCollapseButton="true" Collapsed="@_panelACollapsed" CollapsedChanged="@(v => _panelACollapsed = v)">
+        <p>This panel can be collapsed and expanded. It contains general information about the project setup and configuration options.</p>
+    </DxPanel>
+
+    <DxPanel HeaderText="Collapsible Panel - Section B" ShowCollapseButton="true" Collapsed="@_panelBCollapsed" CollapsedChanged="@(v => _panelBCollapsed = v)">
+        <p>Another collapsible section demonstrating the DxPanel component. Panels provide visual grouping of content with optional headers and footers.</p>
+    </DxPanel>
+
+    <DxPanel HeaderText="Always Visible Panel">
+        <p>This panel does not have a collapse button and is always visible.</p>
+    </DxPanel>
+</div>
+
+<h2>Tabs</h2>
+<DxTabs ActiveTabIndex="@_activeTabIndex" ActiveTabIndexChanged="@(v => _activeTabIndex = v)">
+    <DxTabPage Text="Overview">
+        <div class="demo-tab-content">
+            <h3>Overview</h3>
+            <p>This is the Overview tab. Tabs allow users to switch between different views or sections of content.</p>
+        </div>
+    </DxTabPage>
+    <DxTabPage Text="Details">
+        <div class="demo-tab-content">
+            <h3>Details</h3>
+            <p>This is the Details tab with additional information. Each tab page can contain any Blazor content.</p>
+        </div>
+    </DxTabPage>
+    <DxTabPage Text="Settings">
+        <div class="demo-tab-content">
+            <h3>Settings</h3>
+            <p>Settings tab showing configuration options. The DxTabs component supports keyboard navigation and lazy loading.</p>
+        </div>
+    </DxTabPage>
+</DxTabs>
+
+<h2>Accordion</h2>
+<DxAccordion ExpandMode="AccordionExpandMode.Single">
+    <DxAccordionItem HeaderText="What is DExpressClone?" Expanded="true">
+        <p>DExpressClone is a Blazor component library inspired by DevExpress, featuring data grids, editors, charts, and layout components with a modern Fluent Design theme.</p>
+    </DxAccordionItem>
+    <DxAccordionItem HeaderText="How do I install it?">
+        <p>Add a reference to the DExpressClone.Components NuGet package, call <code>builder.Services.AddDxComponents()</code> in your Program.cs, and include the CSS files in your HTML head.</p>
+    </DxAccordionItem>
+    <DxAccordionItem HeaderText="Does it support dark mode?">
+        <p>Yes! Toggle the <code>data-dx-theme</code> attribute on the HTML element between "light" and "dark" to switch themes. All components automatically adapt.</p>
+    </DxAccordionItem>
+    <DxAccordionItem HeaderText="Is WebAssembly supported?">
+        <p>Absolutely. DExpressClone works with both Blazor Server and Blazor WebAssembly hosting models without any changes to your component code.</p>
+    </DxAccordionItem>
+</DxAccordion>
+
+<h2>Toolbar</h2>
+<DxToolbar Title="Actions">
+    <DxToolbarItem Text="New" Click="@(() => _toolbarMessage = "New clicked")" />
+    <DxToolbarItem Text="Open" Click="@(() => _toolbarMessage = "Open clicked")" />
+    <DxToolbarItem Text="Save" Click="@(() => _toolbarMessage = "Save clicked")" />
+    <DxToolbarItem Text="Delete" Click="@(() => _toolbarMessage = "Delete clicked")" BeginGroup="true" />
+    <DxToolbarItem Text="Help" Alignment="ToolbarItemAlignment.Right" Click="@(() => _toolbarMessage = "Help clicked")" />
+</DxToolbar>
+
+@if (!string.IsNullOrEmpty(_toolbarMessage))
+{
+    <p class="demo-toolbar-message">Toolbar action: @_toolbarMessage</p>
+}
+
+@code {
+    private bool _panelACollapsed = false;
+    private bool _panelBCollapsed = true;
+    private int _activeTabIndex = 0;
+    private string? _toolbarMessage;
+}

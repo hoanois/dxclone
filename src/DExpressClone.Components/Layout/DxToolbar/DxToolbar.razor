@@ -1,0 +1,14 @@
+@namespace DExpressClone.Components.Layout
+@inherits DExpressClone.Components.Core.DxComponentBase
+
+<CascadingValue Value="this" IsFixed="true">
+    <div id="@Id" class="@CssClassString" role="toolbar" @attributes="AdditionalAttributes">
+        @if (!string.IsNullOrEmpty(Title))
+        {
+            <span class="dx-toolbar-title">@Title</span>
+        }
+        <div class="dx-toolbar-items">
+            @ChildContent
+        </div>
+    </div>
+</CascadingValue>

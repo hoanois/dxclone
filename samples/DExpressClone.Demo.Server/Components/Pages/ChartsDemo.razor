@@ -1,0 +1,110 @@
+@page "/charts"
+@rendermode InteractiveServer
+@inject SampleDataService DataService
+
+<PageTitle>Charts Demo - DExpressClone</PageTitle>
+
+<h1>Charts Demo</h1>
+<p>SVG-based chart components with line, bar, and pie series.</p>
+
+<div class="demo-charts-grid">
+    <div class="demo-chart-section">
+        <h2>Monthly Revenue (Line Chart)</h2>
+        <DxChart TItem="SalesData" Data="@_monthlySales" Width="600" Height="350" Title="Revenue Over 12 Months" ShowLegend="true">
+            <DxChartLineSeries TItem="SalesData"
+                               Name="Revenue"
+                               ArgumentField="@(d => (object)d.Month)"
+                               ValueField="@(d => d.Revenue)"
+                               Color="#0078d4" />
+            <DxChartLineSeries TItem="SalesData"
+                               Name="Expenses"
+                               ArgumentField="@(d => (object)d.Month)"
+                               ValueField="@(d => d.Expenses)"
+                               Color="#d13438" />
+        </DxChart>
+    </div>
+
+    <div class="demo-chart-section">
+        <h2>Revenue vs Expenses (Bar Chart)</h2>
+        <DxChart TItem="SalesData" Data="@_quarterlySales" Width="600" Height="350" Title="Quarterly Comparison" ShowLegend="true">
+            <DxChartBarSeries TItem="SalesData"
+                              Name="Revenue"
+                              ArgumentField="@(d => (object)d.Month)"
+                              ValueField="@(d => d.Revenue)"
+                              Color="#0078d4" />
+            <DxChartBarSeries TItem="SalesData"
+                              Name="Expenses"
+                              ArgumentField="@(d => (object)d.Month)"
+                              ValueField="@(d => d.Expenses)"
+                              Color="#d13438" />
+        </DxChart>
+    </div>
+
+    <div class="demo-chart-section">
+        <h2>Sales by Department (Pie Chart)</h2>
+        <DxChart TItem="DepartmentSales" Data="@_departmentSales" Width="500" Height="400" Title="Department Sales Distribution" ShowLegend="true">
+            <DxChartPieSeries TItem="DepartmentSales"
+                              Name="Sales"
+                              ArgumentField="@(d => (object)d.Department)"
+                              ValueField="@(d => d.TotalSales)"
+                              ShowLabels="true" />
+        </DxChart>
+    </div>
+
+    <div class="demo-chart-section">
+        <h2>Monthly Profit (Line Chart)</h2>
+        <DxChart TItem="SalesData" Data="@_monthlySales" Width="600" Height="350" Title="Profit Trend" ShowLegend="true">
+            <DxChartLineSeries TItem="SalesData"
+                               Name="Profit"
+                               ArgumentField="@(d => (object)d.Month)"
+                               ValueField="@(d => d.Profit)"
+                               Color="#107c10"
+                               ShowPoints="true" />
+        </DxChart>
+    </div>
+</div>
+
+@code {
+    private List<SalesData> _monthlySales = new();
+    private List<SalesData> _quarterlySales = new();
+    private List<DepartmentSales> _departmentSales = new();
+
+    protected override void OnInitialized()
+    {
+        _monthlySales = DataService.GenerateMonthlySales();
+        _departmentSales = DataService.GenerateDepartmentSales();
+
+        // Build quarterly data by aggregating monthly
+        _quarterlySales = new List<SalesData>
+        {
+            new SalesData
+            {
+                Month = "Q1", MonthIndex = 1,
+                Revenue = _monthlySales.Take(3).Sum(s => s.Revenue),
+                Expenses = _monthlySales.Take(3).Sum(s => s.Expenses),
+                Profit = _monthlySales.Take(3).Sum(s => s.Profit)
+            },
+            new SalesData
+            {
+                Month = "Q2", MonthIndex = 2,
+                Revenue = _monthlySales.Skip(3).Take(3).Sum(s => s.Revenue),
+                Expenses = _monthlySales.Skip(3).Take(3).Sum(s => s.Expenses),
+                Profit = _monthlySales.Skip(3).Take(3).Sum(s => s.Profit)
+            },
+            new SalesData
+            {
+                Month = "Q3", MonthIndex = 3,
+                Revenue = _monthlySales.Skip(6).Take(3).Sum(s => s.Revenue),
+                Expenses = _monthlySales.Skip(6).Take(3).Sum(s => s.Expenses),
+                Profit = _monthlySales.Skip(6).Take(3).Sum(s => s.Profit)
+            },
+            new SalesData
+            {
+                Month = "Q4", MonthIndex = 4,
+                Revenue = _monthlySales.Skip(9).Take(3).Sum(s => s.Revenue),
+                Expenses = _monthlySales.Skip(9).Take(3).Sum(s => s.Expenses),
+                Profit = _monthlySales.Skip(9).Take(3).Sum(s => s.Profit)
+            }
+        };
+    }
+}

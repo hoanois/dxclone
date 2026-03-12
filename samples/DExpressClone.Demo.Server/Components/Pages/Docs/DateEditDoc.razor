@@ -1,0 +1,71 @@
+@page "/docs/dateedit"
+@rendermode InteractiveServer
+
+<ComponentDoc Title="DxDateEdit" Description="A date editor component with a calendar dropdown for date selection, supporting min/max constraints.">
+    <ParametersContent>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>Date</code></td><td><code>DateTime?</code></td><td><code>null</code></td><td>The selected date value.</td></tr>
+                <tr><td><code>MinDate</code></td><td><code>DateTime?</code></td><td><code>null</code></td><td>Minimum selectable date.</td></tr>
+                <tr><td><code>MaxDate</code></td><td><code>DateTime?</code></td><td><code>null</code></td><td>Maximum selectable date.</td></tr>
+                <tr><td><code>DisplayFormat</code></td><td><code>string?</code></td><td><code>null</code></td><td>Date display format string.</td></tr>
+                <tr><td><code>TimeSectionVisible</code></td><td><code>bool</code></td><td><code>false</code></td><td>Whether to show the time section.</td></tr>
+                <tr><td><code>NullText</code></td><td><code>string?</code></td><td><code>null</code></td><td>Placeholder when no date is selected.</td></tr>
+                <tr><td><code>Enabled</code></td><td><code>bool</code></td><td><code>true</code></td><td>Whether the editor is enabled.</td></tr>
+            </tbody>
+        </table>
+    </ParametersContent>
+    <EventsContent>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>DateChanged</code></td><td><code>EventCallback&lt;DateTime?&gt;</code></td><td>Fires when the date value changes.</td></tr>
+            </tbody>
+        </table>
+    </EventsContent>
+    <Examples>
+        <ExampleBlock Title="Basic Date Selection" Description="Simple date picker with calendar dropdown.">
+            <Demo>
+                <DxDateEdit @bind-Date="_selectedDate" NullText="Select a date..." />
+                <p style="margin-top: 0.5rem; font-size: 0.9rem;">Selected: @(_selectedDate?.ToString("yyyy-MM-dd") ?? "None")</p>
+            </Demo>
+            <Code>
+@(@"<DxDateEdit @bind-Date=""_selectedDate""
+           NullText=""Select a date..."" />
+
+@code {
+    private DateTime? _selectedDate = DateTime.Today;
+}")
+            </Code>
+        </ExampleBlock>
+
+        <ExampleBlock Title="Date Range Constraints" Description="Restrict selectable dates to a specific range.">
+            <Demo>
+                <DxDateEdit @bind-Date="_rangeDate"
+                           MinDate="@_minDate"
+                           MaxDate="@_maxDate"
+                           NullText="Pick a date in range..." />
+                <p style="margin-top: 0.5rem; font-size: 0.9rem;">Range: @_minDate.ToString("MMM dd") - @_maxDate.ToString("MMM dd, yyyy")</p>
+            </Demo>
+            <Code>
+@(@"<DxDateEdit @bind-Date=""_rangeDate""
+           MinDate=""@_minDate""
+           MaxDate=""@_maxDate"" />
+
+@code {
+    private DateTime? _rangeDate;
+    private DateTime _minDate = DateTime.Today;
+    private DateTime _maxDate = DateTime.Today.AddMonths(3);
+}")
+            </Code>
+        </ExampleBlock>
+    </Examples>
+</ComponentDoc>
+
+@code {
+    private DateTime? _selectedDate = DateTime.Today;
+    private DateTime? _rangeDate;
+    private DateTime _minDate = DateTime.Today;
+    private DateTime _maxDate = DateTime.Today.AddMonths(3);
+}

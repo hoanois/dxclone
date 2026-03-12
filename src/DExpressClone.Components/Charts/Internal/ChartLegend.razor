@@ -1,0 +1,15 @@
+@namespace DExpressClone.Components.Charts.Internal
+@using DExpressClone.Components.Charts.Models
+
+@if (Series.Count > 0)
+{
+    <div class="dx-chart-legend">
+        @foreach (var series in Series)
+        {
+            <div class="dx-chart-legend-item">
+                <span class="dx-chart-legend-dot" style="background-color: @GetColor(series);"></span>
+                <span class="dx-chart-legend-label">@(series.Name ?? $"Series {series.SeriesIndex + 1}")</span>
+            </div>
+        }
+    </div>
+}

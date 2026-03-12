@@ -1,0 +1,35 @@
+@namespace DExpressClone.Components.Layout
+@inherits DExpressClone.Components.Core.DxComponentBase
+
+<CascadingValue Value="this" IsFixed="true">
+    <div id="@Id" class="@CssClassString" @attributes="AdditionalAttributes">
+        <div class="dx-tabs-header" role="tablist">
+            @for (int i = 0; i < _tabs.Count; i++)
+            {
+                var index = i;
+                var tab = _tabs[i];
+                if (tab.Visible)
+                {
+                    <button type="button"
+                            role="tab"
+                            class="@GetTabCssClass(index, tab)"
+                            disabled="@(!tab.Enabled)"
+                            aria-selected="@(index == ActiveTabIndex)"
+                            @onclick="() => SetActiveTab(index)">
+                        @if (!string.IsNullOrEmpty(tab.IconCssClass))
+                        {
+                            <i class="@tab.IconCssClass dx-tab-icon"></i>
+                        }
+                        @if (!string.IsNullOrEmpty(tab.Text))
+                        {
+                            <span class="dx-tab-text">@tab.Text</span>
+                        }
+                    </button>
+                }
+            }
+        </div>
+        <div class="dx-tabs-content">
+            @ChildContent
+        </div>
+    </div>
+</CascadingValue>

@@ -1,0 +1,24 @@
+@namespace DExpressClone.Components.Grid.Internal
+@using DExpressClone.Components.Grid.Models
+
+<div class="dx-grid-filter-row">
+    @foreach (var column in Columns)
+    {
+        if (!column.Visible)
+            continue;
+
+        var style = !string.IsNullOrEmpty(column.Width) ? $"width:{column.Width};" : "";
+
+        <div class="dx-grid-filter-cell" style="@style">
+            @if (column is DxGridDataColumn dataCol && dataCol.AllowFilter)
+            {
+                var fieldName = dataCol.FieldName;
+                <input type="text"
+                       class="dx-grid-filter-input"
+                       placeholder="Filter..."
+                       value="@GetFilterValue(fieldName)"
+                       @onchange="e => OnFilterInput(fieldName, e.Value)" />
+            }
+        </div>
+    }
+</div>

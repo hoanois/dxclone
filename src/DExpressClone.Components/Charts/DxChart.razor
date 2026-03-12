@@ -1,0 +1,77 @@
+@namespace DExpressClone.Components.Charts
+@typeparam TItem
+@using DExpressClone.Components.Charts.Internal
+@using DExpressClone.Components.Charts.Models
+@inherits DExpressClone.Components.Core.DxDataBoundComponentBase<TItem>
+
+<CascadingValue Value="this" IsFixed="true">
+    @ChildContent
+</CascadingValue>
+
+<div class="@RootCssClass" id="@Id" @attributes="AdditionalAttributes" style="position: relative; display: inline-block;">
+    @{
+        var descriptors = BuildAllDescriptors();
+    }
+
+    @if (HasPieSeries)
+    {
+        @* Pie chart mode — no axes *@
+        <svg class="dx-chart-svg" viewBox="0 0 @Width @Height" width="@Width" height="@Height">
+            @if (!string.IsNullOrEmpty(Title))
+            {
+                @((MarkupString)$"<text x=\"{F(Width / 2.0)}\" y=\"24\" text-anchor=\"middle\" class=\"dx-chart-title\">{Title}</text>")
+            }
+
+            @{
+                var pieSeries = GetPieSeries();
+                var pieDescriptor = descriptors.FirstOrDefault();
+                if (pieSeries is not null && pieDescriptor is not null)
+                {
+                    double cx = Width / 2.0;
+                    double cy = Height / 2.0 + (string.IsNullOrEmpty(Title) ? 0 : 12);
+                    double radius = Math.Min(Width, Height) / 2.0 - 40;
+                    <SvgPieChart Series="pieDescriptor"
+                                 ShowLabels="pieSeries.ShowLabels"
+                                 InnerRadius="pieSeries.InnerRadius"
+                                 CenterX="cx" CenterY="cy" Radius="radius" />
+                }
+            }
+        </svg>
+    }
+    else
+    {
+        @* Cartesian chart mode *@
+        var scale = ComputeScale(descriptors);
+        <svg class="dx-chart-svg" viewBox="0 0 @Width @Height" width="@Width" height="@Height">
+            @if (!string.IsNullOrEmpty(Title))
+            {
+                @((MarkupString)$"<text x=\"{F(Width / 2.0)}\" y=\"24\" text-anchor=\"middle\" class=\"dx-chart-title\">{Title}</text>")
+            }
+
+            @if (scale is not null)
+            {
+                <ChartGrid Scale="scale" XTicks="GetXTicks(scale)" YTicks="GetYTicks(scale)" />
+                <ChartAxis Scale="scale" XAxisDescriptor="ArgumentAxis" YAxisDescriptor="ValueAxis" />
+
+                @if (HasBarSeries)
+                {
+                    <SvgBarChart Series="GetBarDescriptors(descriptors)" Scale="scale" />
+                }
+                @if (HasLineSeries)
+                {
+                    <SvgLineChart Series="GetLineDescriptors(descriptors)" Scale="scale" ShowPoints="ShowLinePoints" />
+                }
+            }
+        </svg>
+    }
+
+    @if (ShowLegend && descriptors.Count > 0)
+    {
+        <ChartLegend Series="descriptors" />
+    }
+
+    @if (ShowTooltip)
+    {
+        <ChartTooltip />
+    }
+</div>

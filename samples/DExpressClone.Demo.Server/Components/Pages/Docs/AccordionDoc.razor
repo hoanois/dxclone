@@ -1,0 +1,88 @@
+@page "/docs/accordion"
+@rendermode InteractiveServer
+
+<ComponentDoc Title="DxAccordion" Description="An accordion component that organizes content into collapsible sections, supporting single or multiple expand modes.">
+    <ParametersContent>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>ExpandMode</code></td><td><code>AccordionExpandMode</code></td><td><code>Multiple</code></td><td>Expand mode: Single or Multiple.</td></tr>
+                <tr><td><code>ChildContent</code></td><td><code>RenderFragment?</code></td><td><code>null</code></td><td>DxAccordionItem children.</td></tr>
+            </tbody>
+        </table>
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">DxAccordionItem Parameters</h3>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>HeaderText</code></td><td><code>string?</code></td><td><code>null</code></td><td>Header text of the item.</td></tr>
+                <tr><td><code>HeaderTemplate</code></td><td><code>RenderFragment?</code></td><td><code>null</code></td><td>Custom header template.</td></tr>
+                <tr><td><code>Expanded</code></td><td><code>bool</code></td><td><code>false</code></td><td>Whether the item is expanded.</td></tr>
+                <tr><td><code>ChildContent</code></td><td><code>RenderFragment?</code></td><td><code>null</code></td><td>Item body content.</td></tr>
+            </tbody>
+        </table>
+    </ParametersContent>
+    <EventsContent>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>ExpandedChanged</code></td><td><code>EventCallback&lt;bool&gt;</code></td><td>Fires when an item's expanded state changes.</td></tr>
+            </tbody>
+        </table>
+    </EventsContent>
+    <Examples>
+        <ExampleBlock Title="Multiple Expand Mode" Description="Multiple sections can be open at the same time (default).">
+            <Demo>
+                <DxAccordion ExpandMode="AccordionExpandMode.Multiple">
+                    <DxAccordionItem HeaderText="Section 1" Expanded="true">
+                        <p>Content for section 1. Multiple sections can be expanded at once.</p>
+                    </DxAccordionItem>
+                    <DxAccordionItem HeaderText="Section 2">
+                        <p>Content for section 2.</p>
+                    </DxAccordionItem>
+                    <DxAccordionItem HeaderText="Section 3">
+                        <p>Content for section 3.</p>
+                    </DxAccordionItem>
+                </DxAccordion>
+            </Demo>
+            <Code>
+@(@"<DxAccordion ExpandMode=""AccordionExpandMode.Multiple"">
+    <DxAccordionItem HeaderText=""Section 1"" Expanded=""true"">
+        <p>Content for section 1.</p>
+    </DxAccordionItem>
+    <DxAccordionItem HeaderText=""Section 2"">
+        <p>Content for section 2.</p>
+    </DxAccordionItem>
+    <DxAccordionItem HeaderText=""Section 3"">
+        <p>Content for section 3.</p>
+    </DxAccordionItem>
+</DxAccordion>")
+            </Code>
+        </ExampleBlock>
+
+        <ExampleBlock Title="Single Expand Mode" Description="Only one section can be open at a time — expanding one collapses the others.">
+            <Demo>
+                <DxAccordion ExpandMode="AccordionExpandMode.Single">
+                    <DxAccordionItem HeaderText="FAQ: What is DExpressClone?" Expanded="true">
+                        <p>DExpressClone is a high-performance Blazor component library inspired by DevExpress.</p>
+                    </DxAccordionItem>
+                    <DxAccordionItem HeaderText="FAQ: Is it free?">
+                        <p>Yes, DExpressClone is open-source and free to use.</p>
+                    </DxAccordionItem>
+                    <DxAccordionItem HeaderText="FAQ: Which .NET versions?">
+                        <p>Supports both .NET 8 and .NET 9.</p>
+                    </DxAccordionItem>
+                </DxAccordion>
+            </Demo>
+            <Code>
+@(@"<DxAccordion ExpandMode=""AccordionExpandMode.Single"">
+    <DxAccordionItem HeaderText=""FAQ: What is DExpressClone?"" Expanded=""true"">
+        <p>A high-performance Blazor component library.</p>
+    </DxAccordionItem>
+    <DxAccordionItem HeaderText=""FAQ: Is it free?"">
+        <p>Yes, it is open-source and free to use.</p>
+    </DxAccordionItem>
+</DxAccordion>")
+            </Code>
+        </ExampleBlock>
+    </Examples>
+</ComponentDoc>

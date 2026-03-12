@@ -1,0 +1,45 @@
+@page "/editors"
+
+<PageTitle>Editors Demo - WASM</PageTitle>
+
+<h1>Editors Demo</h1>
+
+<div class="demo-editors-form" style="max-width:500px;">
+    <div class="demo-field">
+        <label>Name</label>
+        <DxTextBox Text="@_name" TextChanged="@(v => _name = v)" NullText="Enter name..." />
+    </div>
+    <div class="demo-field">
+        <label>Age</label>
+        <DxNumericEdit TValue="int" Value="@_age" ValueChanged="@(v => _age = v)" MinValue="0" MaxValue="120" />
+    </div>
+    <div class="demo-field">
+        <DxCheckBox Checked="@_active" CheckedChanged="@(v => _active = v)" LabelText="Active" />
+    </div>
+    <div class="demo-field">
+        <label>Department</label>
+        <DxComboBox TData="string" TValue="string"
+                    Data="@_departments"
+                    Value="@_dept"
+                    ValueChanged="@(v => _dept = v)"
+                    TextFieldName="@(d => d)"
+                    ValueFieldName="@(d => d)"
+                    NullText="Select..." />
+    </div>
+    <div class="demo-field">
+        <label>Date</label>
+        <DxDateEdit Date="@_date" DateChanged="@(v => _date = v)" />
+    </div>
+</div>
+
+<h2>Values</h2>
+<p>Name: @(_name ?? "(empty)") | Age: @_age | Active: @_active | Dept: @(_dept ?? "(none)") | Date: @(_date?.ToString("d") ?? "(none)")</p>
+
+@code {
+    private string? _name = "Jane";
+    private int _age = 25;
+    private bool? _active = true;
+    private string? _dept;
+    private DateTime? _date = DateTime.Today;
+    private List<string> _departments = SampleDataService.GetDepartments();
+}

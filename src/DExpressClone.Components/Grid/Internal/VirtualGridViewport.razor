@@ -1,0 +1,36 @@
+@namespace DExpressClone.Components.Grid.Internal
+@typeparam TItem
+@implements IAsyncDisposable
+
+<div class="dx-grid-scroller" @ref="_scrollContainer" style="height:@Height;overflow-y:auto;">
+    @if (VirtualizationWindow is not null)
+    {
+        <div style="height:@(VirtualizationWindow.TopSpacerHeight)px;"></div>
+
+        @for (int i = VirtualizationWindow.StartIndex; i <= VirtualizationWindow.EndIndex && i < Items.Count; i++)
+        {
+            var index = i;
+            var item = Items[index];
+
+            if (RowTemplate is not null)
+            {
+                @RowTemplate(item)
+            }
+            else
+            {
+                <GridRow TItem="TItem"
+                         Item="@item"
+                         Columns="@Columns"
+                         IsSelected="@GetIsSelected(item)"
+                         IsFocused="@GetIsFocused(item)"
+                         RowIndex="@index"
+                         RowHeight="@RowHeight"
+                         RowClick="@OnRowClick"
+                         RowDoubleClick="@OnRowDoubleClick"
+                         SelectionToggled="@OnSelectionToggled" />
+            }
+        }
+
+        <div style="height:@(VirtualizationWindow.BottomSpacerHeight)px;"></div>
+    }
+</div>

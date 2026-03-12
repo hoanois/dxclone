@@ -1,0 +1,686 @@
+@page "/docs/ai-reference"
+@rendermode InteractiveServer
+
+<div class="doc-page">
+    <h1>DExpressClone — AI Agent Reference</h1>
+    <p class="doc-description">Complete API reference for all DExpressClone components. Optimized for AI agents building UI.</p>
+
+    <!-- ===== SECTION 1: SETUP ===== -->
+    <section class="doc-section">
+        <h2>Setup</h2>
+
+        <h3>CSS References</h3>
+        <pre><code>&lt;link href="_content/DExpressClone.Components/css/dx-theme-fluent.css" rel="stylesheet" /&gt;
+&lt;link href="_content/DExpressClone.Components/css/dx-layout.css" rel="stylesheet" /&gt;
+&lt;link href="_content/DExpressClone.Components/css/dx-editors.css" rel="stylesheet" /&gt;
+&lt;link href="_content/DExpressClone.Components/css/dx-grid.css" rel="stylesheet" /&gt;
+&lt;link href="_content/DExpressClone.Components/css/dx-charts.css" rel="stylesheet" /&gt;</code></pre>
+
+        <h3>Service Registration</h3>
+        <pre><code>builder.Services.AddDxComponents();</code></pre>
+
+        <h3>Imports</h3>
+        <pre><code>@@using DExpressClone.Components.Layout
+@@using DExpressClone.Components.Editors.DxTextBox
+@@using DExpressClone.Components.Editors.DxCheckBox
+@@using DExpressClone.Components.Editors.DxNumericEdit
+@@using DExpressClone.Components.Editors.DxRadioGroup
+@@using DExpressClone.Components.Editors.DxDateEdit
+@@using DExpressClone.Components.Editors.DxComboBox
+@@using DExpressClone.Components.Editors.DxFormValidation
+@@using DExpressClone.Components.Grid
+@@using DExpressClone.Components.Charts</code></pre>
+    </section>
+
+    <!-- ===== SECTION 2: BASE CLASSES ===== -->
+    <section class="doc-section">
+        <h2>Base Classes</h2>
+
+        <h3>DxComponentBase</h3>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>CssClass</code></td><td><code>string?</code></td><td><code>null</code></td><td>Additional CSS classes applied to the root element.</td></tr>
+                <tr><td><code>Visible</code></td><td><code>bool</code></td><td><code>true</code></td><td>Whether the component is visible.</td></tr>
+            </tbody>
+        </table>
+
+        <h3>DxInteractiveComponentBase (extends DxComponentBase)</h3>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>Enabled</code></td><td><code>bool</code></td><td><code>true</code></td><td>Whether the component is enabled for user interaction.</td></tr>
+            </tbody>
+        </table>
+
+        <h3>DxFormEditorBase&lt;T&gt; (extends DxInteractiveComponentBase)</h3>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>Value</code></td><td><code>T</code></td><td>—</td><td>The editor's current value. Use @@bind-Value for two-way binding.</td></tr>
+                <tr><td><code>ValueChanged</code></td><td><code>EventCallback&lt;T&gt;</code></td><td>—</td><td>Fires when the value changes.</td></tr>
+                <tr><td><code>ReadOnly</code></td><td><code>bool</code></td><td><code>false</code></td><td>Whether the editor is read-only.</td></tr>
+                <tr><td><code>NullText</code></td><td><code>string?</code></td><td><code>null</code></td><td>Placeholder text shown when the value is null/empty.</td></tr>
+                <tr><td><code>ClearButtonDisplayMode</code></td><td><code>ClearButtonDisplayMode</code></td><td><code>Auto</code></td><td>When to show the clear button: Auto, Never, Always.</td></tr>
+            </tbody>
+        </table>
+        <p>All form editors integrate with <code>EditContext</code> for validation support.</p>
+    </section>
+
+    <!-- ===== SECTION 3: ALL COMPONENTS ===== -->
+
+    <!-- 1. DxButton -->
+    <section class="doc-section">
+        <h2>DxButton</h2>
+        <p>Namespace: <code>DExpressClone.Components.Layout</code></p>
+
+        <h3>Parameters</h3>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>Text</code></td><td><code>string?</code></td><td><code>null</code></td><td>The button's display text.</td></tr>
+                <tr><td><code>IconCssClass</code></td><td><code>string?</code></td><td><code>null</code></td><td>CSS class for the button icon.</td></tr>
+                <tr><td><code>RenderStyle</code></td><td><code>ButtonRenderStyle</code></td><td><code>Primary</code></td><td>Primary, Secondary, Success, Danger, Warning, Info, Light, Dark.</td></tr>
+                <tr><td><code>RenderStyleMode</code></td><td><code>ButtonRenderStyleMode</code></td><td><code>Contained</code></td><td>Contained, Outlined, Text.</td></tr>
+                <tr><td><code>NavigateUrl</code></td><td><code>string?</code></td><td><code>null</code></td><td>URL to navigate to when clicked.</td></tr>
+                <tr><td><code>ButtonType</code></td><td><code>ButtonType</code></td><td><code>Button</code></td><td>Button, Submit, Reset.</td></tr>
+                <tr><td><code>Enabled</code></td><td><code>bool</code></td><td><code>true</code></td><td>Whether the button is enabled.</td></tr>
+                <tr><td><code>CssClass</code></td><td><code>string?</code></td><td><code>null</code></td><td>Additional CSS classes.</td></tr>
+            </tbody>
+        </table>
+
+        <h3>Events</h3>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>Click</code></td><td><code>EventCallback&lt;MouseEventArgs&gt;</code></td><td>Fires when the button is clicked.</td></tr>
+            </tbody>
+        </table>
+
+        <h3>Example</h3>
+        <pre><code>&lt;DxButton Text="Save" RenderStyle="ButtonRenderStyle.Primary" Click="HandleClick" /&gt;</code></pre>
+    </section>
+
+    <!-- 2. DxTextBox -->
+    <section class="doc-section">
+        <h2>DxTextBox</h2>
+        <p>Namespace: <code>DExpressClone.Components.Editors.DxTextBox</code> — Inherits <code>DxFormEditorBase&lt;string&gt;</code></p>
+
+        <h3>Parameters</h3>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>Password</code></td><td><code>bool</code></td><td><code>false</code></td><td>Masks the input as a password field.</td></tr>
+                <tr><td><code>MaxLength</code></td><td><code>int?</code></td><td><code>null</code></td><td>Maximum number of characters allowed.</td></tr>
+                <tr><td><code>Placeholder</code></td><td><code>string?</code></td><td><code>null</code></td><td>Placeholder text displayed in the editor.</td></tr>
+            </tbody>
+        </table>
+
+        <h3>Example</h3>
+        <pre><code>&lt;DxTextBox @@bind-Value="model.Name" NullText="Enter name..." /&gt;</code></pre>
+    </section>
+
+    <!-- 3. DxCheckBox -->
+    <section class="doc-section">
+        <h2>DxCheckBox</h2>
+        <p>Namespace: <code>DExpressClone.Components.Editors.DxCheckBox</code> — Inherits <code>DxFormEditorBase&lt;bool?&gt;</code></p>
+
+        <h3>Parameters</h3>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>Label</code></td><td><code>string?</code></td><td><code>null</code></td><td>Text label displayed next to the checkbox.</td></tr>
+            </tbody>
+        </table>
+        <p>Supports indeterminate state via <code>bool?</code> value type (null = indeterminate).</p>
+
+        <h3>Example</h3>
+        <pre><code>&lt;DxCheckBox @@bind-Value="model.IsActive" Label="Active" /&gt;</code></pre>
+    </section>
+
+    <!-- 4. DxNumericEdit -->
+    <section class="doc-section">
+        <h2>DxNumericEdit&lt;TValue&gt;</h2>
+        <p>Namespace: <code>DExpressClone.Components.Editors.DxNumericEdit</code> — Inherits <code>DxFormEditorBase&lt;TValue&gt;</code></p>
+
+        <h3>Parameters</h3>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>Min</code></td><td><code>TValue?</code></td><td><code>null</code></td><td>Minimum allowed value.</td></tr>
+                <tr><td><code>Max</code></td><td><code>TValue?</code></td><td><code>null</code></td><td>Maximum allowed value.</td></tr>
+                <tr><td><code>Step</code></td><td><code>TValue?</code></td><td><code>null</code></td><td>Increment/decrement step.</td></tr>
+                <tr><td><code>Format</code></td><td><code>string?</code></td><td><code>null</code></td><td>Display format string (e.g. "C2", "N0").</td></tr>
+            </tbody>
+        </table>
+
+        <h3>Example</h3>
+        <pre><code>&lt;DxNumericEdit @@bind-Value="model.Salary" Format="C2" Min="0" /&gt;</code></pre>
+    </section>
+
+    <!-- 5. DxRadioGroup -->
+    <section class="doc-section">
+        <h2>DxRadioGroup&lt;TValue&gt;</h2>
+        <p>Namespace: <code>DExpressClone.Components.Editors.DxRadioGroup</code> — Inherits <code>DxFormEditorBase&lt;TValue&gt;</code></p>
+
+        <h3>Parameters</h3>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>Items</code></td><td><code>IEnumerable&lt;TValue&gt;</code></td><td>—</td><td>Collection of items to display as radio options.</td></tr>
+                <tr><td><code>TextFieldName</code></td><td><code>string?</code></td><td><code>null</code></td><td>Property name used for display text (for complex objects).</td></tr>
+                <tr><td><code>ValueFieldName</code></td><td><code>string?</code></td><td><code>null</code></td><td>Property name used for the value (for complex objects).</td></tr>
+                <tr><td><code>Layout</code></td><td><code>RadioGroupLayout</code></td><td><code>Vertical</code></td><td>Vertical, Horizontal.</td></tr>
+            </tbody>
+        </table>
+
+        <h3>Example</h3>
+        <pre><code>&lt;DxRadioGroup @@bind-Value="selected" Items="options" Layout="RadioGroupLayout.Horizontal" /&gt;</code></pre>
+    </section>
+
+    <!-- 6. DxDateEdit -->
+    <section class="doc-section">
+        <h2>DxDateEdit</h2>
+        <p>Namespace: <code>DExpressClone.Components.Editors.DxDateEdit</code> — Inherits <code>DxFormEditorBase&lt;DateTime?&gt;</code></p>
+
+        <h3>Parameters</h3>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>MinDate</code></td><td><code>DateTime?</code></td><td><code>null</code></td><td>Minimum selectable date.</td></tr>
+                <tr><td><code>MaxDate</code></td><td><code>DateTime?</code></td><td><code>null</code></td><td>Maximum selectable date.</td></tr>
+                <tr><td><code>Format</code></td><td><code>string?</code></td><td><code>"yyyy-MM-dd"</code></td><td>Date display format string.</td></tr>
+            </tbody>
+        </table>
+
+        <h3>Example</h3>
+        <pre><code>&lt;DxDateEdit @@bind-Value="model.HireDate" Format="MM/dd/yyyy" /&gt;</code></pre>
+    </section>
+
+    <!-- 7. DxComboBox -->
+    <section class="doc-section">
+        <h2>DxComboBox&lt;TItem, TValue&gt;</h2>
+        <p>Namespace: <code>DExpressClone.Components.Editors.DxComboBox</code> — Inherits <code>DxFormEditorBase&lt;TValue&gt;</code></p>
+
+        <h3>Parameters</h3>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>Data</code></td><td><code>IEnumerable&lt;TItem&gt;</code></td><td>—</td><td>The data source for the dropdown items.</td></tr>
+                <tr><td><code>TextFieldName</code></td><td><code>string?</code></td><td><code>null</code></td><td>Property name used for display text.</td></tr>
+                <tr><td><code>ValueFieldName</code></td><td><code>string?</code></td><td><code>null</code></td><td>Property name used for the value.</td></tr>
+                <tr><td><code>AllowCustomInput</code></td><td><code>bool</code></td><td><code>false</code></td><td>Whether the user can type custom values.</td></tr>
+                <tr><td><code>FilteringMode</code></td><td><code>DataGridFilteringMode</code></td><td><code>None</code></td><td>None, Contains, StartsWith.</td></tr>
+            </tbody>
+        </table>
+
+        <h3>Example</h3>
+        <pre><code>&lt;DxComboBox Data="departments" @@bind-Value="model.Department"
+            TextFieldName="Name" ValueFieldName="Id" /&gt;</code></pre>
+    </section>
+
+    <!-- 8. DxPanel -->
+    <section class="doc-section">
+        <h2>DxPanel</h2>
+        <p>Namespace: <code>DExpressClone.Components.Layout</code></p>
+
+        <h3>Parameters</h3>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>HeaderText</code></td><td><code>string?</code></td><td><code>null</code></td><td>Text displayed in the panel header.</td></tr>
+                <tr><td><code>HeaderTemplate</code></td><td><code>RenderFragment?</code></td><td><code>null</code></td><td>Custom header template (overrides HeaderText).</td></tr>
+                <tr><td><code>BodyContent</code></td><td><code>RenderFragment?</code></td><td><code>null</code></td><td>The main body content of the panel.</td></tr>
+                <tr><td><code>FooterTemplate</code></td><td><code>RenderFragment?</code></td><td><code>null</code></td><td>Custom footer template.</td></tr>
+                <tr><td><code>Collapsible</code></td><td><code>bool</code></td><td><code>false</code></td><td>Whether the panel can be collapsed.</td></tr>
+                <tr><td><code>Expanded</code></td><td><code>bool</code></td><td><code>true</code></td><td>Whether the panel body is expanded.</td></tr>
+                <tr><td><code>ExpandedChanged</code></td><td><code>EventCallback&lt;bool&gt;</code></td><td>—</td><td>Fires when expanded state changes.</td></tr>
+            </tbody>
+        </table>
+
+        <h3>Example</h3>
+        <pre><code>&lt;DxPanel HeaderText="Details"&gt;
+    &lt;BodyContent&gt;Panel body content here.&lt;/BodyContent&gt;
+&lt;/DxPanel&gt;</code></pre>
+    </section>
+
+    <!-- 9. DxTabs -->
+    <section class="doc-section">
+        <h2>DxTabs + DxTabPage</h2>
+        <p>Namespace: <code>DExpressClone.Components.Layout</code></p>
+
+        <h3>DxTabs Parameters</h3>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>ActiveTabIndex</code></td><td><code>int</code></td><td><code>0</code></td><td>Index of the currently active tab.</td></tr>
+                <tr><td><code>ActiveTabIndexChanged</code></td><td><code>EventCallback&lt;int&gt;</code></td><td>—</td><td>Fires when the active tab changes.</td></tr>
+                <tr><td><code>ChildContent</code></td><td><code>RenderFragment</code></td><td>—</td><td>DxTabPage children.</td></tr>
+            </tbody>
+        </table>
+
+        <h3>DxTabPage Parameters</h3>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>Text</code></td><td><code>string</code></td><td>—</td><td>Tab header text.</td></tr>
+                <tr><td><code>IconCssClass</code></td><td><code>string?</code></td><td><code>null</code></td><td>CSS class for the tab icon.</td></tr>
+                <tr><td><code>Template</code></td><td><code>RenderFragment</code></td><td>—</td><td>Tab content template.</td></tr>
+            </tbody>
+        </table>
+
+        <h3>Example</h3>
+        <pre><code>&lt;DxTabs&gt;
+    &lt;DxTabPage Text="Tab 1"&gt;
+        &lt;Template&gt;Content for tab 1&lt;/Template&gt;
+    &lt;/DxTabPage&gt;
+    &lt;DxTabPage Text="Tab 2"&gt;
+        &lt;Template&gt;Content for tab 2&lt;/Template&gt;
+    &lt;/DxTabPage&gt;
+&lt;/DxTabs&gt;</code></pre>
+    </section>
+
+    <!-- 10. DxAccordion -->
+    <section class="doc-section">
+        <h2>DxAccordion + DxAccordionItem</h2>
+        <p>Namespace: <code>DExpressClone.Components.Layout</code></p>
+
+        <h3>DxAccordion Parameters</h3>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>AllowMultipleExpanded</code></td><td><code>bool</code></td><td><code>false</code></td><td>Whether multiple items can be expanded at once.</td></tr>
+                <tr><td><code>ChildContent</code></td><td><code>RenderFragment</code></td><td>—</td><td>DxAccordionItem children.</td></tr>
+            </tbody>
+        </table>
+
+        <h3>DxAccordionItem Parameters</h3>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>HeaderText</code></td><td><code>string</code></td><td>—</td><td>Text displayed in the accordion item header.</td></tr>
+                <tr><td><code>Expanded</code></td><td><code>bool</code></td><td><code>false</code></td><td>Whether the item is expanded.</td></tr>
+                <tr><td><code>ExpandedChanged</code></td><td><code>EventCallback&lt;bool&gt;</code></td><td>—</td><td>Fires when expanded state changes.</td></tr>
+                <tr><td><code>ChildContent</code></td><td><code>RenderFragment</code></td><td>—</td><td>Item body content.</td></tr>
+            </tbody>
+        </table>
+
+        <h3>Example</h3>
+        <pre><code>&lt;DxAccordion&gt;
+    &lt;DxAccordionItem HeaderText="Section 1" Expanded="true"&gt;
+        Content for section 1.
+    &lt;/DxAccordionItem&gt;
+    &lt;DxAccordionItem HeaderText="Section 2"&gt;
+        Content for section 2.
+    &lt;/DxAccordionItem&gt;
+&lt;/DxAccordion&gt;</code></pre>
+    </section>
+
+    <!-- 11. DxToolbar -->
+    <section class="doc-section">
+        <h2>DxToolbar + DxToolbarItem</h2>
+        <p>Namespace: <code>DExpressClone.Components.Layout</code></p>
+
+        <h3>DxToolbar Parameters</h3>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>Title</code></td><td><code>string?</code></td><td><code>null</code></td><td>Toolbar title text.</td></tr>
+                <tr><td><code>ChildContent</code></td><td><code>RenderFragment</code></td><td>—</td><td>DxToolbarItem children.</td></tr>
+            </tbody>
+        </table>
+
+        <h3>DxToolbarItem Parameters</h3>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>Text</code></td><td><code>string?</code></td><td><code>null</code></td><td>Item display text.</td></tr>
+                <tr><td><code>IconCssClass</code></td><td><code>string?</code></td><td><code>null</code></td><td>CSS class for the item icon.</td></tr>
+                <tr><td><code>Click</code></td><td><code>EventCallback&lt;MouseEventArgs&gt;</code></td><td>—</td><td>Fires when the item is clicked.</td></tr>
+                <tr><td><code>Alignment</code></td><td><code>ToolbarItemAlignment</code></td><td><code>Left</code></td><td>Left, Right.</td></tr>
+                <tr><td><code>IsSeparator</code></td><td><code>bool</code></td><td><code>false</code></td><td>Renders as a visual separator instead of a button.</td></tr>
+            </tbody>
+        </table>
+
+        <h3>Example</h3>
+        <pre><code>&lt;DxToolbar Title="Actions"&gt;
+    &lt;DxToolbarItem Text="New" IconCssClass="fa fa-plus" Click="HandleNew" /&gt;
+    &lt;DxToolbarItem IsSeparator="true" /&gt;
+    &lt;DxToolbarItem Text="Settings" Alignment="ToolbarItemAlignment.Right" /&gt;
+&lt;/DxToolbar&gt;</code></pre>
+    </section>
+
+    <!-- 12. DxGrid -->
+    <section class="doc-section">
+        <h2>DxGrid&lt;TItem&gt;</h2>
+        <p>Namespace: <code>DExpressClone.Components.Grid</code></p>
+
+        <h3>DxGrid Parameters</h3>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>Data</code></td><td><code>IEnumerable&lt;TItem&gt;</code></td><td>—</td><td>The data source for the grid.</td></tr>
+                <tr><td><code>PageSize</code></td><td><code>int</code></td><td><code>10</code></td><td>Number of rows per page.</td></tr>
+                <tr><td><code>ShowPager</code></td><td><code>bool</code></td><td><code>true</code></td><td>Whether to display the pager.</td></tr>
+                <tr><td><code>AllowSort</code></td><td><code>bool</code></td><td><code>true</code></td><td>Whether columns are sortable.</td></tr>
+                <tr><td><code>AllowFilter</code></td><td><code>bool</code></td><td><code>false</code></td><td>Whether column filtering is enabled.</td></tr>
+                <tr><td><code>SelectedItem</code></td><td><code>TItem?</code></td><td><code>null</code></td><td>The currently selected row item.</td></tr>
+                <tr><td><code>SelectedItemChanged</code></td><td><code>EventCallback&lt;TItem&gt;</code></td><td>—</td><td>Fires when the selected row changes.</td></tr>
+                <tr><td><code>ChildContent</code></td><td><code>RenderFragment</code></td><td>—</td><td>DxGridColumn children.</td></tr>
+            </tbody>
+        </table>
+
+        <h3>DxGridColumn Parameters</h3>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>FieldName</code></td><td><code>string</code></td><td>—</td><td>Property name to bind the column to.</td></tr>
+                <tr><td><code>Caption</code></td><td><code>string?</code></td><td><code>null</code></td><td>Column header text (defaults to FieldName).</td></tr>
+                <tr><td><code>Width</code></td><td><code>string?</code></td><td><code>null</code></td><td>Column width (e.g. "150px", "20%").</td></tr>
+                <tr><td><code>Format</code></td><td><code>string?</code></td><td><code>null</code></td><td>Display format string for the column values.</td></tr>
+                <tr><td><code>AllowSort</code></td><td><code>bool</code></td><td><code>true</code></td><td>Whether this column is sortable.</td></tr>
+            </tbody>
+        </table>
+
+        <h3>Example</h3>
+        <pre><code>&lt;DxGrid Data="employees" PageSize="10"&gt;
+    &lt;DxGridColumn FieldName="FirstName" Caption="First Name" /&gt;
+    &lt;DxGridColumn FieldName="LastName" Caption="Last Name" /&gt;
+    &lt;DxGridColumn FieldName="Salary" Format="C2" Width="120px" /&gt;
+&lt;/DxGrid&gt;</code></pre>
+    </section>
+
+    <!-- 13. DxChart -->
+    <section class="doc-section">
+        <h2>DxChart&lt;TItem&gt;</h2>
+        <p>Namespace: <code>DExpressClone.Components.Charts</code></p>
+
+        <h3>DxChart Parameters</h3>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>Data</code></td><td><code>IEnumerable&lt;TItem&gt;</code></td><td>—</td><td>The data source for the chart.</td></tr>
+                <tr><td><code>Width</code></td><td><code>string?</code></td><td><code>null</code></td><td>Chart width (e.g. "100%", "600px").</td></tr>
+                <tr><td><code>Height</code></td><td><code>string?</code></td><td><code>"300px"</code></td><td>Chart height.</td></tr>
+                <tr><td><code>ShowLegend</code></td><td><code>bool</code></td><td><code>true</code></td><td>Whether to display the legend.</td></tr>
+                <tr><td><code>Title</code></td><td><code>string?</code></td><td><code>null</code></td><td>Chart title text.</td></tr>
+                <tr><td><code>ChildContent</code></td><td><code>RenderFragment</code></td><td>—</td><td>Series children.</td></tr>
+            </tbody>
+        </table>
+
+        <h3>Series Types</h3>
+        <p>Available series: <code>DxChartLineSeries</code>, <code>DxChartBarSeries</code>, <code>DxChartAreaSeries</code>, <code>DxChartPieSeries</code></p>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>Name</code></td><td><code>string?</code></td><td><code>null</code></td><td>Series name displayed in the legend.</td></tr>
+                <tr><td><code>ArgumentField</code></td><td><code>string</code></td><td>—</td><td>Property name for the X-axis / category values.</td></tr>
+                <tr><td><code>ValueField</code></td><td><code>string</code></td><td>—</td><td>Property name for the Y-axis / numeric values.</td></tr>
+            </tbody>
+        </table>
+
+        <h3>Example</h3>
+        <pre><code>&lt;DxChart Data="data" Height="400px"&gt;
+    &lt;DxChartBarSeries Name="Revenue" ArgumentField="Month" ValueField="Amount" /&gt;
+    &lt;DxChartLineSeries Name="Target" ArgumentField="Month" ValueField="Target" /&gt;
+&lt;/DxChart&gt;</code></pre>
+    </section>
+
+    <!-- 14. DxFormValidation -->
+    <section class="doc-section">
+        <h2>DxFormValidation</h2>
+        <p>Namespace: <code>DExpressClone.Components.Editors.DxFormValidation</code></p>
+
+        <h3>DxFormValidation Parameters</h3>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>Model</code></td><td><code>object</code></td><td>— (required)</td><td>The model object to validate against.</td></tr>
+                <tr><td><code>ChildContent</code></td><td><code>RenderFragment</code></td><td>—</td><td>DxFormItem children.</td></tr>
+                <tr><td><code>OnValidSubmit</code></td><td><code>EventCallback&lt;EditContext&gt;</code></td><td>—</td><td>Fires when the form is submitted and all validation passes.</td></tr>
+                <tr><td><code>OnInvalidSubmit</code></td><td><code>EventCallback&lt;EditContext&gt;</code></td><td>—</td><td>Fires when the form is submitted with validation errors.</td></tr>
+                <tr><td><code>ShowValidationSummary</code></td><td><code>bool</code></td><td><code>false</code></td><td>Whether to show a validation summary at the top.</td></tr>
+                <tr><td><code>ShowSubmitButton</code></td><td><code>bool</code></td><td><code>true</code></td><td>Whether to show the built-in submit button.</td></tr>
+                <tr><td><code>SubmitButtonText</code></td><td><code>string</code></td><td><code>"Submit"</code></td><td>Text of the built-in submit button.</td></tr>
+            </tbody>
+        </table>
+
+        <h3>DxFormItem Parameters</h3>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>FieldName</code></td><td><code>string</code></td><td>— (required)</td><td>Name of the model property to validate.</td></tr>
+                <tr><td><code>LabelText</code></td><td><code>string?</code></td><td><code>null</code></td><td>Label displayed above the editor.</td></tr>
+                <tr><td><code>ChildContent</code></td><td><code>RenderFragment</code></td><td>—</td><td>The editor component (DxTextBox, etc.).</td></tr>
+                <tr><td><code>Rules</code></td><td><code>List&lt;ValidationRule&gt;</code></td><td>—</td><td>Explicit list of validation rules.</td></tr>
+                <tr><td><code>Required</code></td><td><code>bool</code></td><td><code>false</code></td><td>Shorthand: adds a RequiredRule.</td></tr>
+                <tr><td><code>Email</code></td><td><code>bool</code></td><td><code>false</code></td><td>Shorthand: adds an EmailRule.</td></tr>
+                <tr><td><code>RegexPattern</code></td><td><code>string?</code></td><td><code>null</code></td><td>Shorthand: adds a RegexRule with this pattern.</td></tr>
+                <tr><td><code>MinLength</code></td><td><code>int?</code></td><td><code>null</code></td><td>Shorthand: adds a MinLengthRule.</td></tr>
+                <tr><td><code>MaxLength</code></td><td><code>int?</code></td><td><code>null</code></td><td>Shorthand: adds a MaxLengthRule.</td></tr>
+            </tbody>
+        </table>
+
+        <h3>Validation Rules</h3>
+        <table class="params-table">
+            <thead><tr><th>Rule</th><th>Key Property</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>RequiredRule</code></td><td>—</td><td>Value must not be null or empty.</td></tr>
+                <tr><td><code>EmailRule</code></td><td>—</td><td>Value must be a valid email address.</td></tr>
+                <tr><td><code>RegexRule</code></td><td><code>Pattern</code></td><td>Value must match the regex pattern.</td></tr>
+                <tr><td><code>MatchRule</code></td><td><code>MatchValue</code> (Func)</td><td>Value must equal the result of MatchValue.</td></tr>
+                <tr><td><code>MinLengthRule</code></td><td><code>Length</code></td><td>String length must be at least Length.</td></tr>
+                <tr><td><code>MaxLengthRule</code></td><td><code>Length</code></td><td>String length must be at most Length.</td></tr>
+                <tr><td><code>RangeRule</code></td><td><code>Min</code>, <code>Max</code></td><td>Numeric value must be within the range.</td></tr>
+                <tr><td><code>CustomRule</code></td><td><code>ValidateFunc</code></td><td>Custom validation function returning bool.</td></tr>
+            </tbody>
+        </table>
+
+        <h3>Example</h3>
+        <pre><code>&lt;DxFormValidation Model="model" OnValidSubmit="HandleSubmit"&gt;
+    &lt;DxFormItem FieldName="Name" LabelText="Name" Required&gt;
+        &lt;DxTextBox @@bind-Value="model.Name" /&gt;
+    &lt;/DxFormItem&gt;
+    &lt;DxFormItem FieldName="Email" LabelText="Email" Required Email&gt;
+        &lt;DxTextBox @@bind-Value="model.Email" /&gt;
+    &lt;/DxFormItem&gt;
+    &lt;DxFormItem FieldName="Age" LabelText="Age"&gt;
+        &lt;DxNumericEdit @@bind-Value="model.Age" Min="0" Max="150" /&gt;
+    &lt;/DxFormItem&gt;
+&lt;/DxFormValidation&gt;</code></pre>
+    </section>
+
+    <!-- 15. DxModal -->
+    <section class="doc-section">
+        <h2>DxModal</h2>
+        <p>Namespace: <code>DExpressClone.Components.Layout</code></p>
+
+        <h3>Parameters</h3>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>Visible</code></td><td><code>bool</code></td><td><code>false</code></td><td>Whether the modal is visible. Use @@bind-Visible for two-way binding.</td></tr>
+                <tr><td><code>VisibleChanged</code></td><td><code>EventCallback&lt;bool&gt;</code></td><td>—</td><td>Fires when visibility changes.</td></tr>
+                <tr><td><code>HeaderText</code></td><td><code>string?</code></td><td><code>null</code></td><td>Text displayed in the modal header.</td></tr>
+                <tr><td><code>HeaderTemplate</code></td><td><code>RenderFragment?</code></td><td><code>null</code></td><td>Custom header template.</td></tr>
+                <tr><td><code>BodyContent</code></td><td><code>RenderFragment?</code></td><td><code>null</code></td><td>The main modal body content.</td></tr>
+                <tr><td><code>FooterTemplate</code></td><td><code>RenderFragment?</code></td><td><code>null</code></td><td>Custom footer template.</td></tr>
+                <tr><td><code>Size</code></td><td><code>ModalSize</code></td><td><code>Medium</code></td><td>Small, Medium, Large, FullScreen.</td></tr>
+                <tr><td><code>CloseOnBackdropClick</code></td><td><code>bool</code></td><td><code>true</code></td><td>Whether clicking the backdrop closes the modal.</td></tr>
+                <tr><td><code>CloseOnEscape</code></td><td><code>bool</code></td><td><code>true</code></td><td>Whether pressing Escape closes the modal.</td></tr>
+                <tr><td><code>ShowCloseButton</code></td><td><code>bool</code></td><td><code>true</code></td><td>Whether the X close button is shown in the header.</td></tr>
+                <tr><td><code>OnClosed</code></td><td><code>EventCallback</code></td><td>—</td><td>Fires after the modal is closed.</td></tr>
+            </tbody>
+        </table>
+
+        <h3>Example</h3>
+        <pre><code>&lt;DxButton Text="Open" Click="() =&gt; _visible = true" /&gt;
+&lt;DxModal @@bind-Visible="_visible" HeaderText="Confirm Action"&gt;
+    &lt;BodyContent&gt;Are you sure you want to proceed?&lt;/BodyContent&gt;
+    &lt;FooterTemplate&gt;
+        &lt;DxButton Text="Cancel" RenderStyle="ButtonRenderStyle.Secondary" Click="() =&gt; _visible = false" /&gt;
+        &lt;DxButton Text="Confirm" RenderStyle="ButtonRenderStyle.Primary" Click="HandleConfirm" /&gt;
+    &lt;/FooterTemplate&gt;
+&lt;/DxModal&gt;</code></pre>
+    </section>
+
+    <!-- 16. DxToast -->
+    <section class="doc-section">
+        <h2>DxToast (Toast Notifications)</h2>
+        <p>Namespace: <code>DExpressClone.Components.Layout</code></p>
+
+        <h3>DxToastService (inject via DI)</h3>
+        <table class="params-table">
+            <thead><tr><th>Method</th><th>Signature</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>Show</code></td><td><code>Show(message, type, timeoutMs, title?)</code></td><td>Show a toast with full control.</td></tr>
+                <tr><td><code>ShowSuccess</code></td><td><code>ShowSuccess(message)</code></td><td>Show a success toast.</td></tr>
+                <tr><td><code>ShowError</code></td><td><code>ShowError(message)</code></td><td>Show an error toast (0 timeout, stays until dismissed).</td></tr>
+                <tr><td><code>ShowWarning</code></td><td><code>ShowWarning(message)</code></td><td>Show a warning toast.</td></tr>
+                <tr><td><code>ShowInfo</code></td><td><code>ShowInfo(message)</code></td><td>Show an info toast.</td></tr>
+                <tr><td><code>Dismiss</code></td><td><code>Dismiss(Guid)</code></td><td>Dismiss a specific toast by ID.</td></tr>
+            </tbody>
+        </table>
+
+        <h3>DxToastProvider (place in layout)</h3>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>Position</code></td><td><code>ToastPosition</code></td><td><code>TopRight</code></td><td>TopRight, TopLeft, BottomRight, BottomLeft, TopCenter, BottomCenter.</td></tr>
+                <tr><td><code>MaxToasts</code></td><td><code>int</code></td><td><code>5</code></td><td>Maximum number of visible toasts.</td></tr>
+            </tbody>
+        </table>
+
+        <h3>ToastType Enum</h3>
+        <p><code>Info</code>, <code>Success</code>, <code>Warning</code>, <code>Error</code></p>
+
+        <h3>Example</h3>
+        <pre><code>@@inject DxToastService Toast
+
+&lt;DxButton Text="Save" Click="HandleSave" /&gt;
+
+@@code {
+    void HandleSave() {
+        // ... save logic ...
+        Toast.ShowSuccess("Record saved successfully!");
+    }
+}</code></pre>
+    </section>
+
+    <!-- ===== SECTION 4: CSS VARIABLES ===== -->
+    <section class="doc-section">
+        <h2>Key CSS Variables</h2>
+        <p>Override these variables to customize the theme. Apply at <code>:root</code> or scoped selectors.</p>
+
+        <h3>Colors</h3>
+        <table class="params-table">
+            <thead><tr><th>Variable</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>--dx-color-interactive</code></td><td>Primary interactive/accent color (buttons, links, focus rings).</td></tr>
+                <tr><td><code>--dx-color-text-primary</code></td><td>Primary text color.</td></tr>
+                <tr><td><code>--dx-color-surface</code></td><td>Background surface color for components.</td></tr>
+                <tr><td><code>--dx-color-border</code></td><td>Default border color.</td></tr>
+                <tr><td><code>--dx-color-success</code></td><td>Success state color (green).</td></tr>
+                <tr><td><code>--dx-color-warning</code></td><td>Warning state color (amber/yellow).</td></tr>
+                <tr><td><code>--dx-color-danger</code></td><td>Danger/error state color (red).</td></tr>
+                <tr><td><code>--dx-color-info</code></td><td>Info state color (blue).</td></tr>
+            </tbody>
+        </table>
+
+        <h3>Spacing, Radius, and Shadows</h3>
+        <table class="params-table">
+            <thead><tr><th>Variable</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>--dx-radius-sm</code></td><td>Small border radius.</td></tr>
+                <tr><td><code>--dx-radius-md</code></td><td>Medium border radius.</td></tr>
+                <tr><td><code>--dx-radius-lg</code></td><td>Large border radius.</td></tr>
+                <tr><td><code>--dx-spacing-1</code> through <code>--dx-spacing-8</code></td><td>Spacing scale (1 = smallest, 8 = largest).</td></tr>
+                <tr><td><code>--dx-shadow-sm</code></td><td>Small box shadow.</td></tr>
+                <tr><td><code>--dx-shadow-md</code></td><td>Medium box shadow.</td></tr>
+                <tr><td><code>--dx-shadow-lg</code></td><td>Large box shadow.</td></tr>
+                <tr><td><code>--dx-shadow-xl</code></td><td>Extra-large box shadow.</td></tr>
+            </tbody>
+        </table>
+
+        <h3>Dark Mode</h3>
+        <pre><code>&lt;html data-dx-theme="dark"&gt;</code></pre>
+        <p>Add the <code>data-dx-theme="dark"</code> attribute to the <code>&lt;html&gt;</code> element to enable dark mode. All CSS variables automatically adjust.</p>
+    </section>
+
+    <!-- ===== SECTION 5: COMMON PATTERNS ===== -->
+    <section class="doc-section">
+        <h2>Common Patterns</h2>
+
+        <h3>Two-Way Binding</h3>
+        <pre><code>&lt;DxTextBox @@bind-Value="model.Name" /&gt;
+&lt;DxNumericEdit @@bind-Value="model.Price" /&gt;
+&lt;DxCheckBox @@bind-Value="model.IsActive" /&gt;
+&lt;DxDateEdit @@bind-Value="model.StartDate" /&gt;
+&lt;DxComboBox @@bind-Value="model.CategoryId" Data="categories" TextFieldName="Name" ValueFieldName="Id" /&gt;</code></pre>
+
+        <h3>Event Handling</h3>
+        <pre><code>&lt;DxButton Text="Save" Click="HandleClick" /&gt;
+&lt;DxButton Text="Delete" Click="@@(async () =&gt; await DeleteItem(id))" /&gt;
+
+@@code {
+    void HandleClick(MouseEventArgs e) { /* ... */ }
+}</code></pre>
+
+        <h3>Dark Mode Toggle</h3>
+        <pre><code>&lt;html data-dx-theme="dark"&gt;
+    &lt;!-- All DExpressClone components automatically use dark theme --&gt;
+&lt;/html&gt;</code></pre>
+
+        <h3>Form Validation</h3>
+        <pre><code>&lt;DxFormValidation Model="model" OnValidSubmit="HandleSubmit"&gt;
+    &lt;DxFormItem FieldName="Name" LabelText="Full Name" Required MinLength="2"&gt;
+        &lt;DxTextBox @@bind-Value="model.Name" /&gt;
+    &lt;/DxFormItem&gt;
+    &lt;DxFormItem FieldName="Email" LabelText="Email" Required Email&gt;
+        &lt;DxTextBox @@bind-Value="model.Email" /&gt;
+    &lt;/DxFormItem&gt;
+&lt;/DxFormValidation&gt;
+
+@@code {
+    MyModel model = new();
+    void HandleSubmit(EditContext context) { /* save */ }
+}</code></pre>
+
+        <h3>Toast Notifications</h3>
+        <pre><code>@@inject DxToastService Toast
+
+@@code {
+    void Save() {
+        try {
+            // ... save logic ...
+            Toast.ShowSuccess("Saved successfully!");
+        } catch (Exception ex) {
+            Toast.ShowError($"Error: {ex.Message}");
+        }
+    }
+}</code></pre>
+
+        <h3>Grid with Selection and Paging</h3>
+        <pre><code>&lt;DxGrid Data="items" PageSize="20" AllowSort="true" AllowFilter="true"
+        @@bind-SelectedItem="selectedItem"&gt;
+    &lt;DxGridColumn FieldName="Id" Caption="#" Width="60px" /&gt;
+    &lt;DxGridColumn FieldName="Name" Caption="Name" /&gt;
+    &lt;DxGridColumn FieldName="CreatedDate" Caption="Created" Format="d" /&gt;
+&lt;/DxGrid&gt;</code></pre>
+
+        <h3>Modal Dialog with Form</h3>
+        <pre><code>&lt;DxModal @@bind-Visible="_showModal" HeaderText="Edit Record" Size="ModalSize.Large"&gt;
+    &lt;BodyContent&gt;
+        &lt;DxFormValidation Model="editModel" OnValidSubmit="HandleSave" ShowSubmitButton="false"&gt;
+            &lt;DxFormItem FieldName="Name" LabelText="Name" Required&gt;
+                &lt;DxTextBox @@bind-Value="editModel.Name" /&gt;
+            &lt;/DxFormItem&gt;
+        &lt;/DxFormValidation&gt;
+    &lt;/BodyContent&gt;
+    &lt;FooterTemplate&gt;
+        &lt;DxButton Text="Cancel" RenderStyle="ButtonRenderStyle.Secondary" Click="() =&gt; _showModal = false" /&gt;
+        &lt;DxButton Text="Save" RenderStyle="ButtonRenderStyle.Primary" ButtonType="ButtonType.Submit" /&gt;
+    &lt;/FooterTemplate&gt;
+&lt;/DxModal&gt;</code></pre>
+    </section>
+</div>
