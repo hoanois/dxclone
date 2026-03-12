@@ -9,12 +9,8 @@
     <section class="doc-section">
         <h2>Setup</h2>
 
-        <h3>CSS References</h3>
-        <pre><code>&lt;link href="_content/DExpressClone.Components/css/dx-theme-fluent.css" rel="stylesheet" /&gt;
-&lt;link href="_content/DExpressClone.Components/css/dx-layout.css" rel="stylesheet" /&gt;
-&lt;link href="_content/DExpressClone.Components/css/dx-editors.css" rel="stylesheet" /&gt;
-&lt;link href="_content/DExpressClone.Components/css/dx-grid.css" rel="stylesheet" /&gt;
-&lt;link href="_content/DExpressClone.Components/css/dx-charts.css" rel="stylesheet" /&gt;</code></pre>
+        <h3>CSS Reference (single import)</h3>
+        <pre><code>&lt;link href="_content/DExpressClone.Components/css/dx-all.min.css" rel="stylesheet" /&gt;</code></pre>
 
         <h3>Service Registration</h3>
         <pre><code>builder.Services.AddDxComponents();</code></pre>
@@ -366,11 +362,11 @@
                 <tr><td><code>AllowFilter</code></td><td><code>bool</code></td><td><code>false</code></td><td>Whether column filtering is enabled.</td></tr>
                 <tr><td><code>SelectedItem</code></td><td><code>TItem?</code></td><td><code>null</code></td><td>The currently selected row item.</td></tr>
                 <tr><td><code>SelectedItemChanged</code></td><td><code>EventCallback&lt;TItem&gt;</code></td><td>—</td><td>Fires when the selected row changes.</td></tr>
-                <tr><td><code>ChildContent</code></td><td><code>RenderFragment</code></td><td>—</td><td>DxGridColumn children.</td></tr>
+                <tr><td><code>ChildContent</code></td><td><code>RenderFragment</code></td><td>—</td><td>DxGridDataColumn children.</td></tr>
             </tbody>
         </table>
 
-        <h3>DxGridColumn Parameters</h3>
+        <h3>DxGridDataColumn Parameters</h3>
         <table class="params-table">
             <thead><tr><th>Name</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
             <tbody>
@@ -384,9 +380,9 @@
 
         <h3>Example</h3>
         <pre><code>&lt;DxGrid Data="employees" PageSize="10"&gt;
-    &lt;DxGridColumn FieldName="FirstName" Caption="First Name" /&gt;
-    &lt;DxGridColumn FieldName="LastName" Caption="Last Name" /&gt;
-    &lt;DxGridColumn FieldName="Salary" Format="C2" Width="120px" /&gt;
+    &lt;DxGridDataColumn FieldName="FirstName" Caption="First Name" /&gt;
+    &lt;DxGridDataColumn FieldName="LastName" Caption="Last Name" /&gt;
+    &lt;DxGridDataColumn FieldName="Salary" Format="C2" Width="120px" /&gt;
 &lt;/DxGrid&gt;</code></pre>
     </section>
 
@@ -663,9 +659,9 @@
         <h3>Grid with Selection and Paging</h3>
         <pre><code>&lt;DxGrid Data="items" PageSize="20" AllowSort="true" AllowFilter="true"
         @@bind-SelectedItem="selectedItem"&gt;
-    &lt;DxGridColumn FieldName="Id" Caption="#" Width="60px" /&gt;
-    &lt;DxGridColumn FieldName="Name" Caption="Name" /&gt;
-    &lt;DxGridColumn FieldName="CreatedDate" Caption="Created" Format="d" /&gt;
+    &lt;DxGridDataColumn FieldName="Id" Caption="#" Width="60px" /&gt;
+    &lt;DxGridDataColumn FieldName="Name" Caption="Name" /&gt;
+    &lt;DxGridDataColumn FieldName="CreatedDate" Caption="Created" Format="d" /&gt;
 &lt;/DxGrid&gt;</code></pre>
 
         <h3>Modal Dialog with Form</h3>
