@@ -202,3 +202,79 @@ export function removeClickOutsideListener(element) {
         clickOutsideMap.delete(element);
     }
 }
+
+// ---- File upload helpers ----
+
+/**
+ * Triggers a click on a file input element by its id.
+ * @param {string} elementId - The id of the file input element
+ */
+export function triggerFileInput(elementId) {
+    const el = document.getElementById(elementId);
+    if (el) el.click();
+}
+
+/**
+ * Sets up a drop zone with full drag/drop support that forwards files to a hidden InputFile.
+ * Handles dragenter, dragover, dragleave, and drop entirely in JS to avoid Blazor event conflicts.
+ * @param {HTMLElement} dropZoneElement - The drop zone element
+ * @param {string} inputId - The id of the hidden file input (Blazor InputFile)
+ */
+export function setupDropZone(dropZoneElement, inputId) {
+    if (!dropZoneElement) return;
+
+    let dragCounter = 0;
+
+    const onDragEnter = (e) => {
+        e.preventDefault();
+        dragCounter++;
+        dropZoneElement.classList.add('dx-fileupload-dropzone--dragover');
+    };
+
+    const onDragOver = (e) => {
+        e.preventDefault();
+    };
+
+    const onDragLeave = (e) => {
+        e.preventDefault();
+        dragCounter--;
+        if (dragCounter <= 0) {
+            dragCounter = 0;
+            dropZoneElement.classList.remove('dx-fileupload-dropzone--dragover');
+        }
+    };
+
+    const onDrop = (e) => {
+        e.preventDefault();
+        dragCounter = 0;
+        dropZoneElement.classList.remove('dx-fileupload-dropzone--dragover');
+
+        const input = document.getElementById(inputId);
+        if (input && e.dataTransfer?.files?.length > 0) {
+            // Set files on input and fire native change event
+            input.files = e.dataTransfer.files;
+            input.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+    };
+
+    dropZoneElement.addEventListener('dragenter', onDragEnter);
+    dropZoneElement.addEventListener('dragover', onDragOver);
+    dropZoneElement.addEventListener('dragleave', onDragLeave);
+    dropZoneElement.addEventListener('drop', onDrop);
+
+    dropZoneElement._dxDropHandlers = { onDragEnter, onDragOver, onDragLeave, onDrop };
+}
+
+/**
+ * Removes drop zone handlers.
+ * @param {HTMLElement} dropZoneElement
+ */
+export function removeDropZone(dropZoneElement) {
+    if (!dropZoneElement?._dxDropHandlers) return;
+    const { onDragEnter, onDragOver, onDragLeave, onDrop } = dropZoneElement._dxDropHandlers;
+    dropZoneElement.removeEventListener('dragenter', onDragEnter);
+    dropZoneElement.removeEventListener('dragover', onDragOver);
+    dropZoneElement.removeEventListener('dragleave', onDragLeave);
+    dropZoneElement.removeEventListener('drop', onDrop);
+    delete dropZoneElement._dxDropHandlers;
+}

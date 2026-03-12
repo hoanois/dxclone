@@ -1,0 +1,87 @@
+@namespace DExpressClone.Components.Editors.DxFileUpload
+@inherits DExpressClone.Components.Core.DxInteractiveComponentBase
+
+<div class="@RootCssClass" id="@Id" @attributes="AdditionalAttributes">
+    <div @ref="_dropZoneRef" class="@DropZoneCssClass">
+        @if (DropZoneTemplate is not null)
+        {
+            @DropZoneTemplate
+        }
+        else
+        {
+            <div class="dx-fileupload-placeholder">
+                <svg class="dx-fileupload-icon" viewBox="0 0 48 48" width="48" height="48" fill="none">
+                    <path d="M23 34V18M23 18l-6 6M23 18l6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/>
+                    <path d="M7 34h4v4a2 2 0 002 2h20a2 2 0 002-2v-4h4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.35"/>
+                </svg>
+                <span class="dx-fileupload-text">@UploadText</span>
+                <span class="dx-fileupload-hint">or</span>
+                <button type="button" class="dx-btn dx-btn--primary dx-fileupload-select-btn"
+                        @onclick="BrowseAsync">
+                    Select File
+                </button>
+            </div>
+        }
+    </div>
+
+    <InputFile id="@_inputId"
+               class="dx-fileupload-input"
+               style="display:none"
+               OnChange="HandleFilesSelected"
+               multiple="@Multiple"
+               accept="@Accept" />
+
+    @if (_files.Count > 0)
+    {
+        <div class="dx-fileupload-list">
+            @foreach (var file in _files)
+            {
+                <div class="dx-fileupload-item @GetFileItemCssClass(file)">
+                    @if (file.PreviewDataUrl is not null)
+                    {
+                        <img class="dx-fileupload-item-preview" src="@file.PreviewDataUrl" alt="@file.Name" />
+                    }
+                    else
+                    {
+                        <span class="dx-fileupload-item-icon">@GetFileIcon(file.ContentType)</span>
+                    }
+                    <div class="dx-fileupload-item-info">
+                        <span class="dx-fileupload-item-name" title="@file.Name">@file.Name</span>
+                        <span class="dx-fileupload-item-size">@FormatFileSize(file.Size)</span>
+                        @if (file.Status == FileUploadStatus.Uploading)
+                        {
+                            <div class="dx-fileupload-progress">
+                                <div class="dx-fileupload-progress-bar" style="width:@(file.ProgressPercent)%"></div>
+                            </div>
+                        }
+                        @if (file.ErrorMessage is not null)
+                        {
+                            <span class="dx-fileupload-item-error">@file.ErrorMessage</span>
+                        }
+                    </div>
+                    <button class="dx-fileupload-item-remove"
+                            type="button"
+                            @onclick="() => RemoveFileAsync(file)"
+                            @onclick:stopPropagation="true"
+                            disabled="@(file.Status == FileUploadStatus.Uploading)"
+                            aria-label="Remove file">
+                        <svg viewBox="0 0 16 16" width="14" height="14" fill="none">
+                            <path d="M4 4L12 12M12 4L4 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                </div>
+            }
+        </div>
+
+        @if (!AutoUpload && Upload is not null && _files.Any(f => f.Status == FileUploadStatus.Pending))
+        {
+            <div class="dx-fileupload-actions">
+                <button class="dx-btn dx-btn--primary dx-fileupload-upload-btn"
+                        type="button"
+                        @onclick="UploadAllAsync">
+                    Upload
+                </button>
+            </div>
+        }
+    }
+</div>

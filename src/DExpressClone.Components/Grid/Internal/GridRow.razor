@@ -1,39 +1,65 @@
 @namespace DExpressClone.Components.Grid.Internal
 @typeparam TItem
+@using Microsoft.AspNetCore.Components.Forms
 
-<div class="@RowCssClass"
-     style="height:@(RowHeight)px;"
-     @onclick="HandleClick"
-     @ondblclick="HandleDoubleClick">
-    @foreach (var column in Columns)
-    {
-        if (!column.Visible)
-            continue;
-
-        var style = !string.IsNullOrEmpty(column.Width) ? $"width:{column.Width};" : "";
-
-        <div class="@GetCellCssClass(column)" style="@style">
-            @if (column is DxGridDataColumn dataCol)
-            {
-                if (dataCol.CellTemplate is not null)
-                {
-                    @dataCol.CellTemplate((object)Item!)
-                }
-                else
-                {
-                    @GetCellDisplayValue(dataCol)
-                }
-            }
-            else if (column is DxGridCommandColumn cmdCol && cmdCol.CellTemplate is not null)
-            {
-                @cmdCol.CellTemplate((object)Item!)
-            }
-            else if (column is DxGridSelectionColumn)
-            {
-                <input type="checkbox" checked="@IsSelected"
-                       @onclick:stopPropagation="true"
-                       @onchange="HandleSelectionToggle" />
-            }
+@if (IsEditing && RowEditContext is not null)
+{
+    <CascadingValue Value="@RowEditContext" IsFixed="false">
+        <div class="@RowCssClass"
+             style="height:@(RowHeight)px;"
+             @onclick="HandleClick"
+             @ondblclick="HandleDoubleClick">
+            @RenderCells()
         </div>
-    }
-</div>
+    </CascadingValue>
+}
+else
+{
+    <div class="@RowCssClass"
+         style="height:@(RowHeight)px;"
+         @onclick="HandleClick"
+         @ondblclick="HandleDoubleClick">
+        @RenderCells()
+    </div>
+}
+
+@code {
+    private RenderFragment RenderCells() => __builder =>
+    {
+        foreach (var column in Columns)
+        {
+            if (!column.Visible)
+                continue;
+
+            var style = !string.IsNullOrEmpty(column.Width) ? $"width:{column.Width};" : "";
+
+            <div class="@GetCellCssClass(column)" style="@style">
+                @if (column is DxGridDataColumn dataCol)
+                {
+                    if (IsEditing && dataCol.EditCellTemplate is not null)
+                    {
+                        @dataCol.EditCellTemplate(EditItem!)
+                    }
+                    else if (dataCol.CellTemplate is not null)
+                    {
+                        @dataCol.CellTemplate((object)Item!)
+                    }
+                    else
+                    {
+                        @GetCellDisplayValue(dataCol)
+                    }
+                }
+                else if (column is DxGridCommandColumn cmdCol && cmdCol.CellTemplate is not null)
+                {
+                    @cmdCol.CellTemplate((object)Item!)
+                }
+                else if (column is DxGridSelectionColumn)
+                {
+                    <input type="checkbox" checked="@IsSelected"
+                           @onclick:stopPropagation="true"
+                           @onchange="HandleSelectionToggle" />
+                }
+            </div>
+        }
+    };
+}

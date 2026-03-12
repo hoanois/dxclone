@@ -25,7 +25,9 @@
 @using DExpressClone.Components.Layout.DxAccordion
 @using DExpressClone.Components.Layout.DxToolbar
 @using DExpressClone.Components.Grid
-@using DExpressClone.Components.Charts")" />
+@using DExpressClone.Components.Charts
+@using DExpressClone.Components.Editors.DxFileUpload
+@using DExpressClone.Components.Editors")" />
         </div>
         <div class="getting-started-step">
             <h3>3. Add CSS References</h3>
@@ -38,6 +40,22 @@
         <div class="getting-started-step">
             <h3>4. Add JS Reference</h3>
             <CodeBlock Language="html" Code="@(@"<script src=""_content/DExpressClone.Components/js/dx-interop.js""></script>")" />
+        </div>
+    </section>
+
+    <section class="doc-section">
+        <h2>Available Components</h2>
+        <div class="getting-started-step">
+            <h3>Editors</h3>
+            <p>TextBox, CheckBox, NumericEdit, RadioGroup, DateEdit, ComboBox, <strong>FileUpload</strong>, FormValidation</p>
+        </div>
+        <div class="getting-started-step">
+            <h3>Layout</h3>
+            <p>Button, Panel, Tabs, Accordion, Toolbar, Modal, Toast</p>
+        </div>
+        <div class="getting-started-step">
+            <h3>Data</h3>
+            <p>Grid (with sorting, filtering, paging, <strong>server-side data loading via CustomData</strong>, <strong>inline editing</strong>, virtual scrolling), Chart (Line, Bar, Area, Pie)</p>
         </div>
     </section>
 

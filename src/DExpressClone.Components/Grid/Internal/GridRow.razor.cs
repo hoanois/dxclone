@@ -1,6 +1,7 @@
 using System.Reflection;
 using DExpressClone.Components.Core;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 
 namespace DExpressClone.Components.Grid.Internal;
 
@@ -9,6 +10,7 @@ public partial class GridRow<TItem> : ComponentBase
     private TItem? _previousItem;
     private bool _previousIsSelected;
     private bool _previousIsFocused;
+    private bool _previousIsEditing;
 
     [Parameter]
     public TItem? Item { get; set; }
@@ -37,9 +39,19 @@ public partial class GridRow<TItem> : ComponentBase
     [Parameter]
     public EventCallback<TItem> SelectionToggled { get; set; }
 
+    [Parameter]
+    public bool IsEditing { get; set; }
+
+    [Parameter]
+    public object? EditItem { get; set; }
+
+    [Parameter]
+    public EditContext? RowEditContext { get; set; }
+
     protected string RowCssClass => CssClassBuilder.New("dx-grid-row")
         .AddIf("dx-grid-row--selected", IsSelected)
         .AddIf("dx-grid-row--focused", IsFocused)
+        .AddIf("dx-grid-row--editing", IsEditing)
         .Add(RowIndex % 2 == 0 ? "dx-grid-row--even" : "dx-grid-row--odd")
         .Build();
 
@@ -47,11 +59,13 @@ public partial class GridRow<TItem> : ComponentBase
     {
         var shouldRender = !ReferenceEquals(_previousItem, Item)
             || _previousIsSelected != IsSelected
-            || _previousIsFocused != IsFocused;
+            || _previousIsFocused != IsFocused
+            || _previousIsEditing != IsEditing;
 
         _previousItem = Item;
         _previousIsSelected = IsSelected;
         _previousIsFocused = IsFocused;
+        _previousIsEditing = IsEditing;
 
         return shouldRender;
     }

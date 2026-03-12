@@ -1,0 +1,217 @@
+@page "/docs/fileupload"
+@rendermode InteractiveServer
+@using DExpressClone.Components.Editors.DxFileUpload
+@using DExpressClone.Components.Editors
+
+<ComponentDoc Title="DxFileUpload" Description="A file upload component with drag-and-drop support, progress tracking, image preview, and file validation.">
+    <ParametersContent>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>Accept</code></td><td><code>string?</code></td><td><code>null</code></td><td>Accepted file types (e.g., ".jpg,.png,.pdf", "image/*").</td></tr>
+                <tr><td><code>Multiple</code></td><td><code>bool</code></td><td><code>true</code></td><td>Whether multiple files can be selected.</td></tr>
+                <tr><td><code>MaxFileSize</code></td><td><code>long</code></td><td><code>10485760</code> (10 MB)</td><td>Maximum allowed file size in bytes.</td></tr>
+                <tr><td><code>MaxFileCount</code></td><td><code>int</code></td><td><code>10</code></td><td>Maximum number of files allowed.</td></tr>
+                <tr><td><code>UploadText</code></td><td><code>string</code></td><td><code>"Drag files here"</code></td><td>Text displayed in the drop zone.</td></tr>
+                <tr><td><code>AllowImagePreview</code></td><td><code>bool</code></td><td><code>true</code></td><td>Whether image previews are shown for image files.</td></tr>
+                <tr><td><code>MaxPreviewFileSize</code></td><td><code>long</code></td><td><code>5242880</code> (5 MB)</td><td>Maximum file size for generating image previews.</td></tr>
+                <tr><td><code>AutoUpload</code></td><td><code>bool</code></td><td><code>false</code></td><td>Whether files are uploaded automatically when selected.</td></tr>
+                <tr><td><code>DropZoneTemplate</code></td><td><code>RenderFragment?</code></td><td><code>null</code></td><td>Custom template for the drop zone area.</td></tr>
+                <tr><td><code>Enabled</code></td><td><code>bool</code></td><td><code>true</code></td><td>Whether the component is enabled.</td></tr>
+                <tr><td><code>CssClass</code></td><td><code>string?</code></td><td><code>null</code></td><td>Additional CSS classes.</td></tr>
+            </tbody>
+        </table>
+    </ParametersContent>
+    <EventsContent>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>Upload</code></td><td><code>Func&lt;DxFileUploadEventArgs, Task&gt;?</code></td><td>Called for each file to be uploaded. Use <code>args.Progress.Report(percent)</code> to update progress.</td></tr>
+                <tr><td><code>FileAdded</code></td><td><code>EventCallback&lt;DxFileUploadFile&gt;</code></td><td>Fires when a file is added to the selection.</td></tr>
+                <tr><td><code>FileRemoved</code></td><td><code>EventCallback&lt;DxFileUploadFile&gt;</code></td><td>Fires when a file is removed from the selection.</td></tr>
+                <tr><td><code>FilesChanged</code></td><td><code>EventCallback&lt;IReadOnlyList&lt;DxFileUploadFile&gt;&gt;</code></td><td>Fires when the file list changes.</td></tr>
+            </tbody>
+        </table>
+
+        <h3 style="margin-top: 1.5rem;">Methods</h3>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Signature</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>BrowseAsync</code></td><td><code>Task BrowseAsync()</code></td><td>Triggers the file browser dialog programmatically.</td></tr>
+                <tr><td><code>RemoveFileAsync</code></td><td><code>Task RemoveFileAsync(DxFileUploadFile file)</code></td><td>Removes a file from the selection.</td></tr>
+                <tr><td><code>UploadAllAsync</code></td><td><code>Task UploadAllAsync()</code></td><td>Uploads all pending files by invoking the Upload callback.</td></tr>
+            </tbody>
+        </table>
+
+        <h3 style="margin-top: 1.5rem;">Related Types</h3>
+        <h4>DxFileUploadFile</h4>
+        <table class="params-table">
+            <thead><tr><th>Property</th><th>Type</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>Name</code></td><td><code>string</code></td><td>The file name.</td></tr>
+                <tr><td><code>Size</code></td><td><code>long</code></td><td>The file size in bytes.</td></tr>
+                <tr><td><code>ContentType</code></td><td><code>string</code></td><td>The MIME content type.</td></tr>
+                <tr><td><code>Status</code></td><td><code>FileUploadStatus</code></td><td>Current upload status: Pending, Uploading, Success, Error.</td></tr>
+                <tr><td><code>ProgressPercent</code></td><td><code>int</code></td><td>Upload progress percentage (0-100).</td></tr>
+                <tr><td><code>ErrorMessage</code></td><td><code>string?</code></td><td>Error message if the upload failed.</td></tr>
+                <tr><td><code>PreviewDataUrl</code></td><td><code>string?</code></td><td>Data URL for image preview.</td></tr>
+            </tbody>
+        </table>
+
+        <h4 style="margin-top: 1rem;">DxFileUploadEventArgs</h4>
+        <table class="params-table">
+            <thead><tr><th>Property</th><th>Type</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>File</code></td><td><code>DxFileUploadFile</code></td><td>The file being uploaded.</td></tr>
+                <tr><td><code>FileStream</code></td><td><code>Stream</code></td><td>Stream to read the file content from.</td></tr>
+                <tr><td><code>Progress</code></td><td><code>IProgress&lt;int&gt;</code></td><td>Progress reporter to update upload progress (0-100).</td></tr>
+                <tr><td><code>CancellationToken</code></td><td><code>CancellationToken</code></td><td>Token to observe for upload cancellation.</td></tr>
+            </tbody>
+        </table>
+    </EventsContent>
+    <Examples>
+        <ExampleBlock Title="Basic File Upload" Description="Drag and drop files or click to browse. Click Upload to start.">
+            <Demo>
+                <DxFileUpload Accept=".jpg,.png,.gif,.pdf,.txt"
+                              MaxFileSize="5242880"
+                              MaxFileCount="5"
+                              Upload="HandleBasicUpload" />
+                @if (!string.IsNullOrEmpty(_basicMessage))
+                {
+                    <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--dx-color-success);">@_basicMessage</p>
+                }
+            </Demo>
+            <Code>
+@(@"<DxFileUpload Accept="".jpg,.png,.gif,.pdf,.txt""
+              MaxFileSize=""5242880""
+              MaxFileCount=""5""
+              Upload=""HandleUpload"" />
+
+@code {
+    private async Task HandleUpload(DxFileUploadEventArgs args)
+    {
+        // Simulate upload with progress
+        for (int i = 0; i <= 100; i += 10)
+        {
+            await Task.Delay(100);
+            args.Progress.Report(i);
+        }
+    }
+}")
+            </Code>
+        </ExampleBlock>
+
+        <ExampleBlock Title="Image Upload with Preview" Description="Upload images with automatic preview thumbnails.">
+            <Demo>
+                <DxFileUpload Accept="image/*"
+                              MaxFileSize="10485760"
+                              MaxFileCount="3"
+                              AllowImagePreview="true"
+                              UploadText="Drag images here"
+                              Upload="HandleImageUpload" />
+            </Demo>
+            <Code>
+@(@"<DxFileUpload Accept=""image/*""
+              MaxFileSize=""10485760""
+              MaxFileCount=""3""
+              AllowImagePreview=""true""
+              UploadText=""Drag images here""
+              Upload=""HandleImageUpload"" />
+
+@code {
+    private async Task HandleImageUpload(DxFileUploadEventArgs args)
+    {
+        using var ms = new MemoryStream();
+        await args.FileStream.CopyToAsync(ms, args.CancellationToken);
+        args.Progress.Report(100);
+        // Save ms.ToArray() to storage...
+    }
+}")
+            </Code>
+        </ExampleBlock>
+
+        <ExampleBlock Title="Auto Upload" Description="Files are uploaded automatically as soon as they are selected.">
+            <Demo>
+                <DxFileUpload Accept=".pdf,.docx,.xlsx"
+                              MaxFileSize="20971520"
+                              AutoUpload="true"
+                              UploadText="Drop documents to auto-upload"
+                              Upload="HandleAutoUpload"
+                              FilesChanged="HandleFilesChanged" />
+                @if (_uploadedCount > 0)
+                {
+                    <p style="margin-top: 0.5rem; font-size: 0.85rem;">Uploaded @_uploadedCount file(s)</p>
+                }
+            </Demo>
+            <Code>
+@(@"<DxFileUpload Accept="".pdf,.docx,.xlsx""
+              MaxFileSize=""20971520""
+              AutoUpload=""true""
+              UploadText=""Drop documents to auto-upload""
+              Upload=""HandleAutoUpload"" />
+
+@code {
+    private async Task HandleAutoUpload(DxFileUploadEventArgs args)
+    {
+        for (int i = 0; i <= 100; i += 20)
+        {
+            await Task.Delay(50);
+            args.Progress.Report(i);
+        }
+    }
+}")
+            </Code>
+        </ExampleBlock>
+
+        <ExampleBlock Title="Disabled State" Description="The file upload component can be disabled.">
+            <Demo>
+                <DxFileUpload Enabled="false" UploadText="Upload is disabled" />
+            </Demo>
+            <Code>
+@(@"<DxFileUpload Enabled=""false"" UploadText=""Upload is disabled"" />")
+            </Code>
+        </ExampleBlock>
+    </Examples>
+</ComponentDoc>
+
+@code {
+    // Basic upload
+    private string? _basicMessage;
+
+    private async Task HandleBasicUpload(DxFileUploadEventArgs args)
+    {
+        for (int i = 0; i <= 100; i += 10)
+        {
+            await Task.Delay(100);
+            args.Progress.Report(i);
+        }
+        _basicMessage = $"Uploaded: {args.File.Name}";
+    }
+
+    // Image upload
+    private async Task HandleImageUpload(DxFileUploadEventArgs args)
+    {
+        for (int i = 0; i <= 100; i += 5)
+        {
+            await Task.Delay(50);
+            args.Progress.Report(i);
+        }
+    }
+
+    // Auto upload
+    private int _uploadedCount;
+
+    private async Task HandleAutoUpload(DxFileUploadEventArgs args)
+    {
+        for (int i = 0; i <= 100; i += 20)
+        {
+            await Task.Delay(50);
+            args.Progress.Report(i);
+        }
+    }
+
+    private void HandleFilesChanged(IReadOnlyList<DxFileUploadFile> files)
+    {
+        _uploadedCount = files.Count(f => f.Status == FileUploadStatus.Success);
+    }
+}

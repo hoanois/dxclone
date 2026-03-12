@@ -118,6 +118,33 @@ public sealed class JsInteropService : IAsyncDisposable
         await module.InvokeVoidAsync("removeClickOutsideListener", element);
     }
 
+    /// <summary>
+    /// Triggers a click on a file input element by its id.
+    /// </summary>
+    public async ValueTask TriggerFileInputAsync(string elementId)
+    {
+        var module = await GetModuleAsync();
+        await module.InvokeVoidAsync("triggerFileInput", elementId);
+    }
+
+    /// <summary>
+    /// Sets up a drop zone that forwards dropped files to a hidden file input.
+    /// </summary>
+    public async ValueTask SetupDropZoneAsync(ElementReference dropZone, string inputId)
+    {
+        var module = await GetModuleAsync();
+        await module.InvokeVoidAsync("setupDropZone", dropZone, inputId);
+    }
+
+    /// <summary>
+    /// Removes a drop zone handler.
+    /// </summary>
+    public async ValueTask RemoveDropZoneAsync(ElementReference dropZone)
+    {
+        var module = await GetModuleAsync();
+        await module.InvokeVoidAsync("removeDropZone", dropZone);
+    }
+
     /// <inheritdoc />
     public async ValueTask DisposeAsync()
     {

@@ -10,3 +10,6 @@ wwwroot/_content/
 *.log
 appsettings.Development.json
 .claude/
+publish/
+deploy.zip
+*.PublishSettings

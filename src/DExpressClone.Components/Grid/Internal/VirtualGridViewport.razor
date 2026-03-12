@@ -7,10 +7,15 @@
     {
         <div style="height:@(VirtualizationWindow.TopSpacerHeight)px;"></div>
 
-        @for (int i = VirtualizationWindow.StartIndex; i <= VirtualizationWindow.EndIndex && i < Items.Count; i++)
+        @for (int i = VirtualizationWindow.StartIndex; i <= VirtualizationWindow.EndIndex && i < EffectiveCount; i++)
         {
+            var localIndex = i - ItemOffset;
+            if (localIndex < 0 || localIndex >= Items.Count)
+            {
+                continue;
+            }
             var index = i;
-            var item = Items[index];
+            var item = Items[localIndex];
 
             if (RowTemplate is not null)
             {
@@ -25,6 +30,9 @@
                          IsFocused="@GetIsFocused(item)"
                          RowIndex="@index"
                          RowHeight="@RowHeight"
+                         IsEditing="@GetIsEditing(item)"
+                         EditItem="@(GetEditItem?.Invoke(item))"
+                         RowEditContext="@(GetEditContext?.Invoke(item))"
                          RowClick="@OnRowClick"
                          RowDoubleClick="@OnRowDoubleClick"
                          SelectionToggled="@OnSelectionToggled" />

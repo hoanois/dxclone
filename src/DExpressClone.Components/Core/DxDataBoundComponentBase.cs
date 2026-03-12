@@ -31,13 +31,19 @@ public abstract class DxDataBoundComponentBase<TItem> : DxComponentBase
     /// <summary>
     /// Gets whether data is currently being loaded.
     /// </summary>
-    protected bool IsDataLoading { get; private set; }
+    protected bool IsDataLoading { get; set; }
+
+    /// <summary>
+    /// When true, suppresses automatic data loading in OnParametersSetAsync.
+    /// </summary>
+    protected bool SuppressAutoLoad { get; set; }
 
     /// <inheritdoc />
     protected override async Task OnParametersSetAsync()
     {
         await base.OnParametersSetAsync();
-        await LoadDataAsync();
+        if (!SuppressAutoLoad)
+            await LoadDataAsync();
     }
 
     private async Task LoadDataAsync()

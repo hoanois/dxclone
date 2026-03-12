@@ -295,6 +295,21 @@
     font-size: 14px;
 }
 
+/* ===== Inline Editing ===== */
+
+.dx-grid-row--editing {
+    background-color: #fffbeb;
+    box-shadow: inset 0 0 0 1px var(--dx-color-interactive, #0078d4);
+}
+
+.dx-grid-row--editing .dx-grid-cell {
+    padding: 2px 8px;
+}
+
+[data-dx-theme="dark"] .dx-grid-row--editing {
+    background-color: rgba(255, 251, 235, 0.08);
+}
+
 /* Loading Overlay */
 .dx-grid-loading-overlay {
     position: absolute;

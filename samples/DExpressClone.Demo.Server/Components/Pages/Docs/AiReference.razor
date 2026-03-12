@@ -25,7 +25,9 @@
 @@using DExpressClone.Components.Editors.DxComboBox
 @@using DExpressClone.Components.Editors.DxFormValidation
 @@using DExpressClone.Components.Grid
-@@using DExpressClone.Components.Charts</code></pre>
+@@using DExpressClone.Components.Charts
+@@using DExpressClone.Components.Editors.DxFileUpload
+@@using DExpressClone.Components.Editors</code></pre>
     </section>
 
     <!-- ===== SECTION 2: BASE CLASSES ===== -->
@@ -378,11 +380,117 @@
             </tbody>
         </table>
 
-        <h3>Example</h3>
+        <h3>Server-Side Data Loading (CustomData)</h3>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>CustomData</code></td><td><code>Func&lt;GridDataLoadOptions, CancellationToken, Task&lt;GridDataLoadResult&lt;TItem&gt;&gt;&gt;?</code></td><td><code>null</code></td><td>Server-side data callback. When set, sorting, filtering, and paging are handled by the callback.</td></tr>
+            </tbody>
+        </table>
+
+        <h4>GridDataLoadOptions</h4>
+        <table class="params-table">
+            <thead><tr><th>Property</th><th>Type</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>Skip</code></td><td><code>int</code></td><td>Number of items to skip.</td></tr>
+                <tr><td><code>Take</code></td><td><code>int</code></td><td>Number of items to take.</td></tr>
+                <tr><td><code>SortDescriptors</code></td><td><code>IReadOnlyList&lt;GridSortDescriptor&gt;</code></td><td>Current sort descriptors.</td></tr>
+                <tr><td><code>FilterDescriptors</code></td><td><code>IReadOnlyList&lt;GridFilterDescriptor&gt;</code></td><td>Current filter descriptors.</td></tr>
+            </tbody>
+        </table>
+
+        <h4>GridDataLoadResult&lt;TItem&gt;</h4>
+        <table class="params-table">
+            <thead><tr><th>Property</th><th>Type</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>Items</code></td><td><code>IEnumerable&lt;TItem&gt;</code></td><td>The items for the current page/window.</td></tr>
+                <tr><td><code>TotalCount</code></td><td><code>int</code></td><td>Total number of items matching current filters.</td></tr>
+            </tbody>
+        </table>
+
+        <h3>Inline Editing</h3>
+        <h4>Edit Events</h4>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>EditStarting</code></td><td><code>EventCallback&lt;GridEditStartingEventArgs&lt;TItem&gt;&gt;</code></td><td>Before edit starts. Set Cancel = true to prevent.</td></tr>
+                <tr><td><code>EditStarted</code></td><td><code>EventCallback&lt;TItem&gt;</code></td><td>After edit mode is entered.</td></tr>
+                <tr><td><code>RowUpdating</code></td><td><code>EventCallback&lt;GridRowUpdatingEventArgs&lt;TItem&gt;&gt;</code></td><td>Before save. Set Cancel = true to prevent.</td></tr>
+                <tr><td><code>RowUpdated</code></td><td><code>EventCallback&lt;TItem&gt;</code></td><td>After row is saved.</td></tr>
+                <tr><td><code>EditCancelled</code></td><td><code>EventCallback&lt;TItem&gt;</code></td><td>After edit is cancelled.</td></tr>
+            </tbody>
+        </table>
+        <h4>Edit Methods</h4>
+        <table class="params-table">
+            <thead><tr><th>Method</th><th>Signature</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>StartEditAsync</code></td><td><code>Task StartEditAsync(TItem item)</code></td><td>Begin editing a row.</td></tr>
+                <tr><td><code>SaveEditAsync</code></td><td><code>Task SaveEditAsync()</code></td><td>Save and exit edit mode.</td></tr>
+                <tr><td><code>CancelEditAsync</code></td><td><code>Task CancelEditAsync()</code></td><td>Cancel and revert changes.</td></tr>
+                <tr><td><code>IsEditing</code></td><td><code>bool IsEditing(TItem item)</code></td><td>Check if a row is being edited.</td></tr>
+            </tbody>
+        </table>
+
+        <h3>DxGridDataColumn — EditCellTemplate</h3>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>EditCellTemplate</code></td><td><code>RenderFragment&lt;object&gt;?</code></td><td>Custom cell template for edit mode. Context is the data item being edited.</td></tr>
+            </tbody>
+        </table>
+
+        <h3>DxGridCommandColumn</h3>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>HeaderText</code></td><td><code>string?</code></td><td>Column header text.</td></tr>
+                <tr><td><code>CellTemplate</code></td><td><code>RenderFragment&lt;object&gt;?</code></td><td>Custom cell template for command buttons. Context is the data item.</td></tr>
+                <tr><td><code>Width</code></td><td><code>string?</code></td><td>Column width.</td></tr>
+            </tbody>
+        </table>
+
+        <h3>Examples</h3>
         <pre><code>&lt;DxGrid Data="employees" PageSize="10"&gt;
     &lt;DxGridDataColumn FieldName="FirstName" Caption="First Name" /&gt;
     &lt;DxGridDataColumn FieldName="LastName" Caption="Last Name" /&gt;
     &lt;DxGridDataColumn FieldName="Salary" Format="C2" Width="120px" /&gt;
+&lt;/DxGrid&gt;</code></pre>
+
+        <h4>Server-Side Data Loading</h4>
+        <pre><code>&lt;DxGrid TItem="Employee" CustomData="@@LoadData" PageSize="20"&gt;
+    &lt;DxGridDataColumn FieldName="FirstName" /&gt;
+    &lt;DxGridDataColumn FieldName="Salary" DisplayFormat="{0:C0}" /&gt;
+&lt;/DxGrid&gt;
+
+@@code {
+    async Task&lt;GridDataLoadResult&lt;Employee&gt;&gt; LoadData(GridDataLoadOptions options, CancellationToken ct)
+    {
+        var result = await MyService.GetPagedAsync(options.Skip, options.Take, ct);
+        return new GridDataLoadResult&lt;Employee&gt; { Items = result.Items, TotalCount = result.Total };
+    }
+}</code></pre>
+
+        <h4>Inline Editing</h4>
+        <pre><code>&lt;DxGrid @@ref="_grid" TItem="Employee" Data="employees" KeyFieldName="Id"&gt;
+    &lt;Columns&gt;
+        &lt;DxGridDataColumn FieldName="FirstName"&gt;
+            &lt;EditCellTemplate Context="item"&gt;
+                @@{ var emp = (Employee)item; }
+                &lt;DxTextBox @@bind-Text="emp.FirstName" /&gt;
+            &lt;/EditCellTemplate&gt;
+        &lt;/DxGridDataColumn&gt;
+        &lt;DxGridCommandColumn HeaderText="Actions" Width="150px"&gt;
+            &lt;CellTemplate Context="item"&gt;
+                @@{ var emp = (Employee)item; }
+                @@if (_grid?.IsEditing(emp) == true) {
+                    &lt;button @@onclick="() =&gt; _grid.SaveEditAsync()"&gt;Save&lt;/button&gt;
+                    &lt;button @@onclick="() =&gt; _grid.CancelEditAsync()"&gt;Cancel&lt;/button&gt;
+                } else {
+                    &lt;button @@onclick="() =&gt; _grid.StartEditAsync(emp)"&gt;Edit&lt;/button&gt;
+                }
+            &lt;/CellTemplate&gt;
+        &lt;/DxGridCommandColumn&gt;
+    &lt;/Columns&gt;
 &lt;/DxGrid&gt;</code></pre>
     </section>
 
@@ -486,7 +594,70 @@
 &lt;/DxFormValidation&gt;</code></pre>
     </section>
 
-    <!-- 15. DxModal -->
+    <!-- 15. DxFileUpload -->
+    <section class="doc-section">
+        <h2>DxFileUpload</h2>
+        <p>Namespace: <code>DExpressClone.Components.Editors.DxFileUpload</code> — Inherits <code>DxInteractiveComponentBase</code></p>
+
+        <h3>Parameters</h3>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>Accept</code></td><td><code>string?</code></td><td><code>null</code></td><td>Accepted file types (e.g., ".jpg,.png", "image/*").</td></tr>
+                <tr><td><code>Multiple</code></td><td><code>bool</code></td><td><code>true</code></td><td>Whether multiple files can be selected.</td></tr>
+                <tr><td><code>MaxFileSize</code></td><td><code>long</code></td><td><code>10485760</code></td><td>Maximum file size in bytes (default 10 MB).</td></tr>
+                <tr><td><code>MaxFileCount</code></td><td><code>int</code></td><td><code>10</code></td><td>Maximum number of files allowed.</td></tr>
+                <tr><td><code>UploadText</code></td><td><code>string</code></td><td><code>"Drag files here"</code></td><td>Drop zone text.</td></tr>
+                <tr><td><code>AllowImagePreview</code></td><td><code>bool</code></td><td><code>true</code></td><td>Show image previews for image files.</td></tr>
+                <tr><td><code>MaxPreviewFileSize</code></td><td><code>long</code></td><td><code>5242880</code></td><td>Max file size for preview generation (default 5 MB).</td></tr>
+                <tr><td><code>AutoUpload</code></td><td><code>bool</code></td><td><code>false</code></td><td>Upload files automatically when selected.</td></tr>
+                <tr><td><code>DropZoneTemplate</code></td><td><code>RenderFragment?</code></td><td><code>null</code></td><td>Custom drop zone template.</td></tr>
+            </tbody>
+        </table>
+
+        <h3>Events</h3>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>Upload</code></td><td><code>Func&lt;DxFileUploadEventArgs, Task&gt;?</code></td><td>Upload handler. Use args.Progress.Report(percent) for progress.</td></tr>
+                <tr><td><code>FileAdded</code></td><td><code>EventCallback&lt;DxFileUploadFile&gt;</code></td><td>Fires when a file is added.</td></tr>
+                <tr><td><code>FileRemoved</code></td><td><code>EventCallback&lt;DxFileUploadFile&gt;</code></td><td>Fires when a file is removed.</td></tr>
+                <tr><td><code>FilesChanged</code></td><td><code>EventCallback&lt;IReadOnlyList&lt;DxFileUploadFile&gt;&gt;</code></td><td>Fires when the file list changes.</td></tr>
+            </tbody>
+        </table>
+
+        <h3>Methods</h3>
+        <table class="params-table">
+            <thead><tr><th>Method</th><th>Signature</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>BrowseAsync</code></td><td><code>Task BrowseAsync()</code></td><td>Open file browser dialog.</td></tr>
+                <tr><td><code>RemoveFileAsync</code></td><td><code>Task RemoveFileAsync(DxFileUploadFile)</code></td><td>Remove a file from selection.</td></tr>
+                <tr><td><code>UploadAllAsync</code></td><td><code>Task UploadAllAsync()</code></td><td>Upload all pending files.</td></tr>
+            </tbody>
+        </table>
+
+        <h3>Related Types</h3>
+        <p><code>DxFileUploadFile</code>: Name, Size, ContentType, Status (Pending/Uploading/Success/Error), ProgressPercent, ErrorMessage, PreviewDataUrl.</p>
+        <p><code>DxFileUploadEventArgs</code>: File, FileStream, Progress (IProgress&lt;int&gt;), CancellationToken.</p>
+        <p><code>FileUploadStatus</code>: Pending, Uploading, Success, Error.</p>
+
+        <h3>Example</h3>
+        <pre><code>&lt;DxFileUpload Accept=".jpg,.png,.pdf"
+              MaxFileSize="5242880"
+              MaxFileCount="5"
+              Upload="HandleUpload" /&gt;
+
+@@code {
+    async Task HandleUpload(DxFileUploadEventArgs args) {
+        for (int i = 0; i &lt;= 100; i += 10) {
+            await Task.Delay(100);
+            args.Progress.Report(i);
+        }
+    }
+}</code></pre>
+    </section>
+
+    <!-- 16. DxModal -->
     <section class="doc-section">
         <h2>DxModal</h2>
         <p>Namespace: <code>DExpressClone.Components.Layout</code></p>
@@ -653,6 +824,18 @@
         } catch (Exception ex) {
             Toast.ShowError($"Error: {ex.Message}");
         }
+    }
+}</code></pre>
+
+        <h3>File Upload</h3>
+        <pre><code>&lt;DxFileUpload Accept=".jpg,.png,.pdf" MaxFileSize="5242880" Upload="HandleUpload" /&gt;
+
+@@code {
+    async Task HandleUpload(DxFileUploadEventArgs args) {
+        using var ms = new MemoryStream();
+        await args.FileStream.CopyToAsync(ms, args.CancellationToken);
+        args.Progress.Report(100);
+        // Save ms.ToArray()...
     }
 }</code></pre>
 

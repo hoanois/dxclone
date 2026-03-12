@@ -25,7 +25,7 @@
             </div>
         }
     }
-    else if (ProcessedData.Count == 0 && !IsDataLoading)
+    else if ((IsServerMode ? _serverTotalCount : ProcessedData.Count) == 0 && !IsDataLoading)
     {
         @if (EmptyDataTemplate is not null)
         {
@@ -60,12 +60,17 @@
                                      RowHeight="@RowHeight"
                                      Height="@GridHeight"
                                      VirtualizationWindow="@_virtualizationState.CurrentWindow"
+                                     TotalItemCount="@(IsServerMode ? _serverTotalCount : (int?)null)"
+                                     ItemOffset="@(IsServerMode ? _serverWindowOffset : 0)"
                                      OnScroll="@HandleScroll"
                                      OnRowClick="@HandleRowClick"
                                      OnRowDoubleClick="@HandleRowDoubleClick"
                                      OnSelectionToggled="@HandleSelectionToggled"
                                      IsItemSelected="@_selectionModel.IsSelected"
-                                     IsItemFocused="@IsItemFocused" />
+                                     IsItemFocused="@IsItemFocused"
+                                     IsItemEditing="@IsEditing"
+                                     GetEditItem="@(item => _editState.IsEditing && IsEditing(item) ? (object)_editState.EditingItemCopy! : null)"
+                                     GetEditContext="@(item => IsEditing(item) ? _editState.EditContext : null)" />
             }
             else
             {
@@ -79,6 +84,9 @@
                                  IsFocused="@IsItemFocused(item)"
                                  RowIndex="@(((IList<TItem>)ProcessedData).IndexOf(item))"
                                  RowHeight="@RowHeight"
+                                 IsEditing="@IsEditing(item)"
+                                 EditItem="@(_editState.IsEditing && IsEditing(item) ? (object)_editState.EditingItemCopy! : null)"
+                                 RowEditContext="@(IsEditing(item) ? _editState.EditContext : null)"
                                  RowClick="@HandleRowClick"
                                  RowDoubleClick="@HandleRowDoubleClick"
                                  SelectionToggled="@HandleSelectionToggled" />
@@ -87,7 +95,7 @@
             }
         </div>
 
-        @if (!IsVirtualizationMode)
+        @if (PageSize > 0)
         {
             <GridPager PageIndex="@_pageIndex"
                        PageCount="@PageCount"

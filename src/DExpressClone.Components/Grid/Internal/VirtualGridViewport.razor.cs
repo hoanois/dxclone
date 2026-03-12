@@ -1,6 +1,7 @@
 using DExpressClone.Components.Grid.DataProcessing;
 using DExpressClone.Components.Interop;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.JSInterop;
 
 namespace DExpressClone.Components.Grid.Internal;
@@ -45,10 +46,25 @@ public partial class VirtualGridViewport<TItem> : ComponentBase, IAsyncDisposabl
     public EventCallback<TItem> OnSelectionToggled { get; set; }
 
     [Parameter]
+    public int? TotalItemCount { get; set; }
+
+    [Parameter]
+    public int ItemOffset { get; set; }
+
+    [Parameter]
     public Func<TItem, bool>? IsItemSelected { get; set; }
 
     [Parameter]
     public Func<TItem, bool>? IsItemFocused { get; set; }
+
+    [Parameter]
+    public Func<TItem, bool>? IsItemEditing { get; set; }
+
+    [Parameter]
+    public Func<TItem, object?>? GetEditItem { get; set; }
+
+    [Parameter]
+    public Func<TItem, EditContext?>? GetEditContext { get; set; }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -73,8 +89,11 @@ public partial class VirtualGridViewport<TItem> : ComponentBase, IAsyncDisposabl
         await OnScroll.InvokeAsync(new ScrollEventArgs(scrollTop, viewportHeight));
     }
 
+    private int EffectiveCount => ItemOffset > 0 ? (ItemOffset + Items.Count) : Items.Count;
+
     private bool GetIsSelected(TItem item) => IsItemSelected?.Invoke(item) ?? false;
     private bool GetIsFocused(TItem item) => IsItemFocused?.Invoke(item) ?? false;
+    private bool GetIsEditing(TItem item) => IsItemEditing?.Invoke(item) ?? false;
 
     public async ValueTask DisposeAsync()
     {

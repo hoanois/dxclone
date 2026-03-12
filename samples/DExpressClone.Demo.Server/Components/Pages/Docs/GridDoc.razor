@@ -1,14 +1,16 @@
 @page "/docs/grid"
 @rendermode InteractiveServer
 @using DExpressClone.Demo.Server.Data
+@using DExpressClone.Components.Grid.Models
 
-<ComponentDoc Title="DxGrid" Description="A high-performance data grid with sorting, filtering, selection, virtual scrolling, and row detail templates.">
+<ComponentDoc Title="DxGrid" Description="A high-performance data grid with sorting, filtering, selection, virtual scrolling, server-side data loading, and inline editing.">
     <ParametersContent>
         <table class="params-table">
             <thead><tr><th>Name</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
             <tbody>
                 <tr><td><code>Data</code></td><td><code>IEnumerable&lt;TItem&gt;?</code></td><td><code>null</code></td><td>The data source for grid rows.</td></tr>
-                <tr><td><code>PageSize</code></td><td><code>int</code></td><td><code>0</code></td><td>Number of rows per page. 0 = no paging.</td></tr>
+                <tr><td><code>CustomData</code></td><td><code>Func&lt;GridDataLoadOptions, CancellationToken, Task&lt;GridDataLoadResult&lt;TItem&gt;&gt;&gt;?</code></td><td><code>null</code></td><td>Callback for server-side data loading. When set, sorting, filtering, and paging are handled server-side.</td></tr>
+                <tr><td><code>PageSize</code></td><td><code>int</code></td><td><code>0</code></td><td>Number of rows per page. 0 = virtual scrolling.</td></tr>
                 <tr><td><code>AllowSort</code></td><td><code>bool</code></td><td><code>true</code></td><td>Enable column sorting.</td></tr>
                 <tr><td><code>ShowFilterRow</code></td><td><code>bool</code></td><td><code>false</code></td><td>Show the filter row below headers.</td></tr>
                 <tr><td><code>AllowSelection</code></td><td><code>bool</code></td><td><code>false</code></td><td>Enable row selection.</td></tr>
@@ -16,7 +18,7 @@
                 <tr><td><code>GridHeight</code></td><td><code>string</code></td><td><code>"500px"</code></td><td>Height of the grid container.</td></tr>
                 <tr><td><code>RowHeight</code></td><td><code>int</code></td><td><code>36</code></td><td>Height of each row in pixels.</td></tr>
                 <tr><td><code>KeyFieldName</code></td><td><code>string?</code></td><td><code>null</code></td><td>Key field for row identity.</td></tr>
-                <tr><td><code>Columns</code></td><td><code>RenderFragment?</code></td><td><code>null</code></td><td>Column definitions (DxGridColumn).</td></tr>
+                <tr><td><code>Columns</code></td><td><code>RenderFragment?</code></td><td><code>null</code></td><td>Column definitions (DxGridDataColumn, DxGridCommandColumn).</td></tr>
             </tbody>
         </table>
     </ParametersContent>
@@ -29,6 +31,22 @@
                 <tr><td><code>SelectedItemsChanged</code></td><td><code>EventCallback&lt;IEnumerable&lt;TItem&gt;&gt;</code></td><td>Fires when selected items change.</td></tr>
                 <tr><td><code>SortChanged</code></td><td><code>EventCallback&lt;GridSortDescriptor&gt;</code></td><td>Fires when sort changes.</td></tr>
                 <tr><td><code>FilterChanged</code></td><td><code>EventCallback&lt;GridFilterDescriptor&gt;</code></td><td>Fires when filter changes.</td></tr>
+                <tr><td><code>EditStarting</code></td><td><code>EventCallback&lt;GridEditStartingEventArgs&lt;TItem&gt;&gt;</code></td><td>Fires before a row enters edit mode. Set Cancel = true to prevent editing.</td></tr>
+                <tr><td><code>EditStarted</code></td><td><code>EventCallback&lt;TItem&gt;</code></td><td>Fires after a row enters edit mode.</td></tr>
+                <tr><td><code>RowUpdating</code></td><td><code>EventCallback&lt;GridRowUpdatingEventArgs&lt;TItem&gt;&gt;</code></td><td>Fires before a row is saved. Set Cancel = true to prevent saving.</td></tr>
+                <tr><td><code>RowUpdated</code></td><td><code>EventCallback&lt;TItem&gt;</code></td><td>Fires after a row has been saved.</td></tr>
+                <tr><td><code>EditCancelled</code></td><td><code>EventCallback&lt;TItem&gt;</code></td><td>Fires when an edit operation is cancelled.</td></tr>
+            </tbody>
+        </table>
+
+        <h3 style="margin-top: 1.5rem;">Methods</h3>
+        <table class="params-table">
+            <thead><tr><th>Name</th><th>Signature</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>StartEditAsync</code></td><td><code>Task StartEditAsync(TItem item)</code></td><td>Begins editing the specified row.</td></tr>
+                <tr><td><code>SaveEditAsync</code></td><td><code>Task SaveEditAsync()</code></td><td>Saves the current edit and exits edit mode.</td></tr>
+                <tr><td><code>CancelEditAsync</code></td><td><code>Task CancelEditAsync()</code></td><td>Cancels the current edit and reverts changes.</td></tr>
+                <tr><td><code>IsEditing</code></td><td><code>bool IsEditing(TItem item)</code></td><td>Returns whether the specified row is currently being edited.</td></tr>
             </tbody>
         </table>
     </EventsContent>
@@ -44,17 +62,11 @@
                 </DxGrid>
             </Demo>
             <Code>
-@(@"<DxGrid TItem=""Employee"" Data=""@_employees"" GridHeight=""250px"">
+@(@"<DxGrid TItem=""Employee"" Data=""@_employees"" GridHeight=""250px"" PageSize=""10"">
     <Columns>
-        <DxGridDataColumn
-                     Caption=""Name""
-                     FieldName=""@nameof(Employee.Name)"" />
-        <DxGridDataColumn
-                     Caption=""Position""
-                     FieldName=""@nameof(Employee.Position)"" />
-        <DxGridDataColumn
-                     Caption=""Department""
-                     FieldName=""@nameof(Employee.Department)"" />
+        <DxGridDataColumn Caption=""First Name"" FieldName=""@nameof(Employee.FirstName)"" />
+        <DxGridDataColumn Caption=""Last Name"" FieldName=""@nameof(Employee.LastName)"" />
+        <DxGridDataColumn Caption=""Department"" FieldName=""@nameof(Employee.Department)"" />
     </Columns>
 </DxGrid>")
             </Code>
@@ -74,13 +86,158 @@
 @(@"<DxGrid TItem=""Employee"" Data=""@_employees""
        AllowSort=""true""
        ShowFilterRow=""true""
-       GridHeight=""300px"">
+       GridHeight=""300px"" PageSize=""10"">
     <Columns>
-        <DxGridDataColumn
-                     Caption=""Name""
-                     FieldName=""@nameof(Employee.Name)"" />
+        <DxGridDataColumn Caption=""First Name"" FieldName=""@nameof(Employee.FirstName)"" />
+        <DxGridDataColumn Caption=""Email"" FieldName=""@nameof(Employee.Email)"" />
+        <DxGridDataColumn Caption=""Department"" FieldName=""@nameof(Employee.Department)"" />
     </Columns>
 </DxGrid>")
+            </Code>
+        </ExampleBlock>
+
+        <ExampleBlock Title="Server-Side Paging (CustomData)" Description="Load data from a server-side source with paging, sorting, and filtering handled by the callback.">
+            <Demo>
+                <DxGrid TItem="Employee" CustomData="@LoadServerData" PageSize="10" AllowSort="true" ShowFilterRow="true" GridHeight="350px" KeyFieldName="Id">
+                    <Columns>
+                        <DxGridDataColumn Caption="ID" FieldName="@nameof(Employee.Id)" Width="60px" />
+                        <DxGridDataColumn Caption="First Name" FieldName="@nameof(Employee.FirstName)" />
+                        <DxGridDataColumn Caption="Last Name" FieldName="@nameof(Employee.LastName)" />
+                        <DxGridDataColumn Caption="Department" FieldName="@nameof(Employee.Department)" />
+                        <DxGridDataColumn Caption="Salary" FieldName="@nameof(Employee.Salary)" DisplayFormat="{0:C0}" />
+                    </Columns>
+                </DxGrid>
+                <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--dx-color-text-secondary);">
+                    Total records: @_serverEmployees.Count (loaded from simulated server)
+                </p>
+            </Demo>
+            <Code>
+@(@"<DxGrid TItem=""Employee"" CustomData=""@LoadServerData""
+       PageSize=""10"" AllowSort=""true"" ShowFilterRow=""true""
+       GridHeight=""350px"" KeyFieldName=""Id"">
+    <Columns>
+        <DxGridDataColumn Caption=""ID"" FieldName=""Id"" Width=""60px"" />
+        <DxGridDataColumn Caption=""First Name"" FieldName=""FirstName"" />
+        <DxGridDataColumn Caption=""Last Name"" FieldName=""LastName"" />
+        <DxGridDataColumn Caption=""Department"" FieldName=""Department"" />
+        <DxGridDataColumn Caption=""Salary"" FieldName=""Salary"" DisplayFormat=""{0:C0}"" />
+    </Columns>
+</DxGrid>
+
+@code {
+    private List<Employee> _allEmployees = new SampleDataService().GenerateEmployees(500);
+
+    private async Task<GridDataLoadResult<Employee>> LoadServerData(
+        GridDataLoadOptions options, CancellationToken ct)
+    {
+        await Task.Delay(200, ct); // Simulate network delay
+
+        var query = _allEmployees.AsQueryable();
+        var totalCount = query.Count();
+        var items = query.Skip(options.Skip).Take(options.Take).ToList();
+
+        return new GridDataLoadResult<Employee>
+        {
+            Items = items,
+            TotalCount = totalCount
+        };
+    }
+}")
+            </Code>
+        </ExampleBlock>
+
+        <ExampleBlock Title="Inline Editing" Description="Edit rows directly in the grid using command column with Save/Cancel buttons.">
+            <Demo>
+                <DxGrid @ref="_editGrid" TItem="Employee" Data="@_editEmployees" PageSize="5" KeyFieldName="Id" GridHeight="300px">
+                    <Columns>
+                        <DxGridDataColumn Caption="First Name" FieldName="@nameof(Employee.FirstName)">
+                            <EditCellTemplate Context="item">
+                                @{ var emp = (Employee)item; }
+                                <DxTextBox @bind-Text="emp.FirstName" />
+                            </EditCellTemplate>
+                        </DxGridDataColumn>
+                        <DxGridDataColumn Caption="Last Name" FieldName="@nameof(Employee.LastName)">
+                            <EditCellTemplate Context="item">
+                                @{ var emp = (Employee)item; }
+                                <DxTextBox @bind-Text="emp.LastName" />
+                            </EditCellTemplate>
+                        </DxGridDataColumn>
+                        <DxGridDataColumn Caption="Department" FieldName="@nameof(Employee.Department)">
+                            <EditCellTemplate Context="item">
+                                @{ var emp = (Employee)item; }
+                                <DxTextBox @bind-Text="emp.Department" />
+                            </EditCellTemplate>
+                        </DxGridDataColumn>
+                        <DxGridDataColumn Caption="Salary" FieldName="@nameof(Employee.Salary)" DisplayFormat="{0:C0}">
+                            <EditCellTemplate Context="item">
+                                @{ var emp = (Employee)item; }
+                                <DxNumericEdit TValue="double" @bind-Value="emp.Salary" />
+                            </EditCellTemplate>
+                        </DxGridDataColumn>
+                        <DxGridCommandColumn HeaderText="Actions" Width="160px">
+                            <CellTemplate Context="item">
+                                @{ var emp = (Employee)item; }
+                                @if (_editGrid?.IsEditing(emp) == true)
+                                {
+                                    <button class="dx-btn dx-btn--primary dx-btn--sm" @onclick="() => _editGrid!.SaveEditAsync()">Save</button>
+                                    <button class="dx-btn dx-btn--sm" @onclick="() => _editGrid!.CancelEditAsync()">Cancel</button>
+                                }
+                                else
+                                {
+                                    <button class="dx-btn dx-btn--sm" @onclick="() => _editGrid!.StartEditAsync(emp)">Edit</button>
+                                }
+                            </CellTemplate>
+                        </DxGridCommandColumn>
+                    </Columns>
+                </DxGrid>
+                @if (!string.IsNullOrEmpty(_editMessage))
+                {
+                    <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--dx-color-success);">@_editMessage</p>
+                }
+            </Demo>
+            <Code>
+@(@"<DxGrid @ref=""_editGrid"" TItem=""Employee"" Data=""@_employees""
+       PageSize=""5"" KeyFieldName=""Id"" GridHeight=""300px""
+       RowUpdated=""HandleRowUpdated"">
+    <Columns>
+        <DxGridDataColumn Caption=""First Name"" FieldName=""FirstName"">
+            <EditCellTemplate Context=""item"">
+                @{ var emp = (Employee)item; }
+                <DxTextBox @bind-Text=""emp.FirstName"" />
+            </EditCellTemplate>
+        </DxGridDataColumn>
+        <DxGridDataColumn Caption=""Salary"" FieldName=""Salary"" DisplayFormat=""{0:C0}"">
+            <EditCellTemplate Context=""item"">
+                @{ var emp = (Employee)item; }
+                <DxNumericEdit TValue=""double"" @bind-Value=""emp.Salary"" />
+            </EditCellTemplate>
+        </DxGridDataColumn>
+        <DxGridCommandColumn HeaderText=""Actions"" Width=""160px"">
+            <CellTemplate Context=""item"">
+                @{ var emp = (Employee)item; }
+                @if (_editGrid?.IsEditing(emp) == true)
+                {
+                    <button @onclick=""() => _editGrid.SaveEditAsync()"">Save</button>
+                    <button @onclick=""() => _editGrid.CancelEditAsync()"">Cancel</button>
+                }
+                else
+                {
+                    <button @onclick=""() => _editGrid.StartEditAsync(emp)"">Edit</button>
+                }
+            </CellTemplate>
+        </DxGridCommandColumn>
+    </Columns>
+</DxGrid>
+
+@code {
+    private DxGrid<Employee>? _editGrid;
+    private List<Employee> _employees = new SampleDataService().GenerateEmployees(10);
+
+    private void HandleRowUpdated(Employee emp)
+    {
+        // Row has been saved — update your data store here
+    }
+}")
             </Code>
         </ExampleBlock>
     </Examples>
@@ -88,4 +245,32 @@
 
 @code {
     private List<Employee> _employees = new SampleDataService().GenerateEmployees(10);
+
+    // Server-side paging
+    private List<Employee> _serverEmployees = new SampleDataService().GenerateEmployees(500);
+
+    private async Task<GridDataLoadResult<Employee>> LoadServerData(GridDataLoadOptions options, CancellationToken ct)
+    {
+        await Task.Delay(200, ct); // Simulate network delay
+
+        var query = _serverEmployees.AsQueryable();
+        var totalCount = query.Count();
+        var items = query.Skip(options.Skip).Take(options.Take).ToList();
+
+        return new GridDataLoadResult<Employee>
+        {
+            Items = items,
+            TotalCount = totalCount
+        };
+    }
+
+    // Inline editing
+    private DxGrid<Employee>? _editGrid;
+    private List<Employee> _editEmployees = new SampleDataService().GenerateEmployees(10);
+    private string? _editMessage;
+
+    private void HandleRowUpdated(Employee emp)
+    {
+        _editMessage = $"Saved: {emp.FirstName} {emp.LastName}";
+    }
 }
